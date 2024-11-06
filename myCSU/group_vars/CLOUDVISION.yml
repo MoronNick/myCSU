@@ -1,0 +1,27 @@
+CVP_CONFIGLETS:
+CONTAINERS_DEFAULT:
+  DC1:
+      parentContainerName: FABRIC
+  DC1_SPINES:
+      parentContainerName: DC1
+  DC1_L3_LEAVES:
+      parentContainerName: DC1
+  DC1-Left:
+      parentContainerName: DC1-Leaf
+  DC1-Right:
+      parentContainerName: DC1-Leaf
+
+ 
+CVP_DEVICES_DEFAULT:
+  - fqdn: 'WCC1'
+    configlets:
+      - 'WCC1'
+  - fqdn: 'WCC2'
+    configlets:
+      - 'WCC2'
+  - fqdn: 'e7_0r05c05052051'
+    configlets:
+      - 'AVD_e7_0r05c05052051'
+  - fqdn: 'e7_0r05c05052052'
+    configlets:
+      - 'AVD_e7_0r05c05052052'

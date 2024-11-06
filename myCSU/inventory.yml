@@ -1,0 +1,56 @@
+---
+all: 
+  children: 
+    CLOUDVISION:
+      hosts:
+        cvaas:
+          # Ansible variables used by the ansible_avd and ansible_cvp roles to push configuration to devices via CVP
+          ansible_host: www.cv-staging.corp.arista.io
+          ansible_user: cvaas
+          ansible_password: eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJkaWQiOjY0MjcyOTgsImRzbiI6ImFuc2libGUiLCJkc3QiOiJhY2NvdW50IiwiZXhwIjoxNzUxMzc2MTc0LCJpYXQiOjE3MjI0MzIxODIsIm9naSI6NTAyNzk0OCwib2duIjoibm1vb3JlLWxhYiIsInNpZCI6ImM2NTliMTExNzQxMzQ5OTU0NWQxZmEzOTBhNzg0Nzc0MDI3Yjg0YjQ2NTEzZmFlYzM0ODlhNzI1ZDQxNDgyZGUtSlluNFQwdE5ZZXROYWtDU1VnOFN6TDJxejhsQlZueWtiVHNWWjEzdyJ9.PjXi6tsBdgvMQJogVli9jEo75Kp-2zY0tCNhFaOUZn1Epf9RF0Z62c1sVBMFk9DMfzjTAfOtplfjydc-DeGlUA
+          ansible_connection: httpapi
+          ansible_httpapi_use_ssl: true
+          ansible_httpapi_validate_certs: false
+          ansible_network_os: eos
+          ansible_httpapi_port: 443
+    AVD:
+      children:
+        FABRIC:
+          children:
+            DC1:
+              children:
+                DC1_SPINES:
+                  hosts:
+                    Spine1:
+                      ansible_host: 192.168.3.100
+                    Spine2:
+                      ansible_host: 192.168.3.101
+                DC1_L3_LEAVES:
+                  hosts:
+                    WCC1:
+                      ansible_host: 192.168.3.102
+                    WCC2:
+                      ansible_host: 192.168.3.103
+                DC1_L2_LEAVES:
+                  hosts:
+        Standalone: 
+          children:
+            L2_LEAVES:
+              children: 
+                Cameras: 
+                  hosts: 
+                    e7_0r05c05052051: 
+                      ansible_host: 192.168.3.104
+                    e7_0r05c05052052:
+                      ansible_host: 192.168.3.105
+    NETWORK_SERVICES:
+      children:
+        DC1_L3_LEAVES:
+        DC1_L2_LEAVES:
+    CONNECTED_ENDPOINTS:
+      children:
+        DC1_L3_LEAVES:
+        DC1_L2_LEAVES:
+    Standalone_Endpoints: 
+      children: 
+        Cameras: 

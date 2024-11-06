@@ -1,0 +1,21 @@
+  - name: Deploy Configs
+    hosts: cvaas
+    connection: local
+    gather_facts: false
+    tasks:
+      - name: "Deploying configurations to CVaaS"
+        import_role:
+          name: arista.avd.eos_config_deploy_cvp
+        vars:
+          container_root: 'Standalone'
+          configlets_prefix: 'AVD'
+          device_filter: 
+            - 'e7_0r05c05052051'
+            - 'e7_0r05c05052052'
+          # Loose will ignore missing devices
+          device_inventory_mode: loose
+          state: present
+          #Will not create a change task only upload the configlet
+          execute_tasks: false
+          #Only adds a configlet and will add to CVaaS if device isn't present
+          is_deployed: true

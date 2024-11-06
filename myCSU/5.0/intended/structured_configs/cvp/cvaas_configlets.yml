@@ -1,0 +1,29 @@
+cvp_configlets: {}
+cvp_topology:
+  AVD:
+    devices: []
+    parent_container: Tenant
+  Cameras:
+    devices: []
+    parent_container: L2_LEAVES
+  DC1:
+    devices: []
+    parent_container: FABRIC
+  DC1_L2_LEAVES:
+    devices: []
+    parent_container: DC1
+  DC1_L3_LEAVES:
+    devices: []
+    parent_container: DC1
+  DC1_SPINES:
+    devices: []
+    parent_container: DC1
+  FABRIC:
+    devices: []
+    parent_container: AVD
+  L2_LEAVES:
+    devices: []
+    parent_container: Standalone
+  Standalone:
+    devices: []
+    parent_container: AVD

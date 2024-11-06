@@ -1,0 +1,88 @@
+fabric_name: AVD
+# Ansible connectivity definitions
+# eAPI connectivity via HTTPS is specified (as opposed to CLI via SSH)
+ansible_connection: ansible.netcommon.httpapi
+# Specifies that we are indeed using Arista EOS
+ansible_network_os: arista.eos.eos
+# This user/password must exist on the switches to enable Ansible access
+ansible_user: ansible
+ansible_password: ansible
+# User escalation (to enter enable mode)
+ansible_become: true
+ansible_become_method: enable
+# Use SSL (HTTPS)
+ansible_httpapi_use_ssl: true
+# Do not try to validate certs
+ansible_httpapi_validate_certs: false
+ansible_httpapi_ciphers: AES256-SHA:DHE-RSA-AES256-SHA:AES128-SHA:DHE-RSA-AES128-SHA
+# Common AVD group variables
+# Local users
+local_users:
+  # Define a new user, which is called "ansible"
+  - name: admin
+    privilege: 15
+    role: network-admin
+    # Password set to "ansible". Same string as the device generates when configuring a username.
+    sha512_password: $6$PpWBORiTjmcvvy.d$hh.79gIMJnEGOhvv0zmhgkTh1mdyA.xTikWAjhvM2g88tJ.T2A3KcFAxaFXyrUQT7sFfa6lVzOI8dgPxATLOR1
+
+# CloudVision Portal definitions
+cvp_instance_ips:
+  - cv-staging.corp.arista.io
+terminattr_smashexcludes: "ale,flexCounter,hardware,kni,pulse,strata"
+terminattr_ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
+terminattr_disable_aaa: true
+
+# DNS Server
+name_servers:
+  - 8.8.8.8
+
+
+# NTP Servers IP or DNS name, first NTP server will be prefered, and sourced from Management VRF
+custom_structured_configuration_ntp:
+  local_interface:
+    name: Management1
+    vrf: MGMT
+  servers:
+    - name: 132.163.96.3
+      vrf: MGMT
+
+
+mgmt_interface: Management1
+mgmt_interface_vrf: MGMT
+mgmt_gateway: 192.168.3.1
+mgmt_vrf_routing: yes
+
+snmp_server:
+  contact: "noc@colostate.edu"
+  hosts:
+    - host: "10.100.201.199"
+      vrf: MGMT
+      version: 2c
+      community: "csUn0c"
+  communities:
+    - name: csUn0c
+      access: ro
+banners:
+  login: |
+    ******************************************************************* NOTICE TO USERS *******************************************************************
+
+
+    This is an official computer system and is the property of Colorado State University. It is for authorized users only. Unauthorized users are prohibited. 
+    Users (authorized or unauthorized) have no explicit or implicit expectation of privacy. Any or all uses of this system may be subject to one or more of 
+    the following actions- interception, monitoring, recording, auditing, inspection and disclosing to security personnel and law enforcement personnel,
+    as well as authorized officials of other agencies, both domestic and foreign. By using this system, the user consents to these actions. Unauthorized 
+    or improper use of this system may result in administrative disciplinary action and civil and criminal penalties. 
+    By accessing this system you indicate your awareness of and consent to these terms and conditions of use. 
+    Discontinue access immediately if you do not agree to the conditions stated in this notice.
+
+    
+    ******************************************************************* NOTICE TO USERS *******************************************************************
+    EOF
+
+logging:
+  vrfs:
+    - name: MGMT
+      # Source interface name.
+      source_interface: Management1
+      hosts:
+        - name: 129.82.111.172

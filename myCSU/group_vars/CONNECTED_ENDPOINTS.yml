@@ -1,0 +1,59 @@
+---
+# Definition of connected endpoints in the fabric.
+
+      
+servers:
+
+  # Name of the defined server.
+
+  - name: Atmospheric Science
+
+    # Definition of adapters on the server.
+
+    adapters:
+
+        # Name of the server interfaces that will be used in the description of each interface
+
+      - endpoint_ports: [ A22, B22 ]
+
+        # Device ports where the server ports are connected.
+
+        switch_ports: [ Ethernet5, Ethernet5 ]
+
+        # Device names where the server ports are connected.
+
+        switches: [ WCC1, WCC2 ]
+
+# --> This needs to be descriptions, not description, when configuring multiple ports 
+
+        descriptions: [ 'level1_atmospheric-science(1120)_ats1_114b_048002_A22', 'level1_atmospheric-science(1120)_ats1_114b_048002_B22' ]
+
+        # VLANs that will be configured on these ports.
+
+        vlans: 17,48,50,401,428,472,512,513,525,804,814,2020,2716-2720,3300,3307,3349
+
+        # L2 mode of the port.
+
+        mode: trunk
+
+        # Spanning tree portfast configuration on this port.
+
+        spanning_tree_portfast: edge
+
+        # Definition of the pair of ports as port channel.
+
+# --> You can't reference the port-channel ID in the port_channel field, that is set using channel_id:, 
+
+        port_channel:
+
+          # Description of the port channel interface.
+
+          description: level1_atmospheric-science(1120)_ats1_114b_048002_Trk1
+
+# -- > channel_id: sets both the port-channel # and the MLAG # simultaneously, without this field, both are set to match the physical interface # 
+
+          channel_id: 48
+
+          # Port channel mode for LACP.
+
+          mode: active

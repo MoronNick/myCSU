@@ -1,0 +1,400 @@
+---
+tenants:
+  # Definition of tenants. Additional level of abstraction to VRFs
+  - name: TENANT1
+    # Number used to generate the VNI of each VLAN by adding the VLAN number in this tenant.
+    mac_vrf_vni_base: 10000
+    vrfs:
+      # VRF definitions inside the tenant.
+      - name: MGMT
+        static_routes:
+
+            # IPv4_address.
+          - destination_address_prefix: 0.0.0.0/0 
+
+            # IPv4_address.
+            gateway: 192.168.3.1
+      - name: WCC
+        # VRF VNI definition.
+        vrf_vni: 10
+        # Enable VTEP Network diagnostics
+        # This will create a loopback with virtual source-nat enable to perform diagnostics from the switch.
+        vtep_diagnostic:
+          # Loopback interface number
+          loopback: 10
+          # Loopback ip range, a unique ip is derived from this ranged and assigned- *Need to carve out IP space for each VRF*
+          # to each l3 leaf based on it's unique id.
+          loopback_ip_range: 10.255.10.0/27
+        svis:
+          # SVI definitions.
+          - id: 8
+            # SVI Description
+            name: West_Campus_Remote_Public
+            enabled: true
+            # IP anycast gateway to be used in the SVI in every leaf.
+            ip_address_virtual: 129.82.8.1/23
+          - id: 26
+            name: CVMBS_RBL_Public
+            enabled: true
+            ip_address_virtual: 129.82.26.1/23
+          - id: 48
+            name: COE_ATS_Public
+            enabled: true
+            ip_address_virtual: 129.82.48.1/24    
+          - id: 50
+            name: Drone_Pub
+            enabled: true
+            ip_address_virtual: 129.82.5.193/26  
+          - id: 84
+            name: vendor_foothills
+            enabled: true
+            ip_address_virtual: 129.82.84.129/26  
+          - id: 108
+            name: ACRC-CIRA_Public
+            enabled: true
+            ip_address_virtual: 129.82.108.1/23  
+          - id: 214
+            name: CVMBS_ARBL_Public
+            enabled: true
+            ip_address_virtual: 129.82.214.1/24  
+          - id: 232
+            name: ERC_Public
+            enabled: true
+            ip_address_virtual: 129.82.232.1/23
+          - id: 233
+            name: ERC_Private
+            enabled: true
+            ip_address_virtual: 10.1.232.1/23
+          - id: 248
+            name: CSFS_Public
+            enabled: true
+            ip_address_virtual: 129.82.248.1/24
+          - id: 320
+            name: WCC_PA_PtP
+            enabled: true
+            ip_address_virtual: 129.82.1.138/29
+          - id: 322
+            name: West_Campus_Remote_Private
+            enabled: true
+            ip_address_virtual: 10.1.8.1/23
+          - id: 323
+            name: West_Campus_Remote_Utility
+            enabled: true
+            ip_address_virtual: 10.11.8.1/23
+          - id: 331
+            name: CSFS_Public
+            enabled: true
+            ip_address_virtual: 10.1.214.1/24
+          - id: 332
+            name: ARBL_Utility
+            enabled: true
+            ip_address_virtual: 10.11.214.1/24  
+          - id: 351
+            name: AIDL_Private
+            enabled: true
+            ip_address_virtual: 10.1.178.1/24   
+          - id: 352
+            name: AIDL_Utility
+            enabled: true
+            ip_address_virtual: 10.11.178.1/24   
+          - id: 375
+            name: IDA_Private
+            enabled: true
+            ip_address_virtual: 10.1.179.1/24   
+          - id: 376
+            name: IDA_Utility
+            enabled: true
+            ip_address_virtual: 10.11.179.1/24   
+          - id: 384
+            name: HHS_Aggie_Labs_Private
+            enabled: true
+            ip_address_virtual: 10.3.152.1/24  
+          - id: 386
+            name: ERL_Private
+            enabled: true
+            ip_address_virtual: 10.2.216.1/23  
+          - id: 387
+            name: CVMBS_Equine_Center_Private
+            enabled: true
+            ip_address_virtual: 10.2.218.1/23  
+          - id: 388
+            name: Equine_Center_Utility
+            enabled: true
+            ip_address_virtual: 10.11.218.1/24  
+          - id: 395
+            name: ACRC-CIRA_Utility
+            enabled: true
+            ip_address_virtual: 10.11.108.1/24     
+          - id: 397
+            name: ERC_Utility
+            enabled: true
+            ip_address_virtual: 10.11.232.1/23    
+          - id: 395
+            name: ACRC-CIRA_Utility
+            enabled: true
+            ip_address_virtual: 10.11.108.1/24    
+          - id: 401
+            name: Atmos_Private
+            enabled: true
+            ip_address_virtual: 10.1.48.1/23    
+          - id: 409
+            name: ABL_Utility
+            enabled: true
+            ip_address_virtual: 10.11.228.1/24  
+          - id: 421
+            name: Aggie_Labs_Private
+            enabled: true
+            ip_address_virtual: 10.2.255.1/24 
+          - id: 422
+            name: Aggie_Labs_Utility
+            enabled: true
+            ip_address_virtual: 10.12.255.1/24 
+          - id: 426
+            name: RBL_Utility
+            enabled: true
+            ip_address_virtual: 10.11.26.1/23 
+          - id: 428
+            name: ATS_Utility
+            enabled: true
+            ip_address_virtual: 10.11.48.1/24 
+          - id: 472
+            name: SimLab_Public
+            enabled: true
+            ip_address_virtual: 129.82.4.129/25 
+          - id: 512
+            name: SimLab_Private
+            enabled: true
+            ip_address_virtual: 10.1.4.129/25 
+          - id: 513
+            name: SimLab_Utility
+            enabled: true
+            ip_address_virtual: 10.11.4.129/25 
+          - id: 525
+            name: ATS_Chem_Utility
+            enabled: true
+            ip_address_virtual: 10.11.49.1/24 
+          - id: 540
+            name: Beam_Lab_Private
+            enabled: true
+            ip_address_virtual: 10.1.228.1/24 
+          - id: 584
+            name: WCC_Public_Non_CSU
+            enabled: true
+            ip_address_virtual: 129.82.18.129/25 
+          - id: 600
+            name: WCC_ENDR_DREN_L2_link
+            enabled: true
+            ip_address_virtual: 129.82.1.72/28 
+          - id: 653
+            name: AECOM_Private
+            enabled: true
+            ip_address_virtual: 10.2.228.1/24 
+          - id: 1107
+            name: Temple_Grandin_Util
+            enabled: true
+            ip_address_virtual: 10.11.107.1/24 
+          - id: 1108
+            name: WCC_Public_Non_CSU
+            enabled: true
+            ip_address_virtual: 10.1.108.1/23 
+          - id: 1112
+            name: Engines_Lab_Priv2
+            enabled: true
+            ip_address_virtual: 10.3.106.1/24  
+          - id: 1208
+            name: ACRC-CIRA_Static_Private
+            enabled: true
+            ip_address_virtual: 10.2.108.1/23 
+          - id: 1226
+            name: CVMBS_RBL_Private
+            enabled: true
+            ip_address_virtual: 10.1.26.1/23 
+          - id: 1300
+            name: Temple_Grandin_Priv
+            enabled: true
+            ip_address_virtual: 10.1.15.1/24 
+          - id: 2326
+            name: VOIP_RIC
+            enabled: true
+            ip_address_virtual: 10.174.26.1/23 
+          - id: 2670
+            name: VOIP_ARBL
+            enabled: true
+            ip_address_virtual: 10.20.138.1/23 
+          - id: 2672
+            name: VOIP_RBL
+            enabled: true
+            ip_address_virtual: 10.20.142.1/23  
+          - id: 2676
+            name: VOIP_ERL
+            enabled: true
+            ip_address_virtual: 10.20.150.1/23 
+          - id: 2677
+            name: VOIP_Aggie_Labs
+            enabled: true
+            ip_address_virtual: 10.20.152.1/23 
+          - id: 2680
+            name: VOIP_BEAMLAB
+            enabled: true
+            ip_address_virtual: 10.20.158.1/23   
+          - id: 2684
+            name: VOIP_IDA
+            enabled: true
+            ip_address_virtual: 10.20.166.1/23 
+          - id: 2689
+            name: VOIP_CSFS
+            enabled: true
+            ip_address_virtual: 10.20.176.1/23 
+          - id: 2691
+            name: VOIP_AIDL
+            enabled: true
+            ip_address_virtual: 10.20.180.1/23 
+          - id: 2694
+            name: VOIP_AECOM
+            enabled: true
+            ip_address_virtual: 10.20.186.1/23  
+          - id: 2698
+            name: VOIP_ACRC-CIRA
+            enabled: true
+            ip_address_virtual: 10.20.194.1/23 
+          - id: 2699
+            name: VOIP_ERC
+            enabled: true
+            ip_address_virtual: 10.20.196.1/23 
+          - id: 2712
+            name: VOIP_FOOTHILLS_CATCHALL
+            enabled: true
+            ip_address_virtual: 10.20.222.1/23 
+          - id: 2716
+            name: VOIP_ATS_Main
+            enabled: true
+            ip_address_virtual: 10.20.230.1/23
+          - id: 2717
+            name: VOIP_ATS_CMMAP
+            enabled: true
+            ip_address_virtual: 10.20.232.1/23
+          - id: 2718
+            name: VOIP_ATS_Chem
+            enabled: true
+            ip_address_virtual: 10.20.234.1/23
+          - id: 2719
+            name: VOIP_ATS_Annex
+            enabled: true
+            ip_address_virtual: 10.20.236.1/23
+          - id: 2720
+            name: VOIP_SimLab
+            enabled: true
+            ip_address_virtual: 10.20.238.1/23  
+          - id: 3300
+            name: ACNS_SW-MGMT_WC
+            enabled: true
+            ip_address_virtual: 10.111.0.1/23 
+          - id: 3301
+            name: Wireless_ACRC
+            enabled: true
+            ip_address_virtual: 10.111.108.1/24 
+          - id: 3302
+            name: Wireless_ABL
+            enabled: true
+            ip_address_virtual: 10.111.228.1/24 
+          - id: 3303
+            name: Wireless_AECOM
+            enabled: true
+            ip_address_virtual: 10.111.226.1/24 
+          - id: 3304
+            name: Wireless_Aggie_Labs
+            enabled: true
+            ip_address_virtual: 10.111.255.1/24   
+          - id: 3305
+            name: Wireless_AIDL
+            enabled: true
+            ip_address_virtual: 10.111.178.1/24   
+          - id: 3306
+            name: Wireless_ARBL
+            enabled: true
+            ip_address_virtual: 10.111.214.1/24   
+          - id: 3307
+            name: Wireless_Atmospheric_Science
+            enabled: true
+            ip_address_virtual: 10.111.48.1/24   
+          - id: 3308
+            name: Wireless_CSFS
+            enabled: true
+            ip_address_virtual: 10.111.248.1/24   
+          - id: 3309
+            name: Wireless_ERC
+            enabled: true
+            ip_address_virtual: 10.111.232.1/24   
+          - id: 3310
+            name: Wireless_ERL
+            enabled: true
+            ip_address_virtual: 10.111.216.1/24   
+          - id: 3311
+            name: Wireless_IDA
+            enabled: true
+            ip_address_virtual: 10.111.179.1/24  
+          - id: 3312
+            name: Wireless_RBL
+            enabled: true
+            ip_address_virtual: 10.111.26.1/24  
+          - id: 3313
+            name: Wireless_Temple_Grandin
+            enabled: true
+            ip_address_virtual: 10.111.227.1/24   
+          - id: 3349
+            name: ACNS_UPS-MGMT_WC
+            enabled: true
+            ip_address_virtual: 10.111.2.1/23                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+      - name: VRF11
+        vrf_vni: 11
+        vtep_diagnostic:
+          loopback: 11
+          loopback_ip_range: 10.255.11.0/27
+        svis:
+          - id: 21
+            name: VRF11_VLAN21
+            enabled: true
+            ip_address_virtual: 10.10.21.1/24
+          - id: 22
+            name: VRF11_VLAN22
+            enabled: true
+            ip_address_virtual: 10.10.22.1/24
+
+    l2vlans:
+      # These are pure L2 vlans. They do not have a SVI defined in the l3leafs and they will be bridged inside the VXLAN fabric
+      - id: 168
+        name: Aruba_ctrlr_public
+      - id: 313
+        name: csu-visitor
+      - id: 314
+        name: IoT_Wireless
+      - id: 315
+        name: NOC_Systems 
+      - id: 620
+        name: Heating_2_Chill
+      - id: 634
+        name: Engr_Wifi                                            
+      - id: 804
+        name: Cardkey
+      - id: 814
+        name: EMS
+      - id: 815
+        name: IDRC_EMS        
+      - id: 817
+        name: GMP_EMS  
+      - id: 1068
+        name: Aruba_ctrlr_private
+      - id: 2020
+        name: ARUBA_000
+      - id: 2023
+        name: ARUBA_192   
+      - id: 3500
+        name: csu-net     
+      - id: 3714
+        name: .1x_foothills 
+      - id: 3785
+        name: aruba_guest 
+      - id: 3900
+        name: Wireless-1083_0 
+      - id: 3903
+        name: Wireless-1083_64                                                             

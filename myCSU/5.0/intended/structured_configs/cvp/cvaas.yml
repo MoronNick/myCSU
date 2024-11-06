@@ -1,0 +1,22 @@
+---
+cvp_devices:
+  []
+cvp_containers:
+  AVD:
+    parentContainerName: Tenant
+  Cameras:
+    parentContainerName: L2_LEAVES
+  DC1:
+    parentContainerName: FABRIC
+  DC1_L2_LEAVES:
+    parentContainerName: DC1
+  DC1_L3_LEAVES:
+    parentContainerName: DC1
+  DC1_SPINES:
+    parentContainerName: DC1
+  FABRIC:
+    parentContainerName: AVD
+  L2_LEAVES:
+    parentContainerName: Standalone
+  Standalone:
+    parentContainerName: AVD

@@ -1,0 +1,17 @@
+---
+cvp_devices:
+  - fqdn: e7_0r05c05052051
+    parentContainerName: Cameras
+    configlets:
+      - AVD_e7_0r05c05052051
+  - fqdn: e7_0r05c05052052
+    parentContainerName: Cameras
+    configlets:
+      - AVD_e7_0r05c05052052
+cvp_containers:
+  Cameras:
+    parentContainerName: L2_LEAVES
+  L2_LEAVES:
+    parentContainerName: Standalone
+  Standalone:
+    parentContainerName: Tenant

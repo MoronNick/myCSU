@@ -1,0 +1,15 @@
+Node Type,Node,Node Interface,Peer Type,Peer Node,Peer Interface,Node Interface Enabled
+spine,Spine1,Ethernet1/1,l3leaf,WCC1,Ethernet53/1,True
+spine,Spine1,Ethernet2/1,l3leaf,WCC2,Ethernet53/1,True
+spine,Spine2,Ethernet1/1,l3leaf,WCC1,Ethernet54/1,True
+spine,Spine2,Ethernet2/1,l3leaf,WCC2,Ethernet54/1,True
+l3leaf,WCC1,Ethernet5,server,Atmospheric Science,A22,True
+l3leaf,WCC1,Ethernet49/1,mlag_peer,WCC2,Ethernet49/1,True
+l3leaf,WCC1,Ethernet50/1,mlag_peer,WCC2,Ethernet50/1,True
+l3leaf,WCC1,Ethernet53/1,spine,Spine1,Ethernet1/1,True
+l3leaf,WCC1,Ethernet54/1,spine,Spine2,Ethernet1/1,True
+l3leaf,WCC2,Ethernet5,server,Atmospheric Science,B22,True
+l3leaf,WCC2,Ethernet49/1,mlag_peer,WCC1,Ethernet49/1,True
+l3leaf,WCC2,Ethernet50/1,mlag_peer,WCC1,Ethernet50/1,True
+l3leaf,WCC2,Ethernet53/1,spine,Spine1,Ethernet2/1,True
+l3leaf,WCC2,Ethernet54/1,spine,Spine2,Ethernet2/1,True
