@@ -380,6 +380,7 @@ ASN Notation: asplain
 
 | BGP Tuning |
 | ---------- |
+| update wait-install |
 | no bgp default ipv4-unicast |
 | maximum-paths 4 ecmp 4 |
 
@@ -428,6 +429,7 @@ ASN Notation: asplain
 !
 router bgp 65100
    router-id 10.255.0.1
+   update wait-install
    no bgp default ipv4-unicast
    maximum-paths 4 ecmp 4
    neighbor EVPN-OVERLAY-PEERS peer group

@@ -7,11 +7,13 @@
         import_role:
           name: arista.avd.eos_config_deploy_cvp
         vars:
-          container_root: 'Standalone'
+          container_root: CSU
           configlets_prefix: 'AVD'
           device_filter: 
             - 'e7_0r05c05052051'
             - 'e7_0r05c05052052'
+          #ADDING to build structured but not push to CVaaS
+          avd_eos_config_deploy_cvp_provision : false
           # Loose will ignore missing devices
           device_inventory_mode: loose
           state: present

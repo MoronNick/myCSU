@@ -9,8 +9,8 @@
         vars:
           container_root: 'AVD'
           configlets_prefix: 'AVD'
-          device_filter: 
-            - 'DC1'
+          # device_filter: 
+          #   - 'DC1'
           # Loose will ignore missing devices
           device_inventory_mode: loose
           state: present
@@ -18,4 +18,4 @@
           execute_tasks: false
           #Only adds a configlet and will add to CVaaS if device isn't present
           is_deployed: false
-          # avd_eos_config_deploy_cvp_provision : false
+          avd_eos_config_deploy_cvp_provision : false

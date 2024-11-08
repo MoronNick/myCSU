@@ -1,6 +1,29 @@
 ---
 cvp_devices:
-  []
+  - fqdn: e7_0r05c05052051
+    parentContainerName: Cameras
+    configlets:
+      - AVD_e7_0r05c05052051
+  - fqdn: e7_0r05c05052052
+    parentContainerName: Cameras
+    configlets:
+      - AVD_e7_0r05c05052052
+  - fqdn: Spine1
+    parentContainerName: DC1_SPINES
+    configlets:
+      - AVD_Spine1
+  - fqdn: Spine2
+    parentContainerName: DC1_SPINES
+    configlets:
+      - AVD_Spine2
+  - fqdn: WCC1
+    parentContainerName: DC1_L3_LEAVES
+    configlets:
+      - AVD_WCC1
+  - fqdn: WCC2
+    parentContainerName: DC1_L3_LEAVES
+    configlets:
+      - AVD_WCC2
 cvp_containers:
   AVD:
     parentContainerName: Tenant

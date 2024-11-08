@@ -19,8 +19,8 @@
 | --- | ---- | ---- | ------------- | -------- | -------------------------- | ------------- |
 | AVD | l2leaf | e7_0r05c05052051 | 192.168.3.104/24 | - | Provisioned | - |
 | AVD | l2leaf | e7_0r05c05052052 | 192.168.3.105/24 | - | Provisioned | - |
-| AVD | spine | Spine1 | 192.168.3.100/24 | vEOS-lab | Provisioned | - |
-| AVD | spine | Spine2 | 192.168.3.101/24 | vEOS-lab | Provisioned | - |
+| AVD | spine | Spine1 | 192.168.3.100/24 | - | Provisioned | - |
+| AVD | spine | Spine2 | 192.168.3.101/24 | - | Provisioned | - |
 | AVD | l3leaf | WCC1 | 192.168.3.102/24 | vEOS-lab | Provisioned | - |
 | AVD | l3leaf | WCC2 | 192.168.3.103/24 | vEOS-lab | Provisioned | - |
 

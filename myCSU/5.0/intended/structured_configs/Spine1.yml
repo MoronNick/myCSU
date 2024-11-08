@@ -13,6 +13,8 @@ router_bgp:
     connected:
       enabled: true
       route_map: RM-CONN-2-BGP
+  updates:
+    wait_install: true
   peer_groups:
   - name: IPv4-UNDERLAY-PEERS
     type: ipv4
@@ -154,8 +156,6 @@ router_bfd:
     interval: 300
     min_rx: 300
     multiplier: 3
-metadata:
-  platform: vEOS-lab
 ntp:
   local_interface:
     name: Management1
