@@ -27,11 +27,9 @@ local_users:
 
 # CloudVision Portal definitions
 cvp_instance_ips:
-  - cv-staging.corp.arista.io
-terminattr_smashexcludes: "ale,flexCounter,hardware,kni,pulse,strata"
-terminattr_ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
+  - apiserver.cv-staging.corp.arista.io
+#  - cv-staging.corp.arista.io
 terminattr_disable_aaa: true
-
 # DNS Server
 name_servers:
   - 8.8.8.8
@@ -87,18 +85,4 @@ logging:
       hosts:
         - name: 129.82.111.172
 
-##ADD configlet assignment to devices - currently we are just updating existing configlets:
-# cv_configlets:
-#   devices:
-#     Spine1:
-#       - configprefix_Spine1.cfg
-#     Spine2:
-#       - configprefix_Spine2.cfg
-#     WCC1:
-#       - configprefix_WCC1.cfg
-#     WCC2:
-#       - configprefix_WCC2.cfg   
-#     e7_0r05c05052051:
-#       - configprefix_e7_0r05c05052051.cfg
-#     e7_0r05c05052052:
-#       - configprefix_e7_0r05c05052052.cfg
+

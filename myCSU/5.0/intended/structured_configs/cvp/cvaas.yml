@@ -3,27 +3,27 @@ cvp_devices:
   - fqdn: e7_0r05c05052051
     parentContainerName: Cameras
     configlets:
-      - AVD_e7_0r05c05052051
+      - CSU_e7_0r05c05052051
   - fqdn: e7_0r05c05052052
     parentContainerName: Cameras
     configlets:
-      - AVD_e7_0r05c05052052
+      - CSU_e7_0r05c05052052
   - fqdn: Spine1
     parentContainerName: DC1_SPINES
     configlets:
-      - AVD_Spine1
+      - CSU_Spine1
   - fqdn: Spine2
     parentContainerName: DC1_SPINES
     configlets:
-      - AVD_Spine2
+      - CSU_Spine2
   - fqdn: WCC1
     parentContainerName: DC1_L3_LEAVES
     configlets:
-      - AVD_WCC1
+      - CSU_WCC1
   - fqdn: WCC2
     parentContainerName: DC1_L3_LEAVES
     configlets:
-      - AVD_WCC2
+      - CSU_WCC2
 cvp_containers:
   AVD:
     parentContainerName: Tenant
@@ -31,8 +31,6 @@ cvp_containers:
     parentContainerName: L2_LEAVES
   DC1:
     parentContainerName: FABRIC
-  DC1_L2_LEAVES:
-    parentContainerName: DC1
   DC1_L3_LEAVES:
     parentContainerName: DC1
   DC1_SPINES:

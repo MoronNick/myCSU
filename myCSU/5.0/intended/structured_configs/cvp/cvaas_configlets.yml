@@ -1,7 +1,7 @@
 cvp_configlets:
-  AVD_Spine1: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15
+  CSU_Spine1: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15
     role network-admin secret sha512 $6$PpWBORiTjmcvvy.d$hh.79gIMJnEGOhvv0zmhgkTh1mdyA.xTikWAjhvM2g88tJ.T2A3KcFAxaFXyrUQT7sFfa6lVzOI8dgPxATLOR1\n!\ndaemon
-    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=cv-staging.corp.arista.io:443
+    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=MGMT -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
     -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs\n   no shutdown\n!\nvlan
     internal order ascending range 1006 1199\n!\ntransceiver qsfp default-mode 4x10G\n!\nservice
@@ -55,9 +55,9 @@ cvp_configlets:
     evpn\n      neighbor EVPN-OVERLAY-PEERS activate\n   !\n   address-family ipv4\n
     \     no neighbor EVPN-OVERLAY-PEERS activate\n      neighbor IPv4-UNDERLAY-PEERS
     activate\n!\nend\n"
-  AVD_Spine2: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15
+  CSU_Spine2: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15
     role network-admin secret sha512 $6$PpWBORiTjmcvvy.d$hh.79gIMJnEGOhvv0zmhgkTh1mdyA.xTikWAjhvM2g88tJ.T2A3KcFAxaFXyrUQT7sFfa6lVzOI8dgPxATLOR1\n!\ndaemon
-    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=cv-staging.corp.arista.io:443
+    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=MGMT -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
     -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs\n   no shutdown\n!\nvlan
     internal order ascending range 1006 1199\n!\ntransceiver qsfp default-mode 4x10G\n!\nservice
@@ -111,9 +111,9 @@ cvp_configlets:
     evpn\n      neighbor EVPN-OVERLAY-PEERS activate\n   !\n   address-family ipv4\n
     \     no neighbor EVPN-OVERLAY-PEERS activate\n      neighbor IPv4-UNDERLAY-PEERS
     activate\n!\nend\n"
-  AVD_WCC1: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15 role
+  CSU_WCC1: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15 role
     network-admin secret sha512 $6$PpWBORiTjmcvvy.d$hh.79gIMJnEGOhvv0zmhgkTh1mdyA.xTikWAjhvM2g88tJ.T2A3KcFAxaFXyrUQT7sFfa6lVzOI8dgPxATLOR1\n!\ndaemon
-    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=cv-staging.corp.arista.io:443
+    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=MGMT -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
     -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs\n   no shutdown\n!\nvlan
     internal order ascending range 1006 1199\n!\ntransceiver qsfp default-mode 4x10G\n!\nservice
@@ -543,9 +543,9 @@ cvp_configlets:
     \     neighbor 10.255.1.97 peer group MLAG-IPv4-UNDERLAY-PEER\n      neighbor
     10.255.1.97 description WCC2_Vlan3009\n      redistribute connected route-map
     RM-CONN-2-BGP-VRFS\n!\nend\n"
-  AVD_WCC2: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15 role
+  CSU_WCC2: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15 role
     network-admin secret sha512 $6$PpWBORiTjmcvvy.d$hh.79gIMJnEGOhvv0zmhgkTh1mdyA.xTikWAjhvM2g88tJ.T2A3KcFAxaFXyrUQT7sFfa6lVzOI8dgPxATLOR1\n!\ndaemon
-    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=cv-staging.corp.arista.io:443
+    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=MGMT -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
     -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs\n   no shutdown\n!\nvlan
     internal order ascending range 1006 1199\n!\ntransceiver qsfp default-mode 4x10G\n!\nservice
@@ -975,9 +975,9 @@ cvp_configlets:
     \     neighbor 10.255.1.96 peer group MLAG-IPv4-UNDERLAY-PEER\n      neighbor
     10.255.1.96 description WCC1_Vlan3009\n      redistribute connected route-map
     RM-CONN-2-BGP-VRFS\n!\nend\n"
-  AVD_e7_0r05c05052051: "!\nno enable password\nno aaa root\n!\nusername admin privilege
+  CSU_e7_0r05c05052051: "!\nno enable password\nno aaa root\n!\nusername admin privilege
     15 role network-admin secret sha512 $6$PpWBORiTjmcvvy.d$hh.79gIMJnEGOhvv0zmhgkTh1mdyA.xTikWAjhvM2g88tJ.T2A3KcFAxaFXyrUQT7sFfa6lVzOI8dgPxATLOR1\n!\ndaemon
-    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=cv-staging.corp.arista.io:443
+    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=MGMT -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
     -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs\n   no shutdown\n!\nvlan
     internal order ascending range 1006 1199\n!\ntransceiver qsfp default-mode 4x10G\n!\nservice
@@ -1038,9 +1038,9 @@ cvp_configlets:
     \  reload-delay mlag 300\n   reload-delay non-mlag 330\n!\nip route vrf MGMT 0.0.0.0/0
     192.168.3.1\n!\nntp local-interface vrf MGMT Management1\nntp server vrf MGMT
     132.163.96.3\n!\nend\n"
-  AVD_e7_0r05c05052052: "!\nno enable password\nno aaa root\n!\nusername admin privilege
+  CSU_e7_0r05c05052052: "!\nno enable password\nno aaa root\n!\nusername admin privilege
     15 role network-admin secret sha512 $6$PpWBORiTjmcvvy.d$hh.79gIMJnEGOhvv0zmhgkTh1mdyA.xTikWAjhvM2g88tJ.T2A3KcFAxaFXyrUQT7sFfa6lVzOI8dgPxATLOR1\n!\ndaemon
-    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=cv-staging.corp.arista.io:443
+    TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=MGMT -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
     -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs\n   no shutdown\n!\nvlan
     internal order ascending range 1006 1199\n!\ntransceiver qsfp default-mode 4x10G\n!\nservice
@@ -1113,9 +1113,6 @@ cvp_topology:
   DC1:
     devices: []
     parent_container: FABRIC
-  DC1_L2_LEAVES:
-    devices: []
-    parent_container: DC1
   DC1_L3_LEAVES:
     devices:
     - WCC1

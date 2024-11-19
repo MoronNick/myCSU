@@ -8,7 +8,7 @@
           name: arista.avd.eos_config_deploy_cvp
         vars:
           container_root: 'AVD'
-          configlets_prefix: 'AVD'
+          configlets_prefix: 'CSU'
           # device_filter: 
           #   - 'DC1'
           # Loose will ignore missing devices
@@ -17,5 +17,5 @@
           #Will not create a change task only upload the configlet
           execute_tasks: false
           #Only adds a configlet and will add to CVaaS if device isn't present
-          is_deployed: false
-          avd_eos_config_deploy_cvp_provision : false
+          is_deployed: true
+          #avd_eos_config_deploy_cvp_provision : false

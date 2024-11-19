@@ -31,8 +31,6 @@ all:
                       ansible_host: 192.168.3.102
                     WCC2:
                       ansible_host: 192.168.3.103
-                DC1_L2_LEAVES:
-                  hosts:
         Standalone: 
           children:
             L2_LEAVES:
