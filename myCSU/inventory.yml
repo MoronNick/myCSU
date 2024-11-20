@@ -13,7 +13,7 @@ all:
           ansible_httpapi_validate_certs: false
           ansible_network_os: eos
           ansible_httpapi_port: 443
-    AVD:
+    CSU:
       children:
         FABRIC:
           children:

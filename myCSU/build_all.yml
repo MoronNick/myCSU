@@ -1,6 +1,6 @@
 
 - name: Build Configurations and Documentation # (1)!
-  hosts: AVD
+  hosts: CSU
   gather_facts: false
   tasks:
 

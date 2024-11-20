@@ -1,4 +1,4 @@
-fabric_name: AVD
+fabric_name: CSU
 # Ansible connectivity definitions
 # eAPI connectivity via HTTPS is specified (as opposed to CLI via SSH)
 ansible_connection: ansible.netcommon.httpapi
