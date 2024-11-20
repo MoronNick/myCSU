@@ -1,29 +1,26 @@
 fabric_name: CSU
-# Ansible connectivity definitions
-# eAPI connectivity via HTTPS is specified (as opposed to CLI via SSH)
-ansible_connection: ansible.netcommon.httpapi
-# Specifies that we are indeed using Arista EOS
-ansible_network_os: arista.eos.eos
-# This user/password must exist on the switches to enable Ansible access
-ansible_user: ansible
-ansible_password: ansible
-# User escalation (to enter enable mode)
-ansible_become: true
-ansible_become_method: enable
-# Use SSL (HTTPS)
-ansible_httpapi_use_ssl: true
-# Do not try to validate certs
-ansible_httpapi_validate_certs: false
-ansible_httpapi_ciphers: AES256-SHA:DHE-RSA-AES256-SHA:AES128-SHA:DHE-RSA-AES128-SHA
+# # Ansible connectivity definitions
+# # eAPI connectivity via HTTPS is specified (as opposed to CLI via SSH)
+# ansible_connection: ansible.netcommon.httpapi
+# # Specifies that we are indeed using Arista EOS
+# ansible_network_os: arista.eos.eos
+# # This user/password must exist on the switches to enable Ansible access
+# ansible_user: ansible
+# ansible_password: ansible
+# # User escalation (to enter enable mode)
+# ansible_become: true
+# ansible_become_method: enable
+# # Use SSL (HTTPS)
+# ansible_httpapi_use_ssl: true
+# # Do not try to validate certs
+# ansible_httpapi_validate_certs: false
+# ansible_httpapi_ciphers: AES256-SHA:DHE-RSA-AES256-SHA:AES128-SHA:DHE-RSA-AES128-SHA
 # Common AVD group variables
 # Local users
 local_users:
   # Define a new user, which is called "ansible"
   - name: admin
-    privilege: 15
-    role: network-admin
-    # Password set to "ansible". Same string as the device generates when configuring a username.
-    sha512_password: $6$PpWBORiTjmcvvy.d$hh.79gIMJnEGOhvv0zmhgkTh1mdyA.xTikWAjhvM2g88tJ.T2A3KcFAxaFXyrUQT7sFfa6lVzOI8dgPxATLOR1
+    disabled: true
 
 # CloudVision Portal definitions
 cvp_instance_ips:
@@ -84,5 +81,27 @@ logging:
       source_interface: Management1
       hosts:
         - name: 129.82.111.172
+
+#### CSU Possible additions        
+ip_access_lists:
+  - name: mgmt-acl
+    # Can't run in vEOS
+    # counters_per_entry: true
+    entries:
+      - sequence: 10
+        action: permit
+        protocol: ip
+        source: 192.168.1.0/24
+        destination: any
+      - sequence: 20
+        action: permit
+        protocol: ip
+        source: 192.168.3.0/24
+        destination: any      
+
+management_ssh:
+  access_groups:
+    - name: mgmt-acl
+      vrf: MGMT
 
 

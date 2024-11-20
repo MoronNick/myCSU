@@ -23,6 +23,13 @@
 underlay_routing_protocol: ebgp
 overlay_routing_protocol: ebgp
 
+custom_structured_configuration_local_users:
+  # Define a new user, which is called "ansible"
+  - name: nmoore
+    privilege: 15
+    role: network-admin
+    # Password set to "ansible". Same string as the device generates when configuring a username.
+    sha512_password: $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/ 
 # REMOVE DUPLICATE IN AVD.yml
 # # Local users
 # local_users:

@@ -7,7 +7,7 @@
         import_role:
           name: arista.avd.eos_config_deploy_cvp
         vars:
-          container_root: 'AVD'
+          container_root: 'CSU'
           configlets_prefix: 'CSU'
           # device_filter: 
           #   - 'DC1'

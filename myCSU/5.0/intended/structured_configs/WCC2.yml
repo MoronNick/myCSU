@@ -937,9 +937,11 @@ spanning_tree:
   no_spanning_tree_vlan: 4093-4094
 local_users:
 - name: admin
+  disabled: true
+- name: nmoore
   privilege: 15
   role: network-admin
-  sha512_password: $6$PpWBORiTjmcvvy.d$hh.79gIMJnEGOhvv0zmhgkTh1mdyA.xTikWAjhvM2g88tJ.T2A3KcFAxaFXyrUQT7sFfa6lVzOI8dgPxATLOR1
+  sha512_password: $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/
 vrfs:
 - name: MGMT
   ip_routing: true
