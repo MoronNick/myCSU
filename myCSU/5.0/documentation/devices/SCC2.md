@@ -1,4 +1,4 @@
-# WCC1
+# SCC2
 
 ## Table of Contents
 
@@ -67,7 +67,7 @@
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB_MANAGEMENT | oob | MGMT | 192.168.100.202/24 | 192.168.100.1 |
+| Management1 | OOB_MANAGEMENT | oob | MGMT | 192.168.100.205/24 | 192.168.100.1 |
 
 ##### IPv6
 
@@ -83,7 +83,7 @@ interface Management1
    description OOB_MANAGEMENT
    no shutdown
    vrf MGMT
-   ip address 192.168.100.202/24
+   ip address 192.168.100.205/24
 ```
 
 ### IP Name Servers
@@ -302,7 +302,7 @@ snmp-server host 10.100.201.199 vrf MGMT version 2c <removed>
 
 | Domain-id | Local-interface | Peer-address | Peer-link |
 | --------- | --------------- | ------------ | --------- |
-| DC1_L3_LEAF1 | Vlan4094 | 10.255.1.65 | Port-Channel11 |
+| DC1_L3_LEAF2 | Vlan4094 | 10.255.1.68 | Port-Channel11 |
 
 Dual primary detection is disabled.
 
@@ -311,9 +311,9 @@ Dual primary detection is disabled.
 ```eos
 !
 mlag configuration
-   domain-id DC1_L3_LEAF1
+   domain-id DC1_L3_LEAF2
    local-interface Vlan4094
-   peer-address 10.255.1.65
+   peer-address 10.255.1.68
    peer-link Port-Channel11
    reload-delay mlag 300
    reload-delay non-mlag 330
@@ -793,9 +793,8 @@ vlan 4094
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet5 | level1_atmospheric-science(1120)_ats1_114b_048002_A22 | *trunk | *17,48,50,401,428,472,512-513,525,804,814,2020,2716-2720,3300,3307,3349 | *- | *- | 48 |
-| Ethernet11 | MLAG_WCC2_Ethernet11 | *trunk | *- | *- | *MLAG | 11 |
-| Ethernet12 | MLAG_WCC2_Ethernet12 | *trunk | *- | *- | *MLAG | 11 |
+| Ethernet11 | MLAG_SCC1_Ethernet11 | *trunk | *- | *- | *MLAG | 11 |
+| Ethernet12 | MLAG_SCC1_Ethernet12 | *trunk | *- | *- | *MLAG | 11 |
 
 *Inherited from Port-Channel Interface
 
@@ -803,39 +802,34 @@ vlan 4094
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet7 | P2P_Spine1_Ethernet1 | - | 10.255.255.1/31 | default | 1500 | False | - | - |
-| Ethernet8 | P2P_Spine2_Ethernet1 | - | 10.255.255.3/31 | default | 1500 | False | - | - |
+| Ethernet7 | P2P_Spine1_Ethernet4 | - | 10.255.255.13/31 | default | 1500 | False | - | - |
+| Ethernet8 | P2P_Spine2_Ethernet4 | - | 10.255.255.15/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
 ```eos
 !
-interface Ethernet5
-   description level1_atmospheric-science(1120)_ats1_114b_048002_A22
-   no shutdown
-   channel-group 48 mode active
-!
 interface Ethernet7
-   description P2P_Spine1_Ethernet1
+   description P2P_Spine1_Ethernet4
    no shutdown
    mtu 1500
    no switchport
-   ip address 10.255.255.1/31
+   ip address 10.255.255.13/31
 !
 interface Ethernet8
-   description P2P_Spine2_Ethernet1
+   description P2P_Spine2_Ethernet4
    no shutdown
    mtu 1500
    no switchport
-   ip address 10.255.255.3/31
+   ip address 10.255.255.15/31
 !
 interface Ethernet11
-   description MLAG_WCC2_Ethernet11
+   description MLAG_SCC1_Ethernet11
    no shutdown
    channel-group 11 mode active
 !
 interface Ethernet12
-   description MLAG_WCC2_Ethernet12
+   description MLAG_SCC1_Ethernet12
    no shutdown
    channel-group 11 mode active
 ```
@@ -848,28 +842,18 @@ interface Ethernet12
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel11 | MLAG_WCC2_Port-Channel11 | trunk | - | - | MLAG | - | - | - | - |
-| Port-Channel48 | level1_atmospheric-science(1120)_ats1_114b_048002_Trk1 | trunk | 17,48,50,401,428,472,512-513,525,804,814,2020,2716-2720,3300,3307,3349 | - | - | - | - | 48 | - |
+| Port-Channel11 | MLAG_SCC1_Port-Channel11 | trunk | - | - | MLAG | - | - | - | - |
 
 #### Port-Channel Interfaces Device Configuration
 
 ```eos
 !
 interface Port-Channel11
-   description MLAG_WCC2_Port-Channel11
+   description MLAG_SCC1_Port-Channel11
    no shutdown
    switchport mode trunk
    switchport trunk group MLAG
    switchport
-!
-interface Port-Channel48
-   description level1_atmospheric-science(1120)_ats1_114b_048002_Trk1
-   no shutdown
-   switchport trunk allowed vlan 17,48,50,401,428,472,512,513,525,804,814,2020,2716-2720,3300,3307,3349
-   switchport mode trunk
-   switchport
-   mlag 48
-   spanning-tree portfast
 ```
 
 ### Loopback Interfaces
@@ -880,10 +864,10 @@ interface Port-Channel48
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | ROUTER_ID | default | 10.255.0.3/32 |
-| Loopback1 | VXLAN_TUNNEL_SOURCE | default | 10.255.1.3/32 |
-| Loopback10 | DIAG_VRF_WCC | WCC | 10.255.10.3/32 |
-| Loopback11 | DIAG_VRF_VRF11 | VRF11 | 10.255.11.3/32 |
+| Loopback0 | ROUTER_ID | default | 10.255.0.6/32 |
+| Loopback1 | VXLAN_TUNNEL_SOURCE | default | 10.255.1.5/32 |
+| Loopback10 | DIAG_VRF_WCC | WCC | 10.255.10.6/32 |
+| Loopback11 | DIAG_VRF_VRF11 | VRF11 | 10.255.11.6/32 |
 
 ##### IPv6
 
@@ -901,24 +885,24 @@ interface Port-Channel48
 interface Loopback0
    description ROUTER_ID
    no shutdown
-   ip address 10.255.0.3/32
+   ip address 10.255.0.6/32
 !
 interface Loopback1
    description VXLAN_TUNNEL_SOURCE
    no shutdown
-   ip address 10.255.1.3/32
+   ip address 10.255.1.5/32
 !
 interface Loopback10
    description DIAG_VRF_WCC
    no shutdown
    vrf WCC
-   ip address 10.255.10.3/32
+   ip address 10.255.10.6/32
 !
 interface Loopback11
    description DIAG_VRF_VRF11
    no shutdown
    vrf VRF11
-   ip address 10.255.11.3/32
+   ip address 10.255.11.6/32
 ```
 
 ### VLAN Interfaces
@@ -1081,8 +1065,8 @@ interface Loopback11
 | Vlan2718 |  WCC  |  -  |  10.20.234.1/23  |  -  |  -  |  -  |
 | Vlan2719 |  WCC  |  -  |  10.20.236.1/23  |  -  |  -  |  -  |
 | Vlan2720 |  WCC  |  -  |  10.20.238.1/23  |  -  |  -  |  -  |
-| Vlan3009 |  WCC  |  10.255.1.96/31  |  -  |  -  |  -  |  -  |
-| Vlan3010 |  VRF11  |  10.255.1.96/31  |  -  |  -  |  -  |  -  |
+| Vlan3009 |  WCC  |  10.255.1.101/31  |  -  |  -  |  -  |  -  |
+| Vlan3010 |  VRF11  |  10.255.1.101/31  |  -  |  -  |  -  |  -  |
 | Vlan3300 |  WCC  |  -  |  10.111.0.1/23  |  -  |  -  |  -  |
 | Vlan3301 |  WCC  |  -  |  10.111.108.1/24  |  -  |  -  |  -  |
 | Vlan3302 |  WCC  |  -  |  10.111.228.1/24  |  -  |  -  |  -  |
@@ -1098,8 +1082,8 @@ interface Loopback11
 | Vlan3312 |  WCC  |  -  |  10.111.26.1/24  |  -  |  -  |  -  |
 | Vlan3313 |  WCC  |  -  |  10.111.227.1/24  |  -  |  -  |  -  |
 | Vlan3349 |  WCC  |  -  |  10.111.2.1/23  |  -  |  -  |  -  |
-| Vlan4093 |  default  |  10.255.1.96/31  |  -  |  -  |  -  |  -  |
-| Vlan4094 |  default  |  10.255.1.64/31  |  -  |  -  |  -  |  -  |
+| Vlan4093 |  default  |  10.255.1.101/31  |  -  |  -  |  -  |  -  |
+| Vlan4094 |  default  |  10.255.1.69/31  |  -  |  -  |  -  |  -  |
 
 #### VLAN Interfaces Device Configuration
 
@@ -1500,14 +1484,14 @@ interface Vlan3009
    no shutdown
    mtu 1500
    vrf WCC
-   ip address 10.255.1.96/31
+   ip address 10.255.1.101/31
 !
 interface Vlan3010
    description MLAG_L3_VRF_VRF11
    no shutdown
    mtu 1500
    vrf VRF11
-   ip address 10.255.1.96/31
+   ip address 10.255.1.101/31
 !
 interface Vlan3300
    description ACNS_SW-MGMT_WC
@@ -1603,14 +1587,14 @@ interface Vlan4093
    description MLAG_L3
    no shutdown
    mtu 1500
-   ip address 10.255.1.96/31
+   ip address 10.255.1.101/31
 !
 interface Vlan4094
    description MLAG
    no shutdown
    mtu 1500
    no autostate
-   ip address 10.255.1.64/31
+   ip address 10.255.1.69/31
 ```
 
 ### VXLAN Interface
@@ -1738,7 +1722,7 @@ interface Vlan4094
 ```eos
 !
 interface Vxlan1
-   description WCC1_VTEP
+   description SCC2_VTEP
    vxlan source-interface Loopback1
    vxlan virtual-router encapsulation mac-address mlag-system-id
    vxlan udp-port 4789
@@ -1923,7 +1907,7 @@ ASN Notation: asplain
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65101 | 10.255.0.3 |
+| 65102 | 10.255.0.6 |
 
 | BGP Tuning |
 | ---------- |
@@ -1956,7 +1940,7 @@ ASN Notation: asplain
 | Settings | Value |
 | -------- | ----- |
 | Address Family | ipv4 |
-| Remote AS | 65101 |
+| Remote AS | 65102 |
 | Next-hop self | True |
 | Send community | all |
 | Maximum routes | 12000 |
@@ -1967,11 +1951,11 @@ ASN Notation: asplain
 | -------- | --------- | --- | -------- | -------------- | -------------- | ---------- | --- | --------------------- | ---------------------- | ------- | ------------ |
 | 10.255.0.1 | 65100 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.255.0.2 | 65100 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
-| 10.255.1.97 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | default | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
-| 10.255.255.0 | 65100 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
-| 10.255.255.2 | 65100 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
-| 10.255.1.97 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | VRF11 | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
-| 10.255.1.97 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | WCC | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
+| 10.255.1.100 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | default | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
+| 10.255.255.12 | 65100 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
+| 10.255.255.14 | 65100 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
+| 10.255.1.100 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | VRF11 | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
+| 10.255.1.100 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | WCC | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
 
 #### Router BGP EVPN Address Family
 
@@ -1985,118 +1969,118 @@ ASN Notation: asplain
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
-| 8 | 10.255.0.3:10008 | 10008:10008 | - | - | learned |
-| 21 | 10.255.0.3:10021 | 10021:10021 | - | - | learned |
-| 22 | 10.255.0.3:10022 | 10022:10022 | - | - | learned |
-| 26 | 10.255.0.3:10026 | 10026:10026 | - | - | learned |
-| 48 | 10.255.0.3:10048 | 10048:10048 | - | - | learned |
-| 50 | 10.255.0.3:10050 | 10050:10050 | - | - | learned |
-| 84 | 10.255.0.3:10084 | 10084:10084 | - | - | learned |
-| 108 | 10.255.0.3:10108 | 10108:10108 | - | - | learned |
-| 168 | 10.255.0.3:10168 | 10168:10168 | - | - | learned |
-| 214 | 10.255.0.3:10214 | 10214:10214 | - | - | learned |
-| 232 | 10.255.0.3:10232 | 10232:10232 | - | - | learned |
-| 233 | 10.255.0.3:10233 | 10233:10233 | - | - | learned |
-| 248 | 10.255.0.3:10248 | 10248:10248 | - | - | learned |
-| 313 | 10.255.0.3:10313 | 10313:10313 | - | - | learned |
-| 314 | 10.255.0.3:10314 | 10314:10314 | - | - | learned |
-| 315 | 10.255.0.3:10315 | 10315:10315 | - | - | learned |
-| 320 | 10.255.0.3:10320 | 10320:10320 | - | - | learned |
-| 322 | 10.255.0.3:10322 | 10322:10322 | - | - | learned |
-| 323 | 10.255.0.3:10323 | 10323:10323 | - | - | learned |
-| 331 | 10.255.0.3:10331 | 10331:10331 | - | - | learned |
-| 332 | 10.255.0.3:10332 | 10332:10332 | - | - | learned |
-| 351 | 10.255.0.3:10351 | 10351:10351 | - | - | learned |
-| 352 | 10.255.0.3:10352 | 10352:10352 | - | - | learned |
-| 375 | 10.255.0.3:10375 | 10375:10375 | - | - | learned |
-| 376 | 10.255.0.3:10376 | 10376:10376 | - | - | learned |
-| 384 | 10.255.0.3:10384 | 10384:10384 | - | - | learned |
-| 386 | 10.255.0.3:10386 | 10386:10386 | - | - | learned |
-| 387 | 10.255.0.3:10387 | 10387:10387 | - | - | learned |
-| 388 | 10.255.0.3:10388 | 10388:10388 | - | - | learned |
-| 395 | 10.255.0.3:10395 | 10395:10395 | - | - | learned |
-| 397 | 10.255.0.3:10397 | 10397:10397 | - | - | learned |
-| 401 | 10.255.0.3:10401 | 10401:10401 | - | - | learned |
-| 409 | 10.255.0.3:10409 | 10409:10409 | - | - | learned |
-| 421 | 10.255.0.3:10421 | 10421:10421 | - | - | learned |
-| 422 | 10.255.0.3:10422 | 10422:10422 | - | - | learned |
-| 426 | 10.255.0.3:10426 | 10426:10426 | - | - | learned |
-| 428 | 10.255.0.3:10428 | 10428:10428 | - | - | learned |
-| 472 | 10.255.0.3:10472 | 10472:10472 | - | - | learned |
-| 512 | 10.255.0.3:10512 | 10512:10512 | - | - | learned |
-| 513 | 10.255.0.3:10513 | 10513:10513 | - | - | learned |
-| 525 | 10.255.0.3:10525 | 10525:10525 | - | - | learned |
-| 540 | 10.255.0.3:10540 | 10540:10540 | - | - | learned |
-| 584 | 10.255.0.3:10584 | 10584:10584 | - | - | learned |
-| 600 | 10.255.0.3:10600 | 10600:10600 | - | - | learned |
-| 620 | 10.255.0.3:10620 | 10620:10620 | - | - | learned |
-| 634 | 10.255.0.3:10634 | 10634:10634 | - | - | learned |
-| 653 | 10.255.0.3:10653 | 10653:10653 | - | - | learned |
-| 804 | 10.255.0.3:10804 | 10804:10804 | - | - | learned |
-| 814 | 10.255.0.3:10814 | 10814:10814 | - | - | learned |
-| 815 | 10.255.0.3:10815 | 10815:10815 | - | - | learned |
-| 817 | 10.255.0.3:10817 | 10817:10817 | - | - | learned |
-| 1068 | 10.255.0.3:11068 | 11068:11068 | - | - | learned |
-| 1107 | 10.255.0.3:11107 | 11107:11107 | - | - | learned |
-| 1108 | 10.255.0.3:11108 | 11108:11108 | - | - | learned |
-| 1112 | 10.255.0.3:11112 | 11112:11112 | - | - | learned |
-| 1208 | 10.255.0.3:11208 | 11208:11208 | - | - | learned |
-| 1226 | 10.255.0.3:11226 | 11226:11226 | - | - | learned |
-| 1300 | 10.255.0.3:11300 | 11300:11300 | - | - | learned |
-| 2020 | 10.255.0.3:12020 | 12020:12020 | - | - | learned |
-| 2023 | 10.255.0.3:12023 | 12023:12023 | - | - | learned |
-| 2326 | 10.255.0.3:12326 | 12326:12326 | - | - | learned |
-| 2670 | 10.255.0.3:12670 | 12670:12670 | - | - | learned |
-| 2672 | 10.255.0.3:12672 | 12672:12672 | - | - | learned |
-| 2676 | 10.255.0.3:12676 | 12676:12676 | - | - | learned |
-| 2677 | 10.255.0.3:12677 | 12677:12677 | - | - | learned |
-| 2680 | 10.255.0.3:12680 | 12680:12680 | - | - | learned |
-| 2684 | 10.255.0.3:12684 | 12684:12684 | - | - | learned |
-| 2689 | 10.255.0.3:12689 | 12689:12689 | - | - | learned |
-| 2691 | 10.255.0.3:12691 | 12691:12691 | - | - | learned |
-| 2694 | 10.255.0.3:12694 | 12694:12694 | - | - | learned |
-| 2698 | 10.255.0.3:12698 | 12698:12698 | - | - | learned |
-| 2699 | 10.255.0.3:12699 | 12699:12699 | - | - | learned |
-| 2712 | 10.255.0.3:12712 | 12712:12712 | - | - | learned |
-| 2716 | 10.255.0.3:12716 | 12716:12716 | - | - | learned |
-| 2717 | 10.255.0.3:12717 | 12717:12717 | - | - | learned |
-| 2718 | 10.255.0.3:12718 | 12718:12718 | - | - | learned |
-| 2719 | 10.255.0.3:12719 | 12719:12719 | - | - | learned |
-| 2720 | 10.255.0.3:12720 | 12720:12720 | - | - | learned |
-| 3300 | 10.255.0.3:13300 | 13300:13300 | - | - | learned |
-| 3301 | 10.255.0.3:13301 | 13301:13301 | - | - | learned |
-| 3302 | 10.255.0.3:13302 | 13302:13302 | - | - | learned |
-| 3303 | 10.255.0.3:13303 | 13303:13303 | - | - | learned |
-| 3304 | 10.255.0.3:13304 | 13304:13304 | - | - | learned |
-| 3305 | 10.255.0.3:13305 | 13305:13305 | - | - | learned |
-| 3306 | 10.255.0.3:13306 | 13306:13306 | - | - | learned |
-| 3307 | 10.255.0.3:13307 | 13307:13307 | - | - | learned |
-| 3308 | 10.255.0.3:13308 | 13308:13308 | - | - | learned |
-| 3309 | 10.255.0.3:13309 | 13309:13309 | - | - | learned |
-| 3310 | 10.255.0.3:13310 | 13310:13310 | - | - | learned |
-| 3311 | 10.255.0.3:13311 | 13311:13311 | - | - | learned |
-| 3312 | 10.255.0.3:13312 | 13312:13312 | - | - | learned |
-| 3313 | 10.255.0.3:13313 | 13313:13313 | - | - | learned |
-| 3349 | 10.255.0.3:13349 | 13349:13349 | - | - | learned |
-| 3500 | 10.255.0.3:13500 | 13500:13500 | - | - | learned |
-| 3714 | 10.255.0.3:13714 | 13714:13714 | - | - | learned |
-| 3785 | 10.255.0.3:13785 | 13785:13785 | - | - | learned |
-| 3900 | 10.255.0.3:13900 | 13900:13900 | - | - | learned |
-| 3903 | 10.255.0.3:13903 | 13903:13903 | - | - | learned |
+| 8 | 10.255.0.6:10008 | 10008:10008 | - | - | learned |
+| 21 | 10.255.0.6:10021 | 10021:10021 | - | - | learned |
+| 22 | 10.255.0.6:10022 | 10022:10022 | - | - | learned |
+| 26 | 10.255.0.6:10026 | 10026:10026 | - | - | learned |
+| 48 | 10.255.0.6:10048 | 10048:10048 | - | - | learned |
+| 50 | 10.255.0.6:10050 | 10050:10050 | - | - | learned |
+| 84 | 10.255.0.6:10084 | 10084:10084 | - | - | learned |
+| 108 | 10.255.0.6:10108 | 10108:10108 | - | - | learned |
+| 168 | 10.255.0.6:10168 | 10168:10168 | - | - | learned |
+| 214 | 10.255.0.6:10214 | 10214:10214 | - | - | learned |
+| 232 | 10.255.0.6:10232 | 10232:10232 | - | - | learned |
+| 233 | 10.255.0.6:10233 | 10233:10233 | - | - | learned |
+| 248 | 10.255.0.6:10248 | 10248:10248 | - | - | learned |
+| 313 | 10.255.0.6:10313 | 10313:10313 | - | - | learned |
+| 314 | 10.255.0.6:10314 | 10314:10314 | - | - | learned |
+| 315 | 10.255.0.6:10315 | 10315:10315 | - | - | learned |
+| 320 | 10.255.0.6:10320 | 10320:10320 | - | - | learned |
+| 322 | 10.255.0.6:10322 | 10322:10322 | - | - | learned |
+| 323 | 10.255.0.6:10323 | 10323:10323 | - | - | learned |
+| 331 | 10.255.0.6:10331 | 10331:10331 | - | - | learned |
+| 332 | 10.255.0.6:10332 | 10332:10332 | - | - | learned |
+| 351 | 10.255.0.6:10351 | 10351:10351 | - | - | learned |
+| 352 | 10.255.0.6:10352 | 10352:10352 | - | - | learned |
+| 375 | 10.255.0.6:10375 | 10375:10375 | - | - | learned |
+| 376 | 10.255.0.6:10376 | 10376:10376 | - | - | learned |
+| 384 | 10.255.0.6:10384 | 10384:10384 | - | - | learned |
+| 386 | 10.255.0.6:10386 | 10386:10386 | - | - | learned |
+| 387 | 10.255.0.6:10387 | 10387:10387 | - | - | learned |
+| 388 | 10.255.0.6:10388 | 10388:10388 | - | - | learned |
+| 395 | 10.255.0.6:10395 | 10395:10395 | - | - | learned |
+| 397 | 10.255.0.6:10397 | 10397:10397 | - | - | learned |
+| 401 | 10.255.0.6:10401 | 10401:10401 | - | - | learned |
+| 409 | 10.255.0.6:10409 | 10409:10409 | - | - | learned |
+| 421 | 10.255.0.6:10421 | 10421:10421 | - | - | learned |
+| 422 | 10.255.0.6:10422 | 10422:10422 | - | - | learned |
+| 426 | 10.255.0.6:10426 | 10426:10426 | - | - | learned |
+| 428 | 10.255.0.6:10428 | 10428:10428 | - | - | learned |
+| 472 | 10.255.0.6:10472 | 10472:10472 | - | - | learned |
+| 512 | 10.255.0.6:10512 | 10512:10512 | - | - | learned |
+| 513 | 10.255.0.6:10513 | 10513:10513 | - | - | learned |
+| 525 | 10.255.0.6:10525 | 10525:10525 | - | - | learned |
+| 540 | 10.255.0.6:10540 | 10540:10540 | - | - | learned |
+| 584 | 10.255.0.6:10584 | 10584:10584 | - | - | learned |
+| 600 | 10.255.0.6:10600 | 10600:10600 | - | - | learned |
+| 620 | 10.255.0.6:10620 | 10620:10620 | - | - | learned |
+| 634 | 10.255.0.6:10634 | 10634:10634 | - | - | learned |
+| 653 | 10.255.0.6:10653 | 10653:10653 | - | - | learned |
+| 804 | 10.255.0.6:10804 | 10804:10804 | - | - | learned |
+| 814 | 10.255.0.6:10814 | 10814:10814 | - | - | learned |
+| 815 | 10.255.0.6:10815 | 10815:10815 | - | - | learned |
+| 817 | 10.255.0.6:10817 | 10817:10817 | - | - | learned |
+| 1068 | 10.255.0.6:11068 | 11068:11068 | - | - | learned |
+| 1107 | 10.255.0.6:11107 | 11107:11107 | - | - | learned |
+| 1108 | 10.255.0.6:11108 | 11108:11108 | - | - | learned |
+| 1112 | 10.255.0.6:11112 | 11112:11112 | - | - | learned |
+| 1208 | 10.255.0.6:11208 | 11208:11208 | - | - | learned |
+| 1226 | 10.255.0.6:11226 | 11226:11226 | - | - | learned |
+| 1300 | 10.255.0.6:11300 | 11300:11300 | - | - | learned |
+| 2020 | 10.255.0.6:12020 | 12020:12020 | - | - | learned |
+| 2023 | 10.255.0.6:12023 | 12023:12023 | - | - | learned |
+| 2326 | 10.255.0.6:12326 | 12326:12326 | - | - | learned |
+| 2670 | 10.255.0.6:12670 | 12670:12670 | - | - | learned |
+| 2672 | 10.255.0.6:12672 | 12672:12672 | - | - | learned |
+| 2676 | 10.255.0.6:12676 | 12676:12676 | - | - | learned |
+| 2677 | 10.255.0.6:12677 | 12677:12677 | - | - | learned |
+| 2680 | 10.255.0.6:12680 | 12680:12680 | - | - | learned |
+| 2684 | 10.255.0.6:12684 | 12684:12684 | - | - | learned |
+| 2689 | 10.255.0.6:12689 | 12689:12689 | - | - | learned |
+| 2691 | 10.255.0.6:12691 | 12691:12691 | - | - | learned |
+| 2694 | 10.255.0.6:12694 | 12694:12694 | - | - | learned |
+| 2698 | 10.255.0.6:12698 | 12698:12698 | - | - | learned |
+| 2699 | 10.255.0.6:12699 | 12699:12699 | - | - | learned |
+| 2712 | 10.255.0.6:12712 | 12712:12712 | - | - | learned |
+| 2716 | 10.255.0.6:12716 | 12716:12716 | - | - | learned |
+| 2717 | 10.255.0.6:12717 | 12717:12717 | - | - | learned |
+| 2718 | 10.255.0.6:12718 | 12718:12718 | - | - | learned |
+| 2719 | 10.255.0.6:12719 | 12719:12719 | - | - | learned |
+| 2720 | 10.255.0.6:12720 | 12720:12720 | - | - | learned |
+| 3300 | 10.255.0.6:13300 | 13300:13300 | - | - | learned |
+| 3301 | 10.255.0.6:13301 | 13301:13301 | - | - | learned |
+| 3302 | 10.255.0.6:13302 | 13302:13302 | - | - | learned |
+| 3303 | 10.255.0.6:13303 | 13303:13303 | - | - | learned |
+| 3304 | 10.255.0.6:13304 | 13304:13304 | - | - | learned |
+| 3305 | 10.255.0.6:13305 | 13305:13305 | - | - | learned |
+| 3306 | 10.255.0.6:13306 | 13306:13306 | - | - | learned |
+| 3307 | 10.255.0.6:13307 | 13307:13307 | - | - | learned |
+| 3308 | 10.255.0.6:13308 | 13308:13308 | - | - | learned |
+| 3309 | 10.255.0.6:13309 | 13309:13309 | - | - | learned |
+| 3310 | 10.255.0.6:13310 | 13310:13310 | - | - | learned |
+| 3311 | 10.255.0.6:13311 | 13311:13311 | - | - | learned |
+| 3312 | 10.255.0.6:13312 | 13312:13312 | - | - | learned |
+| 3313 | 10.255.0.6:13313 | 13313:13313 | - | - | learned |
+| 3349 | 10.255.0.6:13349 | 13349:13349 | - | - | learned |
+| 3500 | 10.255.0.6:13500 | 13500:13500 | - | - | learned |
+| 3714 | 10.255.0.6:13714 | 13714:13714 | - | - | learned |
+| 3785 | 10.255.0.6:13785 | 13785:13785 | - | - | learned |
+| 3900 | 10.255.0.6:13900 | 13900:13900 | - | - | learned |
+| 3903 | 10.255.0.6:13903 | 13903:13903 | - | - | learned |
 
 #### Router BGP VRFs
 
 | VRF | Route-Distinguisher | Redistribute |
 | --- | ------------------- | ------------ |
-| VRF11 | 10.255.0.3:11 | connected |
-| WCC | 10.255.0.3:10 | connected |
+| VRF11 | 10.255.0.6:11 | connected |
+| WCC | 10.255.0.6:10 | connected |
 
 #### Router BGP Device Configuration
 
 ```eos
 !
-router bgp 65101
-   router-id 10.255.0.3
+router bgp 65102
+   router-id 10.255.0.6
    no bgp default ipv4-unicast
    maximum-paths 4 ecmp 4
    neighbor EVPN-OVERLAY-PEERS peer group
@@ -2111,9 +2095,9 @@ router bgp 65101
    neighbor IPv4-UNDERLAY-PEERS send-community
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
    neighbor MLAG-IPv4-UNDERLAY-PEER peer group
-   neighbor MLAG-IPv4-UNDERLAY-PEER remote-as 65101
+   neighbor MLAG-IPv4-UNDERLAY-PEER remote-as 65102
    neighbor MLAG-IPv4-UNDERLAY-PEER next-hop-self
-   neighbor MLAG-IPv4-UNDERLAY-PEER description WCC2
+   neighbor MLAG-IPv4-UNDERLAY-PEER description SCC1
    neighbor MLAG-IPv4-UNDERLAY-PEER route-map RM-MLAG-PEER-IN in
    neighbor MLAG-IPv4-UNDERLAY-PEER password 7 <removed>
    neighbor MLAG-IPv4-UNDERLAY-PEER send-community
@@ -2124,503 +2108,503 @@ router bgp 65101
    neighbor 10.255.0.2 peer group EVPN-OVERLAY-PEERS
    neighbor 10.255.0.2 remote-as 65100
    neighbor 10.255.0.2 description Spine2_Loopback0
-   neighbor 10.255.1.97 peer group MLAG-IPv4-UNDERLAY-PEER
-   neighbor 10.255.1.97 description WCC2_Vlan4093
-   neighbor 10.255.255.0 peer group IPv4-UNDERLAY-PEERS
-   neighbor 10.255.255.0 remote-as 65100
-   neighbor 10.255.255.0 description Spine1_Ethernet1
-   neighbor 10.255.255.2 peer group IPv4-UNDERLAY-PEERS
-   neighbor 10.255.255.2 remote-as 65100
-   neighbor 10.255.255.2 description Spine2_Ethernet1
+   neighbor 10.255.1.100 peer group MLAG-IPv4-UNDERLAY-PEER
+   neighbor 10.255.1.100 description SCC1_Vlan4093
+   neighbor 10.255.255.12 peer group IPv4-UNDERLAY-PEERS
+   neighbor 10.255.255.12 remote-as 65100
+   neighbor 10.255.255.12 description Spine1_Ethernet4
+   neighbor 10.255.255.14 peer group IPv4-UNDERLAY-PEERS
+   neighbor 10.255.255.14 remote-as 65100
+   neighbor 10.255.255.14 description Spine2_Ethernet4
    redistribute connected route-map RM-CONN-2-BGP
    !
    vlan 8
-      rd 10.255.0.3:10008
+      rd 10.255.0.6:10008
       route-target both 10008:10008
       redistribute learned
    !
    vlan 21
-      rd 10.255.0.3:10021
+      rd 10.255.0.6:10021
       route-target both 10021:10021
       redistribute learned
    !
    vlan 22
-      rd 10.255.0.3:10022
+      rd 10.255.0.6:10022
       route-target both 10022:10022
       redistribute learned
    !
    vlan 26
-      rd 10.255.0.3:10026
+      rd 10.255.0.6:10026
       route-target both 10026:10026
       redistribute learned
    !
    vlan 48
-      rd 10.255.0.3:10048
+      rd 10.255.0.6:10048
       route-target both 10048:10048
       redistribute learned
    !
    vlan 50
-      rd 10.255.0.3:10050
+      rd 10.255.0.6:10050
       route-target both 10050:10050
       redistribute learned
    !
    vlan 84
-      rd 10.255.0.3:10084
+      rd 10.255.0.6:10084
       route-target both 10084:10084
       redistribute learned
    !
    vlan 108
-      rd 10.255.0.3:10108
+      rd 10.255.0.6:10108
       route-target both 10108:10108
       redistribute learned
    !
    vlan 168
-      rd 10.255.0.3:10168
+      rd 10.255.0.6:10168
       route-target both 10168:10168
       redistribute learned
    !
    vlan 214
-      rd 10.255.0.3:10214
+      rd 10.255.0.6:10214
       route-target both 10214:10214
       redistribute learned
    !
    vlan 232
-      rd 10.255.0.3:10232
+      rd 10.255.0.6:10232
       route-target both 10232:10232
       redistribute learned
    !
    vlan 233
-      rd 10.255.0.3:10233
+      rd 10.255.0.6:10233
       route-target both 10233:10233
       redistribute learned
    !
    vlan 248
-      rd 10.255.0.3:10248
+      rd 10.255.0.6:10248
       route-target both 10248:10248
       redistribute learned
    !
    vlan 313
-      rd 10.255.0.3:10313
+      rd 10.255.0.6:10313
       route-target both 10313:10313
       redistribute learned
    !
    vlan 314
-      rd 10.255.0.3:10314
+      rd 10.255.0.6:10314
       route-target both 10314:10314
       redistribute learned
    !
    vlan 315
-      rd 10.255.0.3:10315
+      rd 10.255.0.6:10315
       route-target both 10315:10315
       redistribute learned
    !
    vlan 320
-      rd 10.255.0.3:10320
+      rd 10.255.0.6:10320
       route-target both 10320:10320
       redistribute learned
    !
    vlan 322
-      rd 10.255.0.3:10322
+      rd 10.255.0.6:10322
       route-target both 10322:10322
       redistribute learned
    !
    vlan 323
-      rd 10.255.0.3:10323
+      rd 10.255.0.6:10323
       route-target both 10323:10323
       redistribute learned
    !
    vlan 331
-      rd 10.255.0.3:10331
+      rd 10.255.0.6:10331
       route-target both 10331:10331
       redistribute learned
    !
    vlan 332
-      rd 10.255.0.3:10332
+      rd 10.255.0.6:10332
       route-target both 10332:10332
       redistribute learned
    !
    vlan 351
-      rd 10.255.0.3:10351
+      rd 10.255.0.6:10351
       route-target both 10351:10351
       redistribute learned
    !
    vlan 352
-      rd 10.255.0.3:10352
+      rd 10.255.0.6:10352
       route-target both 10352:10352
       redistribute learned
    !
    vlan 375
-      rd 10.255.0.3:10375
+      rd 10.255.0.6:10375
       route-target both 10375:10375
       redistribute learned
    !
    vlan 376
-      rd 10.255.0.3:10376
+      rd 10.255.0.6:10376
       route-target both 10376:10376
       redistribute learned
    !
    vlan 384
-      rd 10.255.0.3:10384
+      rd 10.255.0.6:10384
       route-target both 10384:10384
       redistribute learned
    !
    vlan 386
-      rd 10.255.0.3:10386
+      rd 10.255.0.6:10386
       route-target both 10386:10386
       redistribute learned
    !
    vlan 387
-      rd 10.255.0.3:10387
+      rd 10.255.0.6:10387
       route-target both 10387:10387
       redistribute learned
    !
    vlan 388
-      rd 10.255.0.3:10388
+      rd 10.255.0.6:10388
       route-target both 10388:10388
       redistribute learned
    !
    vlan 395
-      rd 10.255.0.3:10395
+      rd 10.255.0.6:10395
       route-target both 10395:10395
       redistribute learned
    !
    vlan 397
-      rd 10.255.0.3:10397
+      rd 10.255.0.6:10397
       route-target both 10397:10397
       redistribute learned
    !
    vlan 401
-      rd 10.255.0.3:10401
+      rd 10.255.0.6:10401
       route-target both 10401:10401
       redistribute learned
    !
    vlan 409
-      rd 10.255.0.3:10409
+      rd 10.255.0.6:10409
       route-target both 10409:10409
       redistribute learned
    !
    vlan 421
-      rd 10.255.0.3:10421
+      rd 10.255.0.6:10421
       route-target both 10421:10421
       redistribute learned
    !
    vlan 422
-      rd 10.255.0.3:10422
+      rd 10.255.0.6:10422
       route-target both 10422:10422
       redistribute learned
    !
    vlan 426
-      rd 10.255.0.3:10426
+      rd 10.255.0.6:10426
       route-target both 10426:10426
       redistribute learned
    !
    vlan 428
-      rd 10.255.0.3:10428
+      rd 10.255.0.6:10428
       route-target both 10428:10428
       redistribute learned
    !
    vlan 472
-      rd 10.255.0.3:10472
+      rd 10.255.0.6:10472
       route-target both 10472:10472
       redistribute learned
    !
    vlan 512
-      rd 10.255.0.3:10512
+      rd 10.255.0.6:10512
       route-target both 10512:10512
       redistribute learned
    !
    vlan 513
-      rd 10.255.0.3:10513
+      rd 10.255.0.6:10513
       route-target both 10513:10513
       redistribute learned
    !
    vlan 525
-      rd 10.255.0.3:10525
+      rd 10.255.0.6:10525
       route-target both 10525:10525
       redistribute learned
    !
    vlan 540
-      rd 10.255.0.3:10540
+      rd 10.255.0.6:10540
       route-target both 10540:10540
       redistribute learned
    !
    vlan 584
-      rd 10.255.0.3:10584
+      rd 10.255.0.6:10584
       route-target both 10584:10584
       redistribute learned
    !
    vlan 600
-      rd 10.255.0.3:10600
+      rd 10.255.0.6:10600
       route-target both 10600:10600
       redistribute learned
    !
    vlan 620
-      rd 10.255.0.3:10620
+      rd 10.255.0.6:10620
       route-target both 10620:10620
       redistribute learned
    !
    vlan 634
-      rd 10.255.0.3:10634
+      rd 10.255.0.6:10634
       route-target both 10634:10634
       redistribute learned
    !
    vlan 653
-      rd 10.255.0.3:10653
+      rd 10.255.0.6:10653
       route-target both 10653:10653
       redistribute learned
    !
    vlan 804
-      rd 10.255.0.3:10804
+      rd 10.255.0.6:10804
       route-target both 10804:10804
       redistribute learned
    !
    vlan 814
-      rd 10.255.0.3:10814
+      rd 10.255.0.6:10814
       route-target both 10814:10814
       redistribute learned
    !
    vlan 815
-      rd 10.255.0.3:10815
+      rd 10.255.0.6:10815
       route-target both 10815:10815
       redistribute learned
    !
    vlan 817
-      rd 10.255.0.3:10817
+      rd 10.255.0.6:10817
       route-target both 10817:10817
       redistribute learned
    !
    vlan 1068
-      rd 10.255.0.3:11068
+      rd 10.255.0.6:11068
       route-target both 11068:11068
       redistribute learned
    !
    vlan 1107
-      rd 10.255.0.3:11107
+      rd 10.255.0.6:11107
       route-target both 11107:11107
       redistribute learned
    !
    vlan 1108
-      rd 10.255.0.3:11108
+      rd 10.255.0.6:11108
       route-target both 11108:11108
       redistribute learned
    !
    vlan 1112
-      rd 10.255.0.3:11112
+      rd 10.255.0.6:11112
       route-target both 11112:11112
       redistribute learned
    !
    vlan 1208
-      rd 10.255.0.3:11208
+      rd 10.255.0.6:11208
       route-target both 11208:11208
       redistribute learned
    !
    vlan 1226
-      rd 10.255.0.3:11226
+      rd 10.255.0.6:11226
       route-target both 11226:11226
       redistribute learned
    !
    vlan 1300
-      rd 10.255.0.3:11300
+      rd 10.255.0.6:11300
       route-target both 11300:11300
       redistribute learned
    !
    vlan 2020
-      rd 10.255.0.3:12020
+      rd 10.255.0.6:12020
       route-target both 12020:12020
       redistribute learned
    !
    vlan 2023
-      rd 10.255.0.3:12023
+      rd 10.255.0.6:12023
       route-target both 12023:12023
       redistribute learned
    !
    vlan 2326
-      rd 10.255.0.3:12326
+      rd 10.255.0.6:12326
       route-target both 12326:12326
       redistribute learned
    !
    vlan 2670
-      rd 10.255.0.3:12670
+      rd 10.255.0.6:12670
       route-target both 12670:12670
       redistribute learned
    !
    vlan 2672
-      rd 10.255.0.3:12672
+      rd 10.255.0.6:12672
       route-target both 12672:12672
       redistribute learned
    !
    vlan 2676
-      rd 10.255.0.3:12676
+      rd 10.255.0.6:12676
       route-target both 12676:12676
       redistribute learned
    !
    vlan 2677
-      rd 10.255.0.3:12677
+      rd 10.255.0.6:12677
       route-target both 12677:12677
       redistribute learned
    !
    vlan 2680
-      rd 10.255.0.3:12680
+      rd 10.255.0.6:12680
       route-target both 12680:12680
       redistribute learned
    !
    vlan 2684
-      rd 10.255.0.3:12684
+      rd 10.255.0.6:12684
       route-target both 12684:12684
       redistribute learned
    !
    vlan 2689
-      rd 10.255.0.3:12689
+      rd 10.255.0.6:12689
       route-target both 12689:12689
       redistribute learned
    !
    vlan 2691
-      rd 10.255.0.3:12691
+      rd 10.255.0.6:12691
       route-target both 12691:12691
       redistribute learned
    !
    vlan 2694
-      rd 10.255.0.3:12694
+      rd 10.255.0.6:12694
       route-target both 12694:12694
       redistribute learned
    !
    vlan 2698
-      rd 10.255.0.3:12698
+      rd 10.255.0.6:12698
       route-target both 12698:12698
       redistribute learned
    !
    vlan 2699
-      rd 10.255.0.3:12699
+      rd 10.255.0.6:12699
       route-target both 12699:12699
       redistribute learned
    !
    vlan 2712
-      rd 10.255.0.3:12712
+      rd 10.255.0.6:12712
       route-target both 12712:12712
       redistribute learned
    !
    vlan 2716
-      rd 10.255.0.3:12716
+      rd 10.255.0.6:12716
       route-target both 12716:12716
       redistribute learned
    !
    vlan 2717
-      rd 10.255.0.3:12717
+      rd 10.255.0.6:12717
       route-target both 12717:12717
       redistribute learned
    !
    vlan 2718
-      rd 10.255.0.3:12718
+      rd 10.255.0.6:12718
       route-target both 12718:12718
       redistribute learned
    !
    vlan 2719
-      rd 10.255.0.3:12719
+      rd 10.255.0.6:12719
       route-target both 12719:12719
       redistribute learned
    !
    vlan 2720
-      rd 10.255.0.3:12720
+      rd 10.255.0.6:12720
       route-target both 12720:12720
       redistribute learned
    !
    vlan 3300
-      rd 10.255.0.3:13300
+      rd 10.255.0.6:13300
       route-target both 13300:13300
       redistribute learned
    !
    vlan 3301
-      rd 10.255.0.3:13301
+      rd 10.255.0.6:13301
       route-target both 13301:13301
       redistribute learned
    !
    vlan 3302
-      rd 10.255.0.3:13302
+      rd 10.255.0.6:13302
       route-target both 13302:13302
       redistribute learned
    !
    vlan 3303
-      rd 10.255.0.3:13303
+      rd 10.255.0.6:13303
       route-target both 13303:13303
       redistribute learned
    !
    vlan 3304
-      rd 10.255.0.3:13304
+      rd 10.255.0.6:13304
       route-target both 13304:13304
       redistribute learned
    !
    vlan 3305
-      rd 10.255.0.3:13305
+      rd 10.255.0.6:13305
       route-target both 13305:13305
       redistribute learned
    !
    vlan 3306
-      rd 10.255.0.3:13306
+      rd 10.255.0.6:13306
       route-target both 13306:13306
       redistribute learned
    !
    vlan 3307
-      rd 10.255.0.3:13307
+      rd 10.255.0.6:13307
       route-target both 13307:13307
       redistribute learned
    !
    vlan 3308
-      rd 10.255.0.3:13308
+      rd 10.255.0.6:13308
       route-target both 13308:13308
       redistribute learned
    !
    vlan 3309
-      rd 10.255.0.3:13309
+      rd 10.255.0.6:13309
       route-target both 13309:13309
       redistribute learned
    !
    vlan 3310
-      rd 10.255.0.3:13310
+      rd 10.255.0.6:13310
       route-target both 13310:13310
       redistribute learned
    !
    vlan 3311
-      rd 10.255.0.3:13311
+      rd 10.255.0.6:13311
       route-target both 13311:13311
       redistribute learned
    !
    vlan 3312
-      rd 10.255.0.3:13312
+      rd 10.255.0.6:13312
       route-target both 13312:13312
       redistribute learned
    !
    vlan 3313
-      rd 10.255.0.3:13313
+      rd 10.255.0.6:13313
       route-target both 13313:13313
       redistribute learned
    !
    vlan 3349
-      rd 10.255.0.3:13349
+      rd 10.255.0.6:13349
       route-target both 13349:13349
       redistribute learned
    !
    vlan 3500
-      rd 10.255.0.3:13500
+      rd 10.255.0.6:13500
       route-target both 13500:13500
       redistribute learned
    !
    vlan 3714
-      rd 10.255.0.3:13714
+      rd 10.255.0.6:13714
       route-target both 13714:13714
       redistribute learned
    !
    vlan 3785
-      rd 10.255.0.3:13785
+      rd 10.255.0.6:13785
       route-target both 13785:13785
       redistribute learned
    !
    vlan 3900
-      rd 10.255.0.3:13900
+      rd 10.255.0.6:13900
       route-target both 13900:13900
       redistribute learned
    !
    vlan 3903
-      rd 10.255.0.3:13903
+      rd 10.255.0.6:13903
       route-target both 13903:13903
       redistribute learned
    !
@@ -2633,21 +2617,21 @@ router bgp 65101
       neighbor MLAG-IPv4-UNDERLAY-PEER activate
    !
    vrf VRF11
-      rd 10.255.0.3:11
+      rd 10.255.0.6:11
       route-target import evpn 11:11
       route-target export evpn 11:11
-      router-id 10.255.0.3
-      neighbor 10.255.1.97 peer group MLAG-IPv4-UNDERLAY-PEER
-      neighbor 10.255.1.97 description WCC2_Vlan3010
+      router-id 10.255.0.6
+      neighbor 10.255.1.100 peer group MLAG-IPv4-UNDERLAY-PEER
+      neighbor 10.255.1.100 description SCC1_Vlan3010
       redistribute connected route-map RM-CONN-2-BGP-VRFS
    !
    vrf WCC
-      rd 10.255.0.3:10
+      rd 10.255.0.6:10
       route-target import evpn 10:10
       route-target export evpn 10:10
-      router-id 10.255.0.3
-      neighbor 10.255.1.97 peer group MLAG-IPv4-UNDERLAY-PEER
-      neighbor 10.255.1.97 description WCC2_Vlan3009
+      router-id 10.255.0.6
+      neighbor 10.255.1.100 peer group MLAG-IPv4-UNDERLAY-PEER
+      neighbor 10.255.1.100 description SCC1_Vlan3009
       redistribute connected route-map RM-CONN-2-BGP-VRFS
 ```
 
@@ -2701,7 +2685,7 @@ router bfd
 
 | Sequence | Action |
 | -------- | ------ |
-| 10 | permit 10.255.1.96/31 |
+| 10 | permit 10.255.1.100/31 |
 
 #### Prefix-lists Device Configuration
 
@@ -2712,7 +2696,7 @@ ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
    seq 20 permit 10.255.1.0/27 eq 32
 !
 ip prefix-list PL-MLAG-PEER-VRFS
-   seq 10 permit 10.255.1.96/31
+   seq 10 permit 10.255.1.100/31
 ```
 
 ### Route-maps
@@ -2796,13 +2780,13 @@ vrf instance WCC
 
 | Source NAT VRF | Source NAT IP Address |
 | -------------- | --------------------- |
-| VRF11 | 10.255.11.3 |
-| WCC | 10.255.10.3 |
+| VRF11 | 10.255.11.6 |
+| WCC | 10.255.10.6 |
 
 ### Virtual Source NAT Configuration
 
 ```eos
 !
-ip address virtual source-nat vrf VRF11 address 10.255.11.3
-ip address virtual source-nat vrf WCC address 10.255.10.3
+ip address virtual source-nat vrf VRF11 address 10.255.11.6
+ip address virtual source-nat vrf WCC address 10.255.10.6
 ```

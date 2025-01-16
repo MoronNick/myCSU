@@ -11,6 +11,7 @@
 - [Authentication](#authentication)
   - [Local Users](#local-users)
   - [Enable Password](#enable-password)
+  - [AAA Authorization](#aaa-authorization)
 - [Monitoring](#monitoring)
   - [TerminAttr Daemon](#terminattr-daemon)
   - [Logging](#logging)
@@ -51,7 +52,7 @@
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB_MANAGEMENT | oob | MGMT | 192.168.3.100/24 | 192.168.3.1 |
+| Management1 | OOB_MANAGEMENT | oob | MGMT | 192.168.100.200/24 | 192.168.100.1 |
 
 ##### IPv6
 
@@ -67,7 +68,7 @@ interface Management1
    description OOB_MANAGEMENT
    no shutdown
    vrf MGMT
-   ip address 192.168.3.100/24
+   ip address 192.168.100.200/24
 ```
 
 ### IP Name Servers
@@ -192,6 +193,23 @@ username nmoore privilege 15 role network-admin secret sha512 <removed>
 
 Enable password has been disabled
 
+### AAA Authorization
+
+#### AAA Authorization Summary
+
+| Type | User Stores |
+| ---- | ----------- |
+| Exec | local |
+
+Authorization for configuration commands is disabled.
+
+#### AAA Authorization Device Configuration
+
+```eos
+aaa authorization exec default local
+!
+```
+
 ## Monitoring
 
 ### TerminAttr Daemon
@@ -310,6 +328,8 @@ vlan internal order ascending range 1006 1199
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
 | Ethernet1 | P2P_WCC1_Ethernet7 | - | 10.255.255.0/31 | default | 1500 | False | - | - |
 | Ethernet2 | P2P_WCC2_Ethernet7 | - | 10.255.255.4/31 | default | 1500 | False | - | - |
+| Ethernet3 | P2P_SCC1_Ethernet7 | - | 10.255.255.8/31 | default | 1500 | False | - | - |
+| Ethernet4 | P2P_SCC2_Ethernet7 | - | 10.255.255.12/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -328,6 +348,20 @@ interface Ethernet2
    mtu 1500
    no switchport
    ip address 10.255.255.4/31
+!
+interface Ethernet3
+   description P2P_SCC1_Ethernet7
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 10.255.255.8/31
+!
+interface Ethernet4
+   description P2P_SCC2_Ethernet7
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 10.255.255.12/31
 ```
 
 ### Loopback Interfaces
@@ -399,13 +433,13 @@ ip routing vrf MGMT
 
 | VRF | Destination Prefix | Next Hop IP | Exit interface | Administrative Distance | Tag | Route Name | Metric |
 | --- | ------------------ | ----------- | -------------- | ----------------------- | --- | ---------- | ------ |
-| MGMT | 0.0.0.0/0 | 192.168.3.1 | - | 1 | - | - | - |
+| MGMT | 0.0.0.0/0 | 192.168.100.1 | - | 1 | - | - | - |
 
 #### Static Routes Device Configuration
 
 ```eos
 !
-ip route vrf MGMT 0.0.0.0/0 192.168.3.1
+ip route vrf MGMT 0.0.0.0/0 192.168.100.1
 ```
 
 ### Router BGP
@@ -452,8 +486,12 @@ ASN Notation: asplain
 | -------- | --------- | --- | -------- | -------------- | -------------- | ---------- | --- | --------------------- | ---------------------- | ------- | ------------ |
 | 10.255.0.3 | 65101 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.255.0.4 | 65101 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
+| 10.255.0.5 | 65102 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
+| 10.255.0.6 | 65102 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.255.255.1 | 65101 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.255.255.5 | 65101 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
+| 10.255.255.9 | 65102 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
+| 10.255.255.13 | 65102 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 
 #### Router BGP EVPN Address Family
 
@@ -490,12 +528,24 @@ router bgp 65100
    neighbor 10.255.0.4 peer group EVPN-OVERLAY-PEERS
    neighbor 10.255.0.4 remote-as 65101
    neighbor 10.255.0.4 description WCC2_Loopback0
+   neighbor 10.255.0.5 peer group EVPN-OVERLAY-PEERS
+   neighbor 10.255.0.5 remote-as 65102
+   neighbor 10.255.0.5 description SCC1_Loopback0
+   neighbor 10.255.0.6 peer group EVPN-OVERLAY-PEERS
+   neighbor 10.255.0.6 remote-as 65102
+   neighbor 10.255.0.6 description SCC2_Loopback0
    neighbor 10.255.255.1 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.255.255.1 remote-as 65101
    neighbor 10.255.255.1 description WCC1_Ethernet7
    neighbor 10.255.255.5 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.255.255.5 remote-as 65101
    neighbor 10.255.255.5 description WCC2_Ethernet7
+   neighbor 10.255.255.9 peer group IPv4-UNDERLAY-PEERS
+   neighbor 10.255.255.9 remote-as 65102
+   neighbor 10.255.255.9 description SCC1_Ethernet7
+   neighbor 10.255.255.13 peer group IPv4-UNDERLAY-PEERS
+   neighbor 10.255.255.13 remote-as 65102
+   neighbor 10.255.255.13 description SCC2_Ethernet7
    redistribute connected route-map RM-CONN-2-BGP
    !
    address-family evpn
@@ -573,6 +623,7 @@ route-map RM-CONN-2-BGP permit 10
 ip access-list mgmt-acl
    10 permit ip 192.168.1.0/24 any
    20 permit ip 192.168.3.0/24 any
+   30 permit ip 192.168.100.0/24 any
 ```
 
 ## VRF Instances

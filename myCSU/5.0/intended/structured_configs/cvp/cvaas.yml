@@ -8,6 +8,14 @@ cvp_devices:
     parentContainerName: Cameras
     configlets:
       - CSU_e7_0r05c05052052
+  - fqdn: SCC1
+    parentContainerName: DC1_L3_LEAVES
+    configlets:
+      - CSU_SCC1
+  - fqdn: SCC2
+    parentContainerName: DC1_L3_LEAVES
+    configlets:
+      - CSU_SCC2
   - fqdn: Spine1
     parentContainerName: DC1_SPINES
     configlets:

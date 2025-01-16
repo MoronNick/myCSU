@@ -1,0 +1,10 @@
+- name: Configuration deployment
+  hosts: CSU
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Deploy configurations and tags to CloudVision
+      ansible.builtin.import_role:
+        name: arista.avd.cv_deploy
+      vars:
+        cv_inventory_hostname: cvaas

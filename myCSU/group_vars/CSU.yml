@@ -1,22 +1,5 @@
 fabric_name: CSU
-# # Ansible connectivity definitions
-# # eAPI connectivity via HTTPS is specified (as opposed to CLI via SSH)
-# ansible_connection: ansible.netcommon.httpapi
-# # Specifies that we are indeed using Arista EOS
-# ansible_network_os: arista.eos.eos
-# # This user/password must exist on the switches to enable Ansible access
-# ansible_user: ansible
-# ansible_password: ansible
-# # User escalation (to enter enable mode)
-# ansible_become: true
-# ansible_become_method: enable
-# # Use SSL (HTTPS)
-# ansible_httpapi_use_ssl: true
-# # Do not try to validate certs
-# ansible_httpapi_validate_certs: false
-# ansible_httpapi_ciphers: AES256-SHA:DHE-RSA-AES256-SHA:AES128-SHA:DHE-RSA-AES128-SHA
-# Common AVD group variables
-# Local users
+
 local_users:
   # Define a new user, which is called "ansible"
   - name: admin
@@ -31,7 +14,6 @@ terminattr_disable_aaa: true
 name_servers:
   - 8.8.8.8
 
-
 # NTP Servers IP or DNS name, first NTP server will be prefered, and sourced from Management VRF
 custom_structured_configuration_ntp:
   local_interface:
@@ -41,10 +23,9 @@ custom_structured_configuration_ntp:
     - name: 132.163.96.3
       vrf: MGMT
 
-
 mgmt_interface: Management1
 mgmt_interface_vrf: MGMT
-mgmt_gateway: 192.168.3.1
+mgmt_gateway: 192.168.100.1
 mgmt_vrf_routing: yes
 
 snmp_server:
@@ -98,10 +79,16 @@ ip_access_lists:
         protocol: ip
         source: 192.168.3.0/24
         destination: any      
-
+      - sequence: 30
+        action: permit
+        protocol: ip
+        source: 192.168.100.0/24
+        destination: any   
 management_ssh:
   access_groups:
     - name: mgmt-acl
       vrf: MGMT
 
-
+aaa_authorization:
+  exec:
+    default: local

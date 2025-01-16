@@ -11,6 +11,7 @@
 - [Authentication](#authentication)
   - [Local Users](#local-users)
   - [Enable Password](#enable-password)
+  - [AAA Authorization](#aaa-authorization)
 - [Monitoring](#monitoring)
   - [TerminAttr Daemon](#terminattr-daemon)
   - [Logging](#logging)
@@ -66,7 +67,7 @@
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB_MANAGEMENT | oob | MGMT | 192.168.3.103/24 | 192.168.3.1 |
+| Management1 | OOB_MANAGEMENT | oob | MGMT | 192.168.100.203/24 | 192.168.100.1 |
 
 ##### IPv6
 
@@ -82,7 +83,7 @@ interface Management1
    description OOB_MANAGEMENT
    no shutdown
    vrf MGMT
-   ip address 192.168.3.103/24
+   ip address 192.168.100.203/24
 ```
 
 ### IP Name Servers
@@ -206,6 +207,23 @@ username nmoore privilege 15 role network-admin secret sha512 <removed>
 ### Enable Password
 
 Enable password has been disabled
+
+### AAA Authorization
+
+#### AAA Authorization Summary
+
+| Type | User Stores |
+| ---- | ----------- |
+| Exec | local |
+
+Authorization for configuration commands is disabled.
+
+#### AAA Authorization Device Configuration
+
+```eos
+aaa authorization exec default local
+!
+```
 
 ## Monitoring
 
@@ -1888,13 +1906,13 @@ ip routing vrf WCC
 
 | VRF | Destination Prefix | Next Hop IP | Exit interface | Administrative Distance | Tag | Route Name | Metric |
 | --- | ------------------ | ----------- | -------------- | ----------------------- | --- | ---------- | ------ |
-| MGMT | 0.0.0.0/0 | 192.168.3.1 | - | 1 | - | - | - |
+| MGMT | 0.0.0.0/0 | 192.168.100.1 | - | 1 | - | - | - |
 
 #### Static Routes Device Configuration
 
 ```eos
 !
-ip route vrf MGMT 0.0.0.0/0 192.168.3.1
+ip route vrf MGMT 0.0.0.0/0 192.168.100.1
 ```
 
 ### Router BGP
@@ -2748,6 +2766,7 @@ route-map RM-MLAG-PEER-IN permit 10
 ip access-list mgmt-acl
    10 permit ip 192.168.1.0/24 any
    20 permit ip 192.168.3.0/24 any
+   30 permit ip 192.168.100.0/24 any
 ```
 
 ## VRF Instances

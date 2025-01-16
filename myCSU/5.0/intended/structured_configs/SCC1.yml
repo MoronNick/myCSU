@@ -1,8 +1,8 @@
-hostname: WCC1
+hostname: SCC1
 is_deployed: true
 router_bgp:
-  as: '65101'
-  router_id: 10.255.0.3
+  as: '65102'
+  router_id: 10.255.0.5
   bgp:
     default:
       ipv4_unicast: false
@@ -16,9 +16,9 @@ router_bgp:
   peer_groups:
   - name: MLAG-IPv4-UNDERLAY-PEER
     type: ipv4
-    remote_as: '65101'
+    remote_as: '65102'
     next_hop_self: true
-    description: WCC2
+    description: SCC2
     password: 4b21pAdCvWeAqpcKDFMdWw==
     maximum_routes: 12000
     send_community: all
@@ -45,20 +45,20 @@ router_bgp:
     - name: EVPN-OVERLAY-PEERS
       activate: false
   neighbors:
-  - ip_address: 10.255.1.97
+  - ip_address: 10.255.1.101
     peer_group: MLAG-IPv4-UNDERLAY-PEER
-    peer: WCC2
-    description: WCC2_Vlan4093
-  - ip_address: 10.255.255.0
+    peer: SCC2
+    description: SCC2_Vlan4093
+  - ip_address: 10.255.255.8
     peer_group: IPv4-UNDERLAY-PEERS
     remote_as: '65100'
     peer: Spine1
-    description: Spine1_Ethernet1
-  - ip_address: 10.255.255.2
+    description: Spine1_Ethernet3
+  - ip_address: 10.255.255.10
     peer_group: IPv4-UNDERLAY-PEERS
     remote_as: '65100'
     peer: Spine2
-    description: Spine2_Ethernet1
+    description: Spine2_Ethernet3
   - ip_address: 10.255.0.1
     peer_group: EVPN-OVERLAY-PEERS
     peer: Spine1
@@ -75,7 +75,7 @@ router_bgp:
       activate: true
   vrfs:
   - name: VRF11
-    rd: 10.255.0.3:11
+    rd: 10.255.0.5:11
     route_targets:
       import:
       - address_family: evpn
@@ -85,17 +85,17 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - '11:11'
-    router_id: 10.255.0.3
+    router_id: 10.255.0.5
     redistribute:
       connected:
         enabled: true
         route_map: RM-CONN-2-BGP-VRFS
     neighbors:
-    - ip_address: 10.255.1.97
+    - ip_address: 10.255.1.101
       peer_group: MLAG-IPv4-UNDERLAY-PEER
-      description: WCC2_Vlan3010
+      description: SCC2_Vlan3010
   - name: WCC
-    rd: 10.255.0.3:10
+    rd: 10.255.0.5:10
     route_targets:
       import:
       - address_family: evpn
@@ -105,19 +105,19 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - '10:10'
-    router_id: 10.255.0.3
+    router_id: 10.255.0.5
     redistribute:
       connected:
         enabled: true
         route_map: RM-CONN-2-BGP-VRFS
     neighbors:
-    - ip_address: 10.255.1.97
+    - ip_address: 10.255.1.101
       peer_group: MLAG-IPv4-UNDERLAY-PEER
-      description: WCC2_Vlan3009
+      description: SCC2_Vlan3009
   vlans:
   - id: 21
     tenant: TENANT1
-    rd: 10.255.0.3:10021
+    rd: 10.255.0.5:10021
     route_targets:
       both:
       - 10021:10021
@@ -125,7 +125,7 @@ router_bgp:
     - learned
   - id: 22
     tenant: TENANT1
-    rd: 10.255.0.3:10022
+    rd: 10.255.0.5:10022
     route_targets:
       both:
       - 10022:10022
@@ -133,7 +133,7 @@ router_bgp:
     - learned
   - id: 8
     tenant: TENANT1
-    rd: 10.255.0.3:10008
+    rd: 10.255.0.5:10008
     route_targets:
       both:
       - 10008:10008
@@ -141,7 +141,7 @@ router_bgp:
     - learned
   - id: 26
     tenant: TENANT1
-    rd: 10.255.0.3:10026
+    rd: 10.255.0.5:10026
     route_targets:
       both:
       - 10026:10026
@@ -149,7 +149,7 @@ router_bgp:
     - learned
   - id: 48
     tenant: TENANT1
-    rd: 10.255.0.3:10048
+    rd: 10.255.0.5:10048
     route_targets:
       both:
       - 10048:10048
@@ -157,7 +157,7 @@ router_bgp:
     - learned
   - id: 50
     tenant: TENANT1
-    rd: 10.255.0.3:10050
+    rd: 10.255.0.5:10050
     route_targets:
       both:
       - 10050:10050
@@ -165,7 +165,7 @@ router_bgp:
     - learned
   - id: 84
     tenant: TENANT1
-    rd: 10.255.0.3:10084
+    rd: 10.255.0.5:10084
     route_targets:
       both:
       - 10084:10084
@@ -173,7 +173,7 @@ router_bgp:
     - learned
   - id: 108
     tenant: TENANT1
-    rd: 10.255.0.3:10108
+    rd: 10.255.0.5:10108
     route_targets:
       both:
       - 10108:10108
@@ -181,7 +181,7 @@ router_bgp:
     - learned
   - id: 214
     tenant: TENANT1
-    rd: 10.255.0.3:10214
+    rd: 10.255.0.5:10214
     route_targets:
       both:
       - 10214:10214
@@ -189,7 +189,7 @@ router_bgp:
     - learned
   - id: 232
     tenant: TENANT1
-    rd: 10.255.0.3:10232
+    rd: 10.255.0.5:10232
     route_targets:
       both:
       - 10232:10232
@@ -197,7 +197,7 @@ router_bgp:
     - learned
   - id: 233
     tenant: TENANT1
-    rd: 10.255.0.3:10233
+    rd: 10.255.0.5:10233
     route_targets:
       both:
       - 10233:10233
@@ -205,7 +205,7 @@ router_bgp:
     - learned
   - id: 248
     tenant: TENANT1
-    rd: 10.255.0.3:10248
+    rd: 10.255.0.5:10248
     route_targets:
       both:
       - 10248:10248
@@ -213,7 +213,7 @@ router_bgp:
     - learned
   - id: 320
     tenant: TENANT1
-    rd: 10.255.0.3:10320
+    rd: 10.255.0.5:10320
     route_targets:
       both:
       - 10320:10320
@@ -221,7 +221,7 @@ router_bgp:
     - learned
   - id: 322
     tenant: TENANT1
-    rd: 10.255.0.3:10322
+    rd: 10.255.0.5:10322
     route_targets:
       both:
       - 10322:10322
@@ -229,7 +229,7 @@ router_bgp:
     - learned
   - id: 323
     tenant: TENANT1
-    rd: 10.255.0.3:10323
+    rd: 10.255.0.5:10323
     route_targets:
       both:
       - 10323:10323
@@ -237,7 +237,7 @@ router_bgp:
     - learned
   - id: 331
     tenant: TENANT1
-    rd: 10.255.0.3:10331
+    rd: 10.255.0.5:10331
     route_targets:
       both:
       - 10331:10331
@@ -245,7 +245,7 @@ router_bgp:
     - learned
   - id: 332
     tenant: TENANT1
-    rd: 10.255.0.3:10332
+    rd: 10.255.0.5:10332
     route_targets:
       both:
       - 10332:10332
@@ -253,7 +253,7 @@ router_bgp:
     - learned
   - id: 351
     tenant: TENANT1
-    rd: 10.255.0.3:10351
+    rd: 10.255.0.5:10351
     route_targets:
       both:
       - 10351:10351
@@ -261,7 +261,7 @@ router_bgp:
     - learned
   - id: 352
     tenant: TENANT1
-    rd: 10.255.0.3:10352
+    rd: 10.255.0.5:10352
     route_targets:
       both:
       - 10352:10352
@@ -269,7 +269,7 @@ router_bgp:
     - learned
   - id: 375
     tenant: TENANT1
-    rd: 10.255.0.3:10375
+    rd: 10.255.0.5:10375
     route_targets:
       both:
       - 10375:10375
@@ -277,7 +277,7 @@ router_bgp:
     - learned
   - id: 376
     tenant: TENANT1
-    rd: 10.255.0.3:10376
+    rd: 10.255.0.5:10376
     route_targets:
       both:
       - 10376:10376
@@ -285,7 +285,7 @@ router_bgp:
     - learned
   - id: 384
     tenant: TENANT1
-    rd: 10.255.0.3:10384
+    rd: 10.255.0.5:10384
     route_targets:
       both:
       - 10384:10384
@@ -293,7 +293,7 @@ router_bgp:
     - learned
   - id: 386
     tenant: TENANT1
-    rd: 10.255.0.3:10386
+    rd: 10.255.0.5:10386
     route_targets:
       both:
       - 10386:10386
@@ -301,7 +301,7 @@ router_bgp:
     - learned
   - id: 387
     tenant: TENANT1
-    rd: 10.255.0.3:10387
+    rd: 10.255.0.5:10387
     route_targets:
       both:
       - 10387:10387
@@ -309,7 +309,7 @@ router_bgp:
     - learned
   - id: 388
     tenant: TENANT1
-    rd: 10.255.0.3:10388
+    rd: 10.255.0.5:10388
     route_targets:
       both:
       - 10388:10388
@@ -317,7 +317,7 @@ router_bgp:
     - learned
   - id: 395
     tenant: TENANT1
-    rd: 10.255.0.3:10395
+    rd: 10.255.0.5:10395
     route_targets:
       both:
       - 10395:10395
@@ -325,7 +325,7 @@ router_bgp:
     - learned
   - id: 397
     tenant: TENANT1
-    rd: 10.255.0.3:10397
+    rd: 10.255.0.5:10397
     route_targets:
       both:
       - 10397:10397
@@ -333,7 +333,7 @@ router_bgp:
     - learned
   - id: 401
     tenant: TENANT1
-    rd: 10.255.0.3:10401
+    rd: 10.255.0.5:10401
     route_targets:
       both:
       - 10401:10401
@@ -341,7 +341,7 @@ router_bgp:
     - learned
   - id: 409
     tenant: TENANT1
-    rd: 10.255.0.3:10409
+    rd: 10.255.0.5:10409
     route_targets:
       both:
       - 10409:10409
@@ -349,7 +349,7 @@ router_bgp:
     - learned
   - id: 421
     tenant: TENANT1
-    rd: 10.255.0.3:10421
+    rd: 10.255.0.5:10421
     route_targets:
       both:
       - 10421:10421
@@ -357,7 +357,7 @@ router_bgp:
     - learned
   - id: 422
     tenant: TENANT1
-    rd: 10.255.0.3:10422
+    rd: 10.255.0.5:10422
     route_targets:
       both:
       - 10422:10422
@@ -365,7 +365,7 @@ router_bgp:
     - learned
   - id: 426
     tenant: TENANT1
-    rd: 10.255.0.3:10426
+    rd: 10.255.0.5:10426
     route_targets:
       both:
       - 10426:10426
@@ -373,7 +373,7 @@ router_bgp:
     - learned
   - id: 428
     tenant: TENANT1
-    rd: 10.255.0.3:10428
+    rd: 10.255.0.5:10428
     route_targets:
       both:
       - 10428:10428
@@ -381,7 +381,7 @@ router_bgp:
     - learned
   - id: 472
     tenant: TENANT1
-    rd: 10.255.0.3:10472
+    rd: 10.255.0.5:10472
     route_targets:
       both:
       - 10472:10472
@@ -389,7 +389,7 @@ router_bgp:
     - learned
   - id: 512
     tenant: TENANT1
-    rd: 10.255.0.3:10512
+    rd: 10.255.0.5:10512
     route_targets:
       both:
       - 10512:10512
@@ -397,7 +397,7 @@ router_bgp:
     - learned
   - id: 513
     tenant: TENANT1
-    rd: 10.255.0.3:10513
+    rd: 10.255.0.5:10513
     route_targets:
       both:
       - 10513:10513
@@ -405,7 +405,7 @@ router_bgp:
     - learned
   - id: 525
     tenant: TENANT1
-    rd: 10.255.0.3:10525
+    rd: 10.255.0.5:10525
     route_targets:
       both:
       - 10525:10525
@@ -413,7 +413,7 @@ router_bgp:
     - learned
   - id: 540
     tenant: TENANT1
-    rd: 10.255.0.3:10540
+    rd: 10.255.0.5:10540
     route_targets:
       both:
       - 10540:10540
@@ -421,7 +421,7 @@ router_bgp:
     - learned
   - id: 584
     tenant: TENANT1
-    rd: 10.255.0.3:10584
+    rd: 10.255.0.5:10584
     route_targets:
       both:
       - 10584:10584
@@ -429,7 +429,7 @@ router_bgp:
     - learned
   - id: 600
     tenant: TENANT1
-    rd: 10.255.0.3:10600
+    rd: 10.255.0.5:10600
     route_targets:
       both:
       - 10600:10600
@@ -437,7 +437,7 @@ router_bgp:
     - learned
   - id: 653
     tenant: TENANT1
-    rd: 10.255.0.3:10653
+    rd: 10.255.0.5:10653
     route_targets:
       both:
       - 10653:10653
@@ -445,7 +445,7 @@ router_bgp:
     - learned
   - id: 1107
     tenant: TENANT1
-    rd: 10.255.0.3:11107
+    rd: 10.255.0.5:11107
     route_targets:
       both:
       - 11107:11107
@@ -453,7 +453,7 @@ router_bgp:
     - learned
   - id: 1108
     tenant: TENANT1
-    rd: 10.255.0.3:11108
+    rd: 10.255.0.5:11108
     route_targets:
       both:
       - 11108:11108
@@ -461,7 +461,7 @@ router_bgp:
     - learned
   - id: 1112
     tenant: TENANT1
-    rd: 10.255.0.3:11112
+    rd: 10.255.0.5:11112
     route_targets:
       both:
       - 11112:11112
@@ -469,7 +469,7 @@ router_bgp:
     - learned
   - id: 1208
     tenant: TENANT1
-    rd: 10.255.0.3:11208
+    rd: 10.255.0.5:11208
     route_targets:
       both:
       - 11208:11208
@@ -477,7 +477,7 @@ router_bgp:
     - learned
   - id: 1226
     tenant: TENANT1
-    rd: 10.255.0.3:11226
+    rd: 10.255.0.5:11226
     route_targets:
       both:
       - 11226:11226
@@ -485,7 +485,7 @@ router_bgp:
     - learned
   - id: 1300
     tenant: TENANT1
-    rd: 10.255.0.3:11300
+    rd: 10.255.0.5:11300
     route_targets:
       both:
       - 11300:11300
@@ -493,7 +493,7 @@ router_bgp:
     - learned
   - id: 2326
     tenant: TENANT1
-    rd: 10.255.0.3:12326
+    rd: 10.255.0.5:12326
     route_targets:
       both:
       - 12326:12326
@@ -501,7 +501,7 @@ router_bgp:
     - learned
   - id: 2670
     tenant: TENANT1
-    rd: 10.255.0.3:12670
+    rd: 10.255.0.5:12670
     route_targets:
       both:
       - 12670:12670
@@ -509,7 +509,7 @@ router_bgp:
     - learned
   - id: 2672
     tenant: TENANT1
-    rd: 10.255.0.3:12672
+    rd: 10.255.0.5:12672
     route_targets:
       both:
       - 12672:12672
@@ -517,7 +517,7 @@ router_bgp:
     - learned
   - id: 2676
     tenant: TENANT1
-    rd: 10.255.0.3:12676
+    rd: 10.255.0.5:12676
     route_targets:
       both:
       - 12676:12676
@@ -525,7 +525,7 @@ router_bgp:
     - learned
   - id: 2677
     tenant: TENANT1
-    rd: 10.255.0.3:12677
+    rd: 10.255.0.5:12677
     route_targets:
       both:
       - 12677:12677
@@ -533,7 +533,7 @@ router_bgp:
     - learned
   - id: 2680
     tenant: TENANT1
-    rd: 10.255.0.3:12680
+    rd: 10.255.0.5:12680
     route_targets:
       both:
       - 12680:12680
@@ -541,7 +541,7 @@ router_bgp:
     - learned
   - id: 2684
     tenant: TENANT1
-    rd: 10.255.0.3:12684
+    rd: 10.255.0.5:12684
     route_targets:
       both:
       - 12684:12684
@@ -549,7 +549,7 @@ router_bgp:
     - learned
   - id: 2689
     tenant: TENANT1
-    rd: 10.255.0.3:12689
+    rd: 10.255.0.5:12689
     route_targets:
       both:
       - 12689:12689
@@ -557,7 +557,7 @@ router_bgp:
     - learned
   - id: 2691
     tenant: TENANT1
-    rd: 10.255.0.3:12691
+    rd: 10.255.0.5:12691
     route_targets:
       both:
       - 12691:12691
@@ -565,7 +565,7 @@ router_bgp:
     - learned
   - id: 2694
     tenant: TENANT1
-    rd: 10.255.0.3:12694
+    rd: 10.255.0.5:12694
     route_targets:
       both:
       - 12694:12694
@@ -573,7 +573,7 @@ router_bgp:
     - learned
   - id: 2698
     tenant: TENANT1
-    rd: 10.255.0.3:12698
+    rd: 10.255.0.5:12698
     route_targets:
       both:
       - 12698:12698
@@ -581,7 +581,7 @@ router_bgp:
     - learned
   - id: 2699
     tenant: TENANT1
-    rd: 10.255.0.3:12699
+    rd: 10.255.0.5:12699
     route_targets:
       both:
       - 12699:12699
@@ -589,7 +589,7 @@ router_bgp:
     - learned
   - id: 2712
     tenant: TENANT1
-    rd: 10.255.0.3:12712
+    rd: 10.255.0.5:12712
     route_targets:
       both:
       - 12712:12712
@@ -597,7 +597,7 @@ router_bgp:
     - learned
   - id: 2716
     tenant: TENANT1
-    rd: 10.255.0.3:12716
+    rd: 10.255.0.5:12716
     route_targets:
       both:
       - 12716:12716
@@ -605,7 +605,7 @@ router_bgp:
     - learned
   - id: 2717
     tenant: TENANT1
-    rd: 10.255.0.3:12717
+    rd: 10.255.0.5:12717
     route_targets:
       both:
       - 12717:12717
@@ -613,7 +613,7 @@ router_bgp:
     - learned
   - id: 2718
     tenant: TENANT1
-    rd: 10.255.0.3:12718
+    rd: 10.255.0.5:12718
     route_targets:
       both:
       - 12718:12718
@@ -621,7 +621,7 @@ router_bgp:
     - learned
   - id: 2719
     tenant: TENANT1
-    rd: 10.255.0.3:12719
+    rd: 10.255.0.5:12719
     route_targets:
       both:
       - 12719:12719
@@ -629,7 +629,7 @@ router_bgp:
     - learned
   - id: 2720
     tenant: TENANT1
-    rd: 10.255.0.3:12720
+    rd: 10.255.0.5:12720
     route_targets:
       both:
       - 12720:12720
@@ -637,7 +637,7 @@ router_bgp:
     - learned
   - id: 3300
     tenant: TENANT1
-    rd: 10.255.0.3:13300
+    rd: 10.255.0.5:13300
     route_targets:
       both:
       - 13300:13300
@@ -645,7 +645,7 @@ router_bgp:
     - learned
   - id: 3301
     tenant: TENANT1
-    rd: 10.255.0.3:13301
+    rd: 10.255.0.5:13301
     route_targets:
       both:
       - 13301:13301
@@ -653,7 +653,7 @@ router_bgp:
     - learned
   - id: 3302
     tenant: TENANT1
-    rd: 10.255.0.3:13302
+    rd: 10.255.0.5:13302
     route_targets:
       both:
       - 13302:13302
@@ -661,7 +661,7 @@ router_bgp:
     - learned
   - id: 3303
     tenant: TENANT1
-    rd: 10.255.0.3:13303
+    rd: 10.255.0.5:13303
     route_targets:
       both:
       - 13303:13303
@@ -669,7 +669,7 @@ router_bgp:
     - learned
   - id: 3304
     tenant: TENANT1
-    rd: 10.255.0.3:13304
+    rd: 10.255.0.5:13304
     route_targets:
       both:
       - 13304:13304
@@ -677,7 +677,7 @@ router_bgp:
     - learned
   - id: 3305
     tenant: TENANT1
-    rd: 10.255.0.3:13305
+    rd: 10.255.0.5:13305
     route_targets:
       both:
       - 13305:13305
@@ -685,7 +685,7 @@ router_bgp:
     - learned
   - id: 3306
     tenant: TENANT1
-    rd: 10.255.0.3:13306
+    rd: 10.255.0.5:13306
     route_targets:
       both:
       - 13306:13306
@@ -693,7 +693,7 @@ router_bgp:
     - learned
   - id: 3307
     tenant: TENANT1
-    rd: 10.255.0.3:13307
+    rd: 10.255.0.5:13307
     route_targets:
       both:
       - 13307:13307
@@ -701,7 +701,7 @@ router_bgp:
     - learned
   - id: 3308
     tenant: TENANT1
-    rd: 10.255.0.3:13308
+    rd: 10.255.0.5:13308
     route_targets:
       both:
       - 13308:13308
@@ -709,7 +709,7 @@ router_bgp:
     - learned
   - id: 3309
     tenant: TENANT1
-    rd: 10.255.0.3:13309
+    rd: 10.255.0.5:13309
     route_targets:
       both:
       - 13309:13309
@@ -717,7 +717,7 @@ router_bgp:
     - learned
   - id: 3310
     tenant: TENANT1
-    rd: 10.255.0.3:13310
+    rd: 10.255.0.5:13310
     route_targets:
       both:
       - 13310:13310
@@ -725,7 +725,7 @@ router_bgp:
     - learned
   - id: 3311
     tenant: TENANT1
-    rd: 10.255.0.3:13311
+    rd: 10.255.0.5:13311
     route_targets:
       both:
       - 13311:13311
@@ -733,7 +733,7 @@ router_bgp:
     - learned
   - id: 3312
     tenant: TENANT1
-    rd: 10.255.0.3:13312
+    rd: 10.255.0.5:13312
     route_targets:
       both:
       - 13312:13312
@@ -741,7 +741,7 @@ router_bgp:
     - learned
   - id: 3313
     tenant: TENANT1
-    rd: 10.255.0.3:13313
+    rd: 10.255.0.5:13313
     route_targets:
       both:
       - 13313:13313
@@ -749,7 +749,7 @@ router_bgp:
     - learned
   - id: 3349
     tenant: TENANT1
-    rd: 10.255.0.3:13349
+    rd: 10.255.0.5:13349
     route_targets:
       both:
       - 13349:13349
@@ -757,7 +757,7 @@ router_bgp:
     - learned
   - id: 3714
     tenant: TENANT1
-    rd: 10.255.0.3:13714
+    rd: 10.255.0.5:13714
     route_targets:
       both:
       - 13714:13714
@@ -765,7 +765,7 @@ router_bgp:
     - learned
   - id: 2020
     tenant: TENANT1
-    rd: 10.255.0.3:12020
+    rd: 10.255.0.5:12020
     route_targets:
       both:
       - 12020:12020
@@ -773,7 +773,7 @@ router_bgp:
     - learned
   - id: 2023
     tenant: TENANT1
-    rd: 10.255.0.3:12023
+    rd: 10.255.0.5:12023
     route_targets:
       both:
       - 12023:12023
@@ -781,7 +781,7 @@ router_bgp:
     - learned
   - id: 1068
     tenant: TENANT1
-    rd: 10.255.0.3:11068
+    rd: 10.255.0.5:11068
     route_targets:
       both:
       - 11068:11068
@@ -789,7 +789,7 @@ router_bgp:
     - learned
   - id: 168
     tenant: TENANT1
-    rd: 10.255.0.3:10168
+    rd: 10.255.0.5:10168
     route_targets:
       both:
       - 10168:10168
@@ -797,7 +797,7 @@ router_bgp:
     - learned
   - id: 804
     tenant: TENANT1
-    rd: 10.255.0.3:10804
+    rd: 10.255.0.5:10804
     route_targets:
       both:
       - 10804:10804
@@ -805,7 +805,7 @@ router_bgp:
     - learned
   - id: 814
     tenant: TENANT1
-    rd: 10.255.0.3:10814
+    rd: 10.255.0.5:10814
     route_targets:
       both:
       - 10814:10814
@@ -813,7 +813,7 @@ router_bgp:
     - learned
   - id: 634
     tenant: TENANT1
-    rd: 10.255.0.3:10634
+    rd: 10.255.0.5:10634
     route_targets:
       both:
       - 10634:10634
@@ -821,7 +821,7 @@ router_bgp:
     - learned
   - id: 817
     tenant: TENANT1
-    rd: 10.255.0.3:10817
+    rd: 10.255.0.5:10817
     route_targets:
       both:
       - 10817:10817
@@ -829,7 +829,7 @@ router_bgp:
     - learned
   - id: 620
     tenant: TENANT1
-    rd: 10.255.0.3:10620
+    rd: 10.255.0.5:10620
     route_targets:
       both:
       - 10620:10620
@@ -837,7 +837,7 @@ router_bgp:
     - learned
   - id: 815
     tenant: TENANT1
-    rd: 10.255.0.3:10815
+    rd: 10.255.0.5:10815
     route_targets:
       both:
       - 10815:10815
@@ -845,7 +845,7 @@ router_bgp:
     - learned
   - id: 314
     tenant: TENANT1
-    rd: 10.255.0.3:10314
+    rd: 10.255.0.5:10314
     route_targets:
       both:
       - 10314:10314
@@ -853,7 +853,7 @@ router_bgp:
     - learned
   - id: 315
     tenant: TENANT1
-    rd: 10.255.0.3:10315
+    rd: 10.255.0.5:10315
     route_targets:
       both:
       - 10315:10315
@@ -861,7 +861,7 @@ router_bgp:
     - learned
   - id: 3900
     tenant: TENANT1
-    rd: 10.255.0.3:13900
+    rd: 10.255.0.5:13900
     route_targets:
       both:
       - 13900:13900
@@ -869,7 +869,7 @@ router_bgp:
     - learned
   - id: 3903
     tenant: TENANT1
-    rd: 10.255.0.3:13903
+    rd: 10.255.0.5:13903
     route_targets:
       both:
       - 13903:13903
@@ -877,7 +877,7 @@ router_bgp:
     - learned
   - id: 3785
     tenant: TENANT1
-    rd: 10.255.0.3:13785
+    rd: 10.255.0.5:13785
     route_targets:
       both:
       - 13785:13785
@@ -885,7 +885,7 @@ router_bgp:
     - learned
   - id: 3500
     tenant: TENANT1
-    rd: 10.255.0.3:13500
+    rd: 10.255.0.5:13500
     route_targets:
       both:
       - 13500:13500
@@ -893,7 +893,7 @@ router_bgp:
     - learned
   - id: 313
     tenant: TENANT1
-    rd: 10.255.0.3:10313
+    rd: 10.255.0.5:10313
     route_targets:
       both:
       - 10313:10313
@@ -956,7 +956,7 @@ management_interfaces:
   description: OOB_MANAGEMENT
   shutdown: false
   vrf: MGMT
-  ip_address: 192.168.100.202/24
+  ip_address: 192.168.100.204/24
   gateway: 192.168.100.1
   type: oob
 management_api_http:
@@ -1283,13 +1283,13 @@ vlan_interfaces:
   description: MLAG_L3
   shutdown: false
   mtu: 1500
-  ip_address: 10.255.1.96/31
+  ip_address: 10.255.1.100/31
 - name: Vlan4094
   description: MLAG
   shutdown: false
   no_autostate: true
   mtu: 1500
-  ip_address: 10.255.1.64/31
+  ip_address: 10.255.1.68/31
 - name: Vlan21
   tenant: TENANT1
   description: VRF11_VLAN21
@@ -1309,7 +1309,7 @@ vlan_interfaces:
   description: MLAG_L3_VRF_VRF11
   vrf: VRF11
   mtu: 1500
-  ip_address: 10.255.1.96/31
+  ip_address: 10.255.1.100/31
 - name: Vlan8
   tenant: TENANT1
   description: West_Campus_Remote_Public
@@ -1785,10 +1785,10 @@ vlan_interfaces:
   description: MLAG_L3_VRF_WCC
   vrf: WCC
   mtu: 1500
-  ip_address: 10.255.1.96/31
+  ip_address: 10.255.1.100/31
 port_channel_interfaces:
 - name: Port-Channel11
-  description: MLAG_WCC2_Port-Channel11
+  description: MLAG_SCC2_Port-Channel11
   switchport:
     enabled: true
     mode: trunk
@@ -1796,68 +1796,49 @@ port_channel_interfaces:
       groups:
       - MLAG
   shutdown: false
-- name: Port-Channel48
-  description: level1_atmospheric-science(1120)_ats1_114b_048002_Trk1
-  shutdown: false
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 17,48,50,401,428,472,512,513,525,804,814,2020,2716-2720,3300,3307,3349
-  spanning_tree_portfast: edge
-  mlag: 48
 ethernet_interfaces:
 - name: Ethernet11
-  peer: WCC2
+  peer: SCC2
   peer_interface: Ethernet11
   peer_type: mlag_peer
-  description: MLAG_WCC2_Ethernet11
+  description: MLAG_SCC2_Ethernet11
   shutdown: false
   channel_group:
     id: 11
     mode: active
 - name: Ethernet12
-  peer: WCC2
+  peer: SCC2
   peer_interface: Ethernet12
   peer_type: mlag_peer
-  description: MLAG_WCC2_Ethernet12
+  description: MLAG_SCC2_Ethernet12
   shutdown: false
   channel_group:
     id: 11
     mode: active
 - name: Ethernet7
   peer: Spine1
-  peer_interface: Ethernet1
+  peer_interface: Ethernet3
   peer_type: spine
-  description: P2P_Spine1_Ethernet1
+  description: P2P_Spine1_Ethernet3
   shutdown: false
   mtu: 1500
   switchport:
     enabled: false
-  ip_address: 10.255.255.1/31
+  ip_address: 10.255.255.9/31
 - name: Ethernet8
   peer: Spine2
-  peer_interface: Ethernet1
+  peer_interface: Ethernet3
   peer_type: spine
-  description: P2P_Spine2_Ethernet1
+  description: P2P_Spine2_Ethernet3
   shutdown: false
   mtu: 1500
   switchport:
     enabled: false
-  ip_address: 10.255.255.3/31
-- name: Ethernet5
-  peer: Atmospheric Science
-  peer_interface: A22
-  peer_type: server
-  description: level1_atmospheric-science(1120)_ats1_114b_048002_A22
-  shutdown: false
-  channel_group:
-    id: 48
-    mode: active
+  ip_address: 10.255.255.11/31
 mlag_configuration:
-  domain_id: DC1_L3_LEAF1
+  domain_id: DC1_L3_LEAF2
   local_interface: Vlan4094
-  peer_address: 10.255.1.65
+  peer_address: 10.255.1.69
   peer_link: Port-Channel11
   reload_delay_mlag: '300'
   reload_delay_non_mlag: '330'
@@ -1887,21 +1868,21 @@ loopback_interfaces:
 - name: Loopback0
   description: ROUTER_ID
   shutdown: false
-  ip_address: 10.255.0.3/32
+  ip_address: 10.255.0.5/32
 - name: Loopback1
   description: VXLAN_TUNNEL_SOURCE
   shutdown: false
-  ip_address: 10.255.1.3/32
+  ip_address: 10.255.1.5/32
 - name: Loopback11
   description: DIAG_VRF_VRF11
   shutdown: false
   vrf: VRF11
-  ip_address: 10.255.11.3/32
+  ip_address: 10.255.11.5/32
 - name: Loopback10
   description: DIAG_VRF_WCC
   shutdown: false
   vrf: WCC
-  ip_address: 10.255.10.3/32
+  ip_address: 10.255.10.5/32
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -1912,7 +1893,7 @@ prefix_lists:
 - name: PL-MLAG-PEER-VRFS
   sequence_numbers:
   - sequence: 10
-    action: permit 10.255.1.96/31
+    action: permit 10.255.1.100/31
 router_bfd:
   multihop:
     interval: 300
@@ -1923,7 +1904,7 @@ ip_igmp_snooping:
 ip_virtual_router_mac_address: 00:1c:73:00:00:99
 vxlan_interface:
   vxlan1:
-    description: WCC1_VTEP
+    description: SCC1_VTEP
     vxlan:
       udp_port: 4789
       source_interface: Loopback1
@@ -2132,9 +2113,9 @@ vxlan_interface:
         vni: 10
 virtual_source_nat_vrfs:
 - name: VRF11
-  ip_address: 10.255.11.3
+  ip_address: 10.255.11.5
 - name: WCC
-  ip_address: 10.255.10.3
+  ip_address: 10.255.10.5
 metadata:
   platform: vEOS-lab
 ntp:

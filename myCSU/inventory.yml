@@ -22,15 +22,19 @@ all:
                 DC1_SPINES:
                   hosts:
                     Spine1:
-                      ansible_host: 192.168.3.100
+                      ansible_host: 192.168.100.200
                     Spine2:
-                      ansible_host: 192.168.3.101
+                      ansible_host: 192.168.100.201
                 DC1_L3_LEAVES:
                   hosts:
                     WCC1:
-                      ansible_host: 192.168.3.102
+                      ansible_host: 192.168.100.202
                     WCC2:
-                      ansible_host: 192.168.3.103
+                      ansible_host: 192.168.100.203
+                    SCC1:
+                      ansible_host: 192.168.100.204
+                    SCC2:
+                      ansible_host: 192.168.100.205
         Standalone: 
           children:
             L2_LEAVES:
@@ -38,9 +42,9 @@ all:
                 Cameras: 
                   hosts: 
                     e7_0r05c05052051: 
-                      ansible_host: 192.168.3.104
+                      ansible_host: 192.168.100.206
                     e7_0r05c05052052:
-                      ansible_host: 192.168.3.105
+                      ansible_host: 192.168.100.207
     NETWORK_SERVICES:
       children:
         DC1_L3_LEAVES:

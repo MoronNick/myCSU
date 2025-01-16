@@ -10,10 +10,10 @@ l2leaf:
           nodes: 
             - name: e7_0r05c05052051
               id: 1
-              mgmt_ip: 192.168.3.104/24
+              mgmt_ip: 192.168.100.206/24
             - name: e7_0r05c05052052
               id: 2
-              mgmt_ip: 192.168.3.105/24
+              mgmt_ip: 192.168.100.207/24
 custom_structured_configuration_local_users:
   # Define a new user, which is called "ansible"
   - name: nmoore
