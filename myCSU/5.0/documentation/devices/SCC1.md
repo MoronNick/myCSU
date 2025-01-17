@@ -1085,6 +1085,12 @@ interface Loopback11
 | Vlan4093 |  default  |  10.255.1.100/31  |  -  |  -  |  -  |  -  |
 | Vlan4094 |  default  |  10.255.1.68/31  |  -  |  -  |  -  |  -  |
 
+##### IPv6
+
+| Interface | VRF | IPv6 Address | IPv6 Virtual Addresses | Virtual Router Addresses | ND RA Disabled | Managed Config Flag | Other Config Flag | IPv6 ACL In | IPv6 ACL Out |
+| --------- | --- | ------------ | ---------------------- | ------------------------ | -------------- | ------------------- | ----------------- | ----------- | ------------ |
+| Vlan8 | WCC | - | fec0:0:8::1/96 | - | - | - | - | - | - |
+
 #### VLAN Interfaces Device Configuration
 
 ```eos
@@ -1093,7 +1099,9 @@ interface Vlan8
    description West_Campus_Remote_Public
    no shutdown
    vrf WCC
+   ipv6 enable
    ip address virtual 129.82.8.1/23
+   ipv6 address virtual fec0:0:8::1/96
 !
 interface Vlan21
    description VRF11_VLAN21
@@ -1882,7 +1890,7 @@ ip routing vrf WCC
 | default | False |
 | MGMT | false |
 | VRF11 | false |
-| WCC | false |
+| WCC | true |
 
 ### Static Routes
 

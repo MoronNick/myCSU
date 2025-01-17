@@ -951,6 +951,7 @@ vrfs:
 - name: WCC
   tenant: TENANT1
   ip_routing: true
+  ipv6_routing: true
 management_interfaces:
 - name: Management1
   description: OOB_MANAGEMENT
@@ -1314,7 +1315,10 @@ vlan_interfaces:
   tenant: TENANT1
   description: West_Campus_Remote_Public
   shutdown: false
+  ipv6_enable: true
   ip_address_virtual: 129.82.8.1/23
+  ipv6_address_virtuals:
+  - fec0:0:8::1/96
   vrf: WCC
 - name: Vlan26
   tenant: TENANT1
