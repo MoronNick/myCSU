@@ -67,13 +67,13 @@
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB_MANAGEMENT | oob | MGMT | 192.168.100.204/24 | 192.168.100.1 |
+| Management1 | OOB_MANAGEMENT | oob | mgmt | 192.168.100.204/24 | 192.168.100.1 |
 
 ##### IPv6
 
 | Management Interface | Description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | OOB_MANAGEMENT | oob | MGMT | - | - |
+| Management1 | OOB_MANAGEMENT | oob | mgmt | - | - |
 
 #### Management Interfaces Device Configuration
 
@@ -82,7 +82,7 @@
 interface Management1
    description OOB_MANAGEMENT
    no shutdown
-   vrf MGMT
+   vrf mgmt
    ip address 192.168.100.204/24
 ```
 
@@ -92,12 +92,12 @@ interface Management1
 
 | Name Server | VRF | Priority |
 | ----------- | --- | -------- |
-| 8.8.8.8 | MGMT | - |
+| 8.8.8.8 | mgmt | - |
 
 #### IP Name Servers Device Configuration
 
 ```eos
-ip name-server vrf MGMT 8.8.8.8
+ip name-server vrf mgmt 8.8.8.8
 ```
 
 ### NTP
@@ -108,20 +108,20 @@ ip name-server vrf MGMT 8.8.8.8
 
 | Interface | VRF |
 | --------- | --- |
-| Management1 | MGMT |
+| Management1 | mgmt |
 
 ##### NTP Servers
 
 | Server | VRF | Preferred | Burst | iBurst | Version | Min Poll | Max Poll | Local-interface | Key |
 | ------ | --- | --------- | ----- | ------ | ------- | -------- | -------- | --------------- | --- |
-| 132.163.96.3 | MGMT | - | - | - | - | - | - | - | - |
+| 132.163.96.3 | mgmt | - | - | - | - | - | - | - | - |
 
 #### NTP Device Configuration
 
 ```eos
 !
-ntp local-interface vrf MGMT Management1
-ntp server vrf MGMT 132.163.96.3
+ntp local-interface vrf mgmt Management1
+ntp server vrf mgmt 132.163.96.3
 ```
 
 ### Management SSH
@@ -130,7 +130,7 @@ ntp server vrf MGMT 132.163.96.3
 
 | IPv4 ACL | VRF |
 | -------- | --- |
-| mgmt-acl | MGMT |
+| mgmt-acl | mgmt |
 
 #### SSH Timeout and Management
 
@@ -156,7 +156,7 @@ ntp server vrf MGMT 132.163.96.3
 ```eos
 !
 management ssh
-   ip access-group mgmt-acl vrf MGMT in
+   ip access-group mgmt-acl vrf mgmt in
 ```
 
 ### Management API HTTP
@@ -171,7 +171,7 @@ management ssh
 
 | VRF Name | IPv4 ACL | IPv6 ACL |
 | -------- | -------- | -------- |
-| MGMT | - | - |
+| mgmt | - | - |
 
 #### Management API HTTP Device Configuration
 
@@ -181,7 +181,7 @@ management api http-commands
    protocol https
    no shutdown
    !
-   vrf MGMT
+   vrf mgmt
       no shutdown
 ```
 
@@ -233,14 +233,14 @@ aaa authorization exec default local
 
 | CV Compression | CloudVision Servers | VRF | Authentication | Smash Excludes | Ingest Exclude | Bypass AAA |
 | -------------- | ------------------- | --- | -------------- | -------------- | -------------- | ---------- |
-| gzip | apiserver.cv-staging.corp.arista.io:443 | MGMT | token-secure,/tmp/cv-onboarding-token | ale,flexCounter,hardware,kni,pulse,strata | /Sysdb/cell/1/agent,/Sysdb/cell/2/agent | True |
+| gzip | apiserver.cv-staging.corp.arista.io:443 | mgmt | token-secure,/tmp/cv-onboarding-token | ale,flexCounter,hardware,kni,pulse,strata | /Sysdb/cell/1/agent,/Sysdb/cell/2/agent | True |
 
 #### TerminAttr Daemon Device Configuration
 
 ```eos
 !
 daemon TerminAttr
-   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443 -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=MGMT -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
+   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443 -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
    no shutdown
 ```
 
@@ -253,18 +253,18 @@ daemon TerminAttr
 
 | VRF | Source Interface |
 | --- | ---------------- |
-| MGMT | Management1 |
+| mgmt | Management1 |
 
 | VRF | Hosts | Ports | Protocol |
 | --- | ----- | ----- | -------- |
-| MGMT | 129.82.111.172 | Default | UDP |
+| mgmt | 129.82.111.172 | Default | UDP |
 
 #### Logging Servers and Features Device Configuration
 
 ```eos
 !
-logging vrf MGMT host 129.82.111.172
-logging vrf MGMT source-interface Management1
+logging vrf mgmt host 129.82.111.172
+logging vrf mgmt source-interface Management1
 ```
 
 ### SNMP
@@ -279,7 +279,7 @@ logging vrf MGMT source-interface Management1
 
 | Host | VRF | Community | Username | Authentication level | SNMP Version |
 | ---- |---- | --------- | -------- | -------------------- | ------------ |
-| 10.100.201.199 | MGMT | <removed> | - | - | 2c |
+| 10.100.201.199 | mgmt | <removed> | - | - | 2c |
 
 #### SNMP Communities
 
@@ -293,7 +293,7 @@ logging vrf MGMT source-interface Management1
 !
 snmp-server contact noc@colostate.edu
 snmp-server community <removed> ro
-snmp-server host 10.100.201.199 vrf MGMT version 2c <removed>
+snmp-server host 10.100.201.199 vrf mgmt version 2c <removed>
 ```
 
 ## MLAG
@@ -366,8 +366,6 @@ vlan internal order ascending range 1006 1199
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
 | 8 | West_Campus_Remote_Public | - |
-| 21 | VRF11_VLAN21 | - |
-| 22 | VRF11_VLAN22 | - |
 | 26 | CVMBS_RBL_Public | - |
 | 48 | COE_ATS_Public | - |
 | 50 | Drone_Pub | - |
@@ -443,8 +441,7 @@ vlan internal order ascending range 1006 1199
 | 2718 | VOIP_ATS_Chem | - |
 | 2719 | VOIP_ATS_Annex | - |
 | 2720 | VOIP_SimLab | - |
-| 3009 | MLAG_L3_VRF_WCC | MLAG |
-| 3010 | MLAG_L3_VRF_VRF11 | MLAG |
+| 3009 | MLAG_L3_VRF_campus | MLAG |
 | 3300 | ACNS_SW-MGMT_WC | - |
 | 3301 | Wireless_ACRC | - |
 | 3302 | Wireless_ABL | - |
@@ -474,12 +471,6 @@ vlan internal order ascending range 1006 1199
 !
 vlan 8
    name West_Campus_Remote_Public
-!
-vlan 21
-   name VRF11_VLAN21
-!
-vlan 22
-   name VRF11_VLAN22
 !
 vlan 26
    name CVMBS_RBL_Public
@@ -707,11 +698,7 @@ vlan 2720
    name VOIP_SimLab
 !
 vlan 3009
-   name MLAG_L3_VRF_WCC
-   trunk group MLAG
-!
-vlan 3010
-   name MLAG_L3_VRF_VRF11
+   name MLAG_L3_VRF_campus
    trunk group MLAG
 !
 vlan 3300
@@ -866,8 +853,7 @@ interface Port-Channel11
 | --------- | ----------- | --- | ---------- |
 | Loopback0 | ROUTER_ID | default | 10.255.0.5/32 |
 | Loopback1 | VXLAN_TUNNEL_SOURCE | default | 10.255.1.5/32 |
-| Loopback10 | DIAG_VRF_WCC | WCC | 10.255.10.5/32 |
-| Loopback11 | DIAG_VRF_VRF11 | VRF11 | 10.255.11.5/32 |
+| Loopback10 | DIAG_VRF_campus | campus | 10.255.10.5/32 |
 
 ##### IPv6
 
@@ -875,8 +861,7 @@ interface Port-Channel11
 | --------- | ----------- | --- | ------------ |
 | Loopback0 | ROUTER_ID | default | - |
 | Loopback1 | VXLAN_TUNNEL_SOURCE | default | - |
-| Loopback10 | DIAG_VRF_WCC | WCC | - |
-| Loopback11 | DIAG_VRF_VRF11 | VRF11 | - |
+| Loopback10 | DIAG_VRF_campus | campus | - |
 
 #### Loopback Interfaces Device Configuration
 
@@ -893,16 +878,10 @@ interface Loopback1
    ip address 10.255.1.5/32
 !
 interface Loopback10
-   description DIAG_VRF_WCC
+   description DIAG_VRF_campus
    no shutdown
-   vrf WCC
+   vrf campus
    ip address 10.255.10.5/32
-!
-interface Loopback11
-   description DIAG_VRF_VRF11
-   no shutdown
-   vrf VRF11
-   ip address 10.255.11.5/32
 ```
 
 ### VLAN Interfaces
@@ -911,88 +890,85 @@ interface Loopback11
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
-| Vlan8 | West_Campus_Remote_Public | WCC | - | False |
-| Vlan21 | VRF11_VLAN21 | VRF11 | - | False |
-| Vlan22 | VRF11_VLAN22 | VRF11 | - | False |
-| Vlan26 | CVMBS_RBL_Public | WCC | - | False |
-| Vlan48 | COE_ATS_Public | WCC | - | False |
-| Vlan50 | Drone_Pub | WCC | - | False |
-| Vlan84 | vendor_foothills | WCC | - | False |
-| Vlan108 | ACRC-CIRA_Public | WCC | - | False |
-| Vlan214 | CVMBS_ARBL_Public | WCC | - | False |
-| Vlan232 | ERC_Public | WCC | - | False |
-| Vlan233 | ERC_Private | WCC | - | False |
-| Vlan248 | CSFS_Public | WCC | - | False |
-| Vlan320 | WCC_PA_PtP | WCC | - | False |
-| Vlan322 | West_Campus_Remote_Private | WCC | - | False |
-| Vlan323 | West_Campus_Remote_Utility | WCC | - | False |
-| Vlan331 | CSFS_Public | WCC | - | False |
-| Vlan332 | ARBL_Utility | WCC | - | False |
-| Vlan351 | AIDL_Private | WCC | - | False |
-| Vlan352 | AIDL_Utility | WCC | - | False |
-| Vlan375 | IDA_Private | WCC | - | False |
-| Vlan376 | IDA_Utility | WCC | - | False |
-| Vlan384 | HHS_Aggie_Labs_Private | WCC | - | False |
-| Vlan386 | ERL_Private | WCC | - | False |
-| Vlan387 | CVMBS_Equine_Center_Private | WCC | - | False |
-| Vlan388 | Equine_Center_Utility | WCC | - | False |
-| Vlan395 | ACRC-CIRA_Utility | WCC | - | False |
-| Vlan397 | ERC_Utility | WCC | - | False |
-| Vlan401 | Atmos_Private | WCC | - | False |
-| Vlan409 | ABL_Utility | WCC | - | False |
-| Vlan421 | Aggie_Labs_Private | WCC | - | False |
-| Vlan422 | Aggie_Labs_Utility | WCC | - | False |
-| Vlan426 | RBL_Utility | WCC | - | False |
-| Vlan428 | ATS_Utility | WCC | - | False |
-| Vlan472 | SimLab_Public | WCC | - | False |
-| Vlan512 | SimLab_Private | WCC | - | False |
-| Vlan513 | SimLab_Utility | WCC | - | False |
-| Vlan525 | ATS_Chem_Utility | WCC | - | False |
-| Vlan540 | Beam_Lab_Private | WCC | - | False |
-| Vlan584 | WCC_Public_Non_CSU | WCC | - | False |
-| Vlan600 | WCC_ENDR_DREN_L2_link | WCC | - | False |
-| Vlan653 | AECOM_Private | WCC | - | False |
-| Vlan1107 | Temple_Grandin_Util | WCC | - | False |
-| Vlan1108 | WCC_Public_Non_CSU | WCC | - | False |
-| Vlan1112 | Engines_Lab_Priv2 | WCC | - | False |
-| Vlan1208 | ACRC-CIRA_Static_Private | WCC | - | False |
-| Vlan1226 | CVMBS_RBL_Private | WCC | - | False |
-| Vlan1300 | Temple_Grandin_Priv | WCC | - | False |
-| Vlan2326 | VOIP_RIC | WCC | - | False |
-| Vlan2670 | VOIP_ARBL | WCC | - | False |
-| Vlan2672 | VOIP_RBL | WCC | - | False |
-| Vlan2676 | VOIP_ERL | WCC | - | False |
-| Vlan2677 | VOIP_Aggie_Labs | WCC | - | False |
-| Vlan2680 | VOIP_BEAMLAB | WCC | - | False |
-| Vlan2684 | VOIP_IDA | WCC | - | False |
-| Vlan2689 | VOIP_CSFS | WCC | - | False |
-| Vlan2691 | VOIP_AIDL | WCC | - | False |
-| Vlan2694 | VOIP_AECOM | WCC | - | False |
-| Vlan2698 | VOIP_ACRC-CIRA | WCC | - | False |
-| Vlan2699 | VOIP_ERC | WCC | - | False |
-| Vlan2712 | VOIP_FOOTHILLS_CATCHALL | WCC | - | False |
-| Vlan2716 | VOIP_ATS_Main | WCC | - | False |
-| Vlan2717 | VOIP_ATS_CMMAP | WCC | - | False |
-| Vlan2718 | VOIP_ATS_Chem | WCC | - | False |
-| Vlan2719 | VOIP_ATS_Annex | WCC | - | False |
-| Vlan2720 | VOIP_SimLab | WCC | - | False |
-| Vlan3009 | MLAG_L3_VRF_WCC | WCC | 1500 | False |
-| Vlan3010 | MLAG_L3_VRF_VRF11 | VRF11 | 1500 | False |
-| Vlan3300 | ACNS_SW-MGMT_WC | WCC | - | False |
-| Vlan3301 | Wireless_ACRC | WCC | - | False |
-| Vlan3302 | Wireless_ABL | WCC | - | False |
-| Vlan3303 | Wireless_AECOM | WCC | - | False |
-| Vlan3304 | Wireless_Aggie_Labs | WCC | - | False |
-| Vlan3305 | Wireless_AIDL | WCC | - | False |
-| Vlan3306 | Wireless_ARBL | WCC | - | False |
-| Vlan3307 | Wireless_Atmospheric_Science | WCC | - | False |
-| Vlan3308 | Wireless_CSFS | WCC | - | False |
-| Vlan3309 | Wireless_ERC | WCC | - | False |
-| Vlan3310 | Wireless_ERL | WCC | - | False |
-| Vlan3311 | Wireless_IDA | WCC | - | False |
-| Vlan3312 | Wireless_RBL | WCC | - | False |
-| Vlan3313 | Wireless_Temple_Grandin | WCC | - | False |
-| Vlan3349 | ACNS_UPS-MGMT_WC | WCC | - | False |
+| Vlan8 | West_Campus_Remote_Public | campus | - | False |
+| Vlan26 | CVMBS_RBL_Public | campus | - | False |
+| Vlan48 | COE_ATS_Public | campus | - | False |
+| Vlan50 | Drone_Pub | campus | - | False |
+| Vlan84 | vendor_foothills | campus | - | False |
+| Vlan108 | ACRC-CIRA_Public | campus | - | False |
+| Vlan214 | CVMBS_ARBL_Public | campus | - | False |
+| Vlan232 | ERC_Public | campus | - | False |
+| Vlan233 | ERC_Private | campus | - | False |
+| Vlan248 | CSFS_Public | campus | - | False |
+| Vlan320 | WCC_PA_PtP | campus | - | False |
+| Vlan322 | West_Campus_Remote_Private | campus | - | False |
+| Vlan323 | West_Campus_Remote_Utility | campus | - | False |
+| Vlan331 | CSFS_Public | campus | - | False |
+| Vlan332 | ARBL_Utility | campus | - | False |
+| Vlan351 | AIDL_Private | campus | - | False |
+| Vlan352 | AIDL_Utility | campus | - | False |
+| Vlan375 | IDA_Private | campus | - | False |
+| Vlan376 | IDA_Utility | campus | - | False |
+| Vlan384 | HHS_Aggie_Labs_Private | campus | - | False |
+| Vlan386 | ERL_Private | campus | - | False |
+| Vlan387 | CVMBS_Equine_Center_Private | campus | - | False |
+| Vlan388 | Equine_Center_Utility | campus | - | False |
+| Vlan395 | ACRC-CIRA_Utility | campus | - | False |
+| Vlan397 | ERC_Utility | campus | - | False |
+| Vlan401 | Atmos_Private | campus | - | False |
+| Vlan409 | ABL_Utility | campus | - | False |
+| Vlan421 | Aggie_Labs_Private | campus | - | False |
+| Vlan422 | Aggie_Labs_Utility | campus | - | False |
+| Vlan426 | RBL_Utility | campus | - | False |
+| Vlan428 | ATS_Utility | campus | - | False |
+| Vlan472 | SimLab_Public | campus | - | False |
+| Vlan512 | SimLab_Private | campus | - | False |
+| Vlan513 | SimLab_Utility | campus | - | False |
+| Vlan525 | ATS_Chem_Utility | campus | - | False |
+| Vlan540 | Beam_Lab_Private | campus | - | False |
+| Vlan584 | WCC_Public_Non_CSU | campus | - | False |
+| Vlan600 | WCC_ENDR_DREN_L2_link | campus | - | False |
+| Vlan653 | AECOM_Private | campus | - | False |
+| Vlan1107 | Temple_Grandin_Util | campus | - | False |
+| Vlan1108 | WCC_Public_Non_CSU | campus | - | False |
+| Vlan1112 | Engines_Lab_Priv2 | campus | - | False |
+| Vlan1208 | ACRC-CIRA_Static_Private | campus | - | False |
+| Vlan1226 | CVMBS_RBL_Private | campus | - | False |
+| Vlan1300 | Temple_Grandin_Priv | campus | - | False |
+| Vlan2326 | VOIP_RIC | campus | - | False |
+| Vlan2670 | VOIP_ARBL | campus | - | False |
+| Vlan2672 | VOIP_RBL | campus | - | False |
+| Vlan2676 | VOIP_ERL | campus | - | False |
+| Vlan2677 | VOIP_Aggie_Labs | campus | - | False |
+| Vlan2680 | VOIP_BEAMLAB | campus | - | False |
+| Vlan2684 | VOIP_IDA | campus | - | False |
+| Vlan2689 | VOIP_CSFS | campus | - | False |
+| Vlan2691 | VOIP_AIDL | campus | - | False |
+| Vlan2694 | VOIP_AECOM | campus | - | False |
+| Vlan2698 | VOIP_ACRC-CIRA | campus | - | False |
+| Vlan2699 | VOIP_ERC | campus | - | False |
+| Vlan2712 | VOIP_FOOTHILLS_CATCHALL | campus | - | False |
+| Vlan2716 | VOIP_ATS_Main | campus | - | False |
+| Vlan2717 | VOIP_ATS_CMMAP | campus | - | False |
+| Vlan2718 | VOIP_ATS_Chem | campus | - | False |
+| Vlan2719 | VOIP_ATS_Annex | campus | - | False |
+| Vlan2720 | VOIP_SimLab | campus | - | False |
+| Vlan3009 | MLAG_L3_VRF_campus | campus | 1500 | False |
+| Vlan3300 | ACNS_SW-MGMT_WC | campus | - | False |
+| Vlan3301 | Wireless_ACRC | campus | - | False |
+| Vlan3302 | Wireless_ABL | campus | - | False |
+| Vlan3303 | Wireless_AECOM | campus | - | False |
+| Vlan3304 | Wireless_Aggie_Labs | campus | - | False |
+| Vlan3305 | Wireless_AIDL | campus | - | False |
+| Vlan3306 | Wireless_ARBL | campus | - | False |
+| Vlan3307 | Wireless_Atmospheric_Science | campus | - | False |
+| Vlan3308 | Wireless_CSFS | campus | - | False |
+| Vlan3309 | Wireless_ERC | campus | - | False |
+| Vlan3310 | Wireless_ERL | campus | - | False |
+| Vlan3311 | Wireless_IDA | campus | - | False |
+| Vlan3312 | Wireless_RBL | campus | - | False |
+| Vlan3313 | Wireless_Temple_Grandin | campus | - | False |
+| Vlan3349 | ACNS_UPS-MGMT_WC | campus | - | False |
 | Vlan4093 | MLAG_L3 | default | 1500 | False |
 | Vlan4094 | MLAG | default | 1500 | False |
 
@@ -1000,88 +976,85 @@ interface Loopback11
 
 | Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | ACL In | ACL Out |
 | --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
-| Vlan8 |  WCC  |  -  |  129.82.8.1/23  |  -  |  -  |  -  |
-| Vlan21 |  VRF11  |  -  |  10.10.21.1/24  |  -  |  -  |  -  |
-| Vlan22 |  VRF11  |  -  |  10.10.22.1/24  |  -  |  -  |  -  |
-| Vlan26 |  WCC  |  -  |  129.82.26.1/23  |  -  |  -  |  -  |
-| Vlan48 |  WCC  |  -  |  129.82.48.1/24  |  -  |  -  |  -  |
-| Vlan50 |  WCC  |  -  |  129.82.5.193/26  |  -  |  -  |  -  |
-| Vlan84 |  WCC  |  -  |  129.82.84.129/26  |  -  |  -  |  -  |
-| Vlan108 |  WCC  |  -  |  129.82.108.1/23  |  -  |  -  |  -  |
-| Vlan214 |  WCC  |  -  |  129.82.214.1/24  |  -  |  -  |  -  |
-| Vlan232 |  WCC  |  -  |  129.82.232.1/23  |  -  |  -  |  -  |
-| Vlan233 |  WCC  |  -  |  10.1.232.1/23  |  -  |  -  |  -  |
-| Vlan248 |  WCC  |  -  |  129.82.248.1/24  |  -  |  -  |  -  |
-| Vlan320 |  WCC  |  -  |  129.82.1.138/29  |  -  |  -  |  -  |
-| Vlan322 |  WCC  |  -  |  10.1.8.1/23  |  -  |  -  |  -  |
-| Vlan323 |  WCC  |  -  |  10.11.8.1/23  |  -  |  -  |  -  |
-| Vlan331 |  WCC  |  -  |  10.1.214.1/24  |  -  |  -  |  -  |
-| Vlan332 |  WCC  |  -  |  10.11.214.1/24  |  -  |  -  |  -  |
-| Vlan351 |  WCC  |  -  |  10.1.178.1/24  |  -  |  -  |  -  |
-| Vlan352 |  WCC  |  -  |  10.11.178.1/24  |  -  |  -  |  -  |
-| Vlan375 |  WCC  |  -  |  10.1.179.1/24  |  -  |  -  |  -  |
-| Vlan376 |  WCC  |  -  |  10.11.179.1/24  |  -  |  -  |  -  |
-| Vlan384 |  WCC  |  -  |  10.3.152.1/24  |  -  |  -  |  -  |
-| Vlan386 |  WCC  |  -  |  10.2.216.1/23  |  -  |  -  |  -  |
-| Vlan387 |  WCC  |  -  |  10.2.218.1/23  |  -  |  -  |  -  |
-| Vlan388 |  WCC  |  -  |  10.11.218.1/24  |  -  |  -  |  -  |
-| Vlan395 |  WCC  |  -  |  10.11.108.1/24  |  -  |  -  |  -  |
-| Vlan397 |  WCC  |  -  |  10.11.232.1/23  |  -  |  -  |  -  |
-| Vlan401 |  WCC  |  -  |  10.1.48.1/23  |  -  |  -  |  -  |
-| Vlan409 |  WCC  |  -  |  10.11.228.1/24  |  -  |  -  |  -  |
-| Vlan421 |  WCC  |  -  |  10.2.255.1/24  |  -  |  -  |  -  |
-| Vlan422 |  WCC  |  -  |  10.12.255.1/24  |  -  |  -  |  -  |
-| Vlan426 |  WCC  |  -  |  10.11.26.1/23  |  -  |  -  |  -  |
-| Vlan428 |  WCC  |  -  |  10.11.48.1/24  |  -  |  -  |  -  |
-| Vlan472 |  WCC  |  -  |  129.82.4.129/25  |  -  |  -  |  -  |
-| Vlan512 |  WCC  |  -  |  10.1.4.129/25  |  -  |  -  |  -  |
-| Vlan513 |  WCC  |  -  |  10.11.4.129/25  |  -  |  -  |  -  |
-| Vlan525 |  WCC  |  -  |  10.11.49.1/24  |  -  |  -  |  -  |
-| Vlan540 |  WCC  |  -  |  10.1.228.1/24  |  -  |  -  |  -  |
-| Vlan584 |  WCC  |  -  |  129.82.18.129/25  |  -  |  -  |  -  |
-| Vlan600 |  WCC  |  -  |  129.82.1.72/28  |  -  |  -  |  -  |
-| Vlan653 |  WCC  |  -  |  10.2.228.1/24  |  -  |  -  |  -  |
-| Vlan1107 |  WCC  |  -  |  10.11.107.1/24  |  -  |  -  |  -  |
-| Vlan1108 |  WCC  |  -  |  10.1.108.1/23  |  -  |  -  |  -  |
-| Vlan1112 |  WCC  |  -  |  10.3.106.1/24  |  -  |  -  |  -  |
-| Vlan1208 |  WCC  |  -  |  10.2.108.1/23  |  -  |  -  |  -  |
-| Vlan1226 |  WCC  |  -  |  10.1.26.1/23  |  -  |  -  |  -  |
-| Vlan1300 |  WCC  |  -  |  10.1.15.1/24  |  -  |  -  |  -  |
-| Vlan2326 |  WCC  |  -  |  10.174.26.1/23  |  -  |  -  |  -  |
-| Vlan2670 |  WCC  |  -  |  10.20.138.1/23  |  -  |  -  |  -  |
-| Vlan2672 |  WCC  |  -  |  10.20.142.1/23  |  -  |  -  |  -  |
-| Vlan2676 |  WCC  |  -  |  10.20.150.1/23  |  -  |  -  |  -  |
-| Vlan2677 |  WCC  |  -  |  10.20.152.1/23  |  -  |  -  |  -  |
-| Vlan2680 |  WCC  |  -  |  10.20.158.1/23  |  -  |  -  |  -  |
-| Vlan2684 |  WCC  |  -  |  10.20.166.1/23  |  -  |  -  |  -  |
-| Vlan2689 |  WCC  |  -  |  10.20.176.1/23  |  -  |  -  |  -  |
-| Vlan2691 |  WCC  |  -  |  10.20.180.1/23  |  -  |  -  |  -  |
-| Vlan2694 |  WCC  |  -  |  10.20.186.1/23  |  -  |  -  |  -  |
-| Vlan2698 |  WCC  |  -  |  10.20.194.1/23  |  -  |  -  |  -  |
-| Vlan2699 |  WCC  |  -  |  10.20.196.1/23  |  -  |  -  |  -  |
-| Vlan2712 |  WCC  |  -  |  10.20.222.1/23  |  -  |  -  |  -  |
-| Vlan2716 |  WCC  |  -  |  10.20.230.1/23  |  -  |  -  |  -  |
-| Vlan2717 |  WCC  |  -  |  10.20.232.1/23  |  -  |  -  |  -  |
-| Vlan2718 |  WCC  |  -  |  10.20.234.1/23  |  -  |  -  |  -  |
-| Vlan2719 |  WCC  |  -  |  10.20.236.1/23  |  -  |  -  |  -  |
-| Vlan2720 |  WCC  |  -  |  10.20.238.1/23  |  -  |  -  |  -  |
-| Vlan3009 |  WCC  |  10.255.1.100/31  |  -  |  -  |  -  |  -  |
-| Vlan3010 |  VRF11  |  10.255.1.100/31  |  -  |  -  |  -  |  -  |
-| Vlan3300 |  WCC  |  -  |  10.111.0.1/23  |  -  |  -  |  -  |
-| Vlan3301 |  WCC  |  -  |  10.111.108.1/24  |  -  |  -  |  -  |
-| Vlan3302 |  WCC  |  -  |  10.111.228.1/24  |  -  |  -  |  -  |
-| Vlan3303 |  WCC  |  -  |  10.111.226.1/24  |  -  |  -  |  -  |
-| Vlan3304 |  WCC  |  -  |  10.111.255.1/24  |  -  |  -  |  -  |
-| Vlan3305 |  WCC  |  -  |  10.111.178.1/24  |  -  |  -  |  -  |
-| Vlan3306 |  WCC  |  -  |  10.111.214.1/24  |  -  |  -  |  -  |
-| Vlan3307 |  WCC  |  -  |  10.111.48.1/24  |  -  |  -  |  -  |
-| Vlan3308 |  WCC  |  -  |  10.111.248.1/24  |  -  |  -  |  -  |
-| Vlan3309 |  WCC  |  -  |  10.111.232.1/24  |  -  |  -  |  -  |
-| Vlan3310 |  WCC  |  -  |  10.111.216.1/24  |  -  |  -  |  -  |
-| Vlan3311 |  WCC  |  -  |  10.111.179.1/24  |  -  |  -  |  -  |
-| Vlan3312 |  WCC  |  -  |  10.111.26.1/24  |  -  |  -  |  -  |
-| Vlan3313 |  WCC  |  -  |  10.111.227.1/24  |  -  |  -  |  -  |
-| Vlan3349 |  WCC  |  -  |  10.111.2.1/23  |  -  |  -  |  -  |
+| Vlan8 |  campus  |  -  |  129.82.8.1/23  |  -  |  -  |  -  |
+| Vlan26 |  campus  |  -  |  129.82.26.1/23  |  -  |  -  |  -  |
+| Vlan48 |  campus  |  -  |  129.82.48.1/24  |  -  |  -  |  -  |
+| Vlan50 |  campus  |  -  |  129.82.5.193/26  |  -  |  -  |  -  |
+| Vlan84 |  campus  |  -  |  129.82.84.129/26  |  -  |  -  |  -  |
+| Vlan108 |  campus  |  -  |  129.82.108.1/23  |  -  |  -  |  -  |
+| Vlan214 |  campus  |  -  |  129.82.214.1/24  |  -  |  -  |  -  |
+| Vlan232 |  campus  |  -  |  129.82.232.1/23  |  -  |  -  |  -  |
+| Vlan233 |  campus  |  -  |  10.1.232.1/23  |  -  |  -  |  -  |
+| Vlan248 |  campus  |  -  |  129.82.248.1/24  |  -  |  -  |  -  |
+| Vlan320 |  campus  |  -  |  129.82.1.138/29  |  -  |  -  |  -  |
+| Vlan322 |  campus  |  -  |  10.1.8.1/23  |  -  |  -  |  -  |
+| Vlan323 |  campus  |  -  |  10.11.8.1/23  |  -  |  -  |  -  |
+| Vlan331 |  campus  |  -  |  10.1.214.1/24  |  -  |  -  |  -  |
+| Vlan332 |  campus  |  -  |  10.11.214.1/24  |  -  |  -  |  -  |
+| Vlan351 |  campus  |  -  |  10.1.178.1/24  |  -  |  -  |  -  |
+| Vlan352 |  campus  |  -  |  10.11.178.1/24  |  -  |  -  |  -  |
+| Vlan375 |  campus  |  -  |  10.1.179.1/24  |  -  |  -  |  -  |
+| Vlan376 |  campus  |  -  |  10.11.179.1/24  |  -  |  -  |  -  |
+| Vlan384 |  campus  |  -  |  10.3.152.1/24  |  -  |  -  |  -  |
+| Vlan386 |  campus  |  -  |  10.2.216.1/23  |  -  |  -  |  -  |
+| Vlan387 |  campus  |  -  |  10.2.218.1/23  |  -  |  -  |  -  |
+| Vlan388 |  campus  |  -  |  10.11.218.1/24  |  -  |  -  |  -  |
+| Vlan395 |  campus  |  -  |  10.11.108.1/24  |  -  |  -  |  -  |
+| Vlan397 |  campus  |  -  |  10.11.232.1/23  |  -  |  -  |  -  |
+| Vlan401 |  campus  |  -  |  10.1.48.1/23  |  -  |  -  |  -  |
+| Vlan409 |  campus  |  -  |  10.11.228.1/24  |  -  |  -  |  -  |
+| Vlan421 |  campus  |  -  |  10.2.255.1/24  |  -  |  -  |  -  |
+| Vlan422 |  campus  |  -  |  10.12.255.1/24  |  -  |  -  |  -  |
+| Vlan426 |  campus  |  -  |  10.11.26.1/23  |  -  |  -  |  -  |
+| Vlan428 |  campus  |  -  |  10.11.48.1/24  |  -  |  -  |  -  |
+| Vlan472 |  campus  |  -  |  129.82.4.129/25  |  -  |  -  |  -  |
+| Vlan512 |  campus  |  -  |  10.1.4.129/25  |  -  |  -  |  -  |
+| Vlan513 |  campus  |  -  |  10.11.4.129/25  |  -  |  -  |  -  |
+| Vlan525 |  campus  |  -  |  10.11.49.1/24  |  -  |  -  |  -  |
+| Vlan540 |  campus  |  -  |  10.1.228.1/24  |  -  |  -  |  -  |
+| Vlan584 |  campus  |  -  |  129.82.18.129/25  |  -  |  -  |  -  |
+| Vlan600 |  campus  |  -  |  129.82.1.72/28  |  -  |  -  |  -  |
+| Vlan653 |  campus  |  -  |  10.2.228.1/24  |  -  |  -  |  -  |
+| Vlan1107 |  campus  |  -  |  10.11.107.1/24  |  -  |  -  |  -  |
+| Vlan1108 |  campus  |  -  |  10.1.108.1/23  |  -  |  -  |  -  |
+| Vlan1112 |  campus  |  -  |  10.3.106.1/24  |  -  |  -  |  -  |
+| Vlan1208 |  campus  |  -  |  10.2.108.1/23  |  -  |  -  |  -  |
+| Vlan1226 |  campus  |  -  |  10.1.26.1/23  |  -  |  -  |  -  |
+| Vlan1300 |  campus  |  -  |  10.1.15.1/24  |  -  |  -  |  -  |
+| Vlan2326 |  campus  |  -  |  10.174.26.1/23  |  -  |  -  |  -  |
+| Vlan2670 |  campus  |  -  |  10.20.138.1/23  |  -  |  -  |  -  |
+| Vlan2672 |  campus  |  -  |  10.20.142.1/23  |  -  |  -  |  -  |
+| Vlan2676 |  campus  |  -  |  10.20.150.1/23  |  -  |  -  |  -  |
+| Vlan2677 |  campus  |  -  |  10.20.152.1/23  |  -  |  -  |  -  |
+| Vlan2680 |  campus  |  -  |  10.20.158.1/23  |  -  |  -  |  -  |
+| Vlan2684 |  campus  |  -  |  10.20.166.1/23  |  -  |  -  |  -  |
+| Vlan2689 |  campus  |  -  |  10.20.176.1/23  |  -  |  -  |  -  |
+| Vlan2691 |  campus  |  -  |  10.20.180.1/23  |  -  |  -  |  -  |
+| Vlan2694 |  campus  |  -  |  10.20.186.1/23  |  -  |  -  |  -  |
+| Vlan2698 |  campus  |  -  |  10.20.194.1/23  |  -  |  -  |  -  |
+| Vlan2699 |  campus  |  -  |  10.20.196.1/23  |  -  |  -  |  -  |
+| Vlan2712 |  campus  |  -  |  10.20.222.1/23  |  -  |  -  |  -  |
+| Vlan2716 |  campus  |  -  |  10.20.230.1/23  |  -  |  -  |  -  |
+| Vlan2717 |  campus  |  -  |  10.20.232.1/23  |  -  |  -  |  -  |
+| Vlan2718 |  campus  |  -  |  10.20.234.1/23  |  -  |  -  |  -  |
+| Vlan2719 |  campus  |  -  |  10.20.236.1/23  |  -  |  -  |  -  |
+| Vlan2720 |  campus  |  -  |  10.20.238.1/23  |  -  |  -  |  -  |
+| Vlan3009 |  campus  |  10.255.1.100/31  |  -  |  -  |  -  |  -  |
+| Vlan3300 |  campus  |  -  |  10.111.0.1/23  |  -  |  -  |  -  |
+| Vlan3301 |  campus  |  -  |  10.111.108.1/24  |  -  |  -  |  -  |
+| Vlan3302 |  campus  |  -  |  10.111.228.1/24  |  -  |  -  |  -  |
+| Vlan3303 |  campus  |  -  |  10.111.226.1/24  |  -  |  -  |  -  |
+| Vlan3304 |  campus  |  -  |  10.111.255.1/24  |  -  |  -  |  -  |
+| Vlan3305 |  campus  |  -  |  10.111.178.1/24  |  -  |  -  |  -  |
+| Vlan3306 |  campus  |  -  |  10.111.214.1/24  |  -  |  -  |  -  |
+| Vlan3307 |  campus  |  -  |  10.111.48.1/24  |  -  |  -  |  -  |
+| Vlan3308 |  campus  |  -  |  10.111.248.1/24  |  -  |  -  |  -  |
+| Vlan3309 |  campus  |  -  |  10.111.232.1/24  |  -  |  -  |  -  |
+| Vlan3310 |  campus  |  -  |  10.111.216.1/24  |  -  |  -  |  -  |
+| Vlan3311 |  campus  |  -  |  10.111.179.1/24  |  -  |  -  |  -  |
+| Vlan3312 |  campus  |  -  |  10.111.26.1/24  |  -  |  -  |  -  |
+| Vlan3313 |  campus  |  -  |  10.111.227.1/24  |  -  |  -  |  -  |
+| Vlan3349 |  campus  |  -  |  10.111.2.1/23  |  -  |  -  |  -  |
 | Vlan4093 |  default  |  10.255.1.100/31  |  -  |  -  |  -  |  -  |
 | Vlan4094 |  default  |  10.255.1.68/31  |  -  |  -  |  -  |  -  |
 
@@ -1092,495 +1065,476 @@ interface Loopback11
 interface Vlan8
    description West_Campus_Remote_Public
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.8.1/23
-!
-interface Vlan21
-   description VRF11_VLAN21
-   no shutdown
-   vrf VRF11
-   ip address virtual 10.10.21.1/24
-!
-interface Vlan22
-   description VRF11_VLAN22
-   no shutdown
-   vrf VRF11
-   ip address virtual 10.10.22.1/24
 !
 interface Vlan26
    description CVMBS_RBL_Public
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.26.1/23
 !
 interface Vlan48
    description COE_ATS_Public
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.48.1/24
 !
 interface Vlan50
    description Drone_Pub
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.5.193/26
 !
 interface Vlan84
    description vendor_foothills
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.84.129/26
 !
 interface Vlan108
    description ACRC-CIRA_Public
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.108.1/23
 !
 interface Vlan214
    description CVMBS_ARBL_Public
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.214.1/24
 !
 interface Vlan232
    description ERC_Public
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.232.1/23
 !
 interface Vlan233
    description ERC_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.1.232.1/23
 !
 interface Vlan248
    description CSFS_Public
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.248.1/24
 !
 interface Vlan320
    description WCC_PA_PtP
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.1.138/29
 !
 interface Vlan322
    description West_Campus_Remote_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.1.8.1/23
 !
 interface Vlan323
    description West_Campus_Remote_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.8.1/23
 !
 interface Vlan331
    description CSFS_Public
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.1.214.1/24
 !
 interface Vlan332
    description ARBL_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.214.1/24
 !
 interface Vlan351
    description AIDL_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.1.178.1/24
 !
 interface Vlan352
    description AIDL_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.178.1/24
 !
 interface Vlan375
    description IDA_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.1.179.1/24
 !
 interface Vlan376
    description IDA_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.179.1/24
 !
 interface Vlan384
    description HHS_Aggie_Labs_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.3.152.1/24
 !
 interface Vlan386
    description ERL_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.2.216.1/23
 !
 interface Vlan387
    description CVMBS_Equine_Center_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.2.218.1/23
 !
 interface Vlan388
    description Equine_Center_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.218.1/24
 !
 interface Vlan395
    description ACRC-CIRA_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.108.1/24
 !
 interface Vlan397
    description ERC_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.232.1/23
 !
 interface Vlan401
    description Atmos_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.1.48.1/23
 !
 interface Vlan409
    description ABL_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.228.1/24
 !
 interface Vlan421
    description Aggie_Labs_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.2.255.1/24
 !
 interface Vlan422
    description Aggie_Labs_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.12.255.1/24
 !
 interface Vlan426
    description RBL_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.26.1/23
 !
 interface Vlan428
    description ATS_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.48.1/24
 !
 interface Vlan472
    description SimLab_Public
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.4.129/25
 !
 interface Vlan512
    description SimLab_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.1.4.129/25
 !
 interface Vlan513
    description SimLab_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.4.129/25
 !
 interface Vlan525
    description ATS_Chem_Utility
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.49.1/24
 !
 interface Vlan540
    description Beam_Lab_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.1.228.1/24
 !
 interface Vlan584
    description WCC_Public_Non_CSU
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.18.129/25
 !
 interface Vlan600
    description WCC_ENDR_DREN_L2_link
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 129.82.1.72/28
 !
 interface Vlan653
    description AECOM_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.2.228.1/24
 !
 interface Vlan1107
    description Temple_Grandin_Util
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.11.107.1/24
 !
 interface Vlan1108
    description WCC_Public_Non_CSU
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.1.108.1/23
 !
 interface Vlan1112
    description Engines_Lab_Priv2
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.3.106.1/24
 !
 interface Vlan1208
    description ACRC-CIRA_Static_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.2.108.1/23
 !
 interface Vlan1226
    description CVMBS_RBL_Private
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.1.26.1/23
 !
 interface Vlan1300
    description Temple_Grandin_Priv
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.1.15.1/24
 !
 interface Vlan2326
    description VOIP_RIC
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.174.26.1/23
 !
 interface Vlan2670
    description VOIP_ARBL
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.138.1/23
 !
 interface Vlan2672
    description VOIP_RBL
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.142.1/23
 !
 interface Vlan2676
    description VOIP_ERL
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.150.1/23
 !
 interface Vlan2677
    description VOIP_Aggie_Labs
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.152.1/23
 !
 interface Vlan2680
    description VOIP_BEAMLAB
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.158.1/23
 !
 interface Vlan2684
    description VOIP_IDA
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.166.1/23
 !
 interface Vlan2689
    description VOIP_CSFS
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.176.1/23
 !
 interface Vlan2691
    description VOIP_AIDL
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.180.1/23
 !
 interface Vlan2694
    description VOIP_AECOM
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.186.1/23
 !
 interface Vlan2698
    description VOIP_ACRC-CIRA
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.194.1/23
 !
 interface Vlan2699
    description VOIP_ERC
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.196.1/23
 !
 interface Vlan2712
    description VOIP_FOOTHILLS_CATCHALL
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.222.1/23
 !
 interface Vlan2716
    description VOIP_ATS_Main
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.230.1/23
 !
 interface Vlan2717
    description VOIP_ATS_CMMAP
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.232.1/23
 !
 interface Vlan2718
    description VOIP_ATS_Chem
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.234.1/23
 !
 interface Vlan2719
    description VOIP_ATS_Annex
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.236.1/23
 !
 interface Vlan2720
    description VOIP_SimLab
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.20.238.1/23
 !
 interface Vlan3009
-   description MLAG_L3_VRF_WCC
+   description MLAG_L3_VRF_campus
    no shutdown
    mtu 1500
-   vrf WCC
-   ip address 10.255.1.100/31
-!
-interface Vlan3010
-   description MLAG_L3_VRF_VRF11
-   no shutdown
-   mtu 1500
-   vrf VRF11
+   vrf campus
    ip address 10.255.1.100/31
 !
 interface Vlan3300
    description ACNS_SW-MGMT_WC
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.0.1/23
 !
 interface Vlan3301
    description Wireless_ACRC
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.108.1/24
 !
 interface Vlan3302
    description Wireless_ABL
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.228.1/24
 !
 interface Vlan3303
    description Wireless_AECOM
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.226.1/24
 !
 interface Vlan3304
    description Wireless_Aggie_Labs
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.255.1/24
 !
 interface Vlan3305
    description Wireless_AIDL
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.178.1/24
 !
 interface Vlan3306
    description Wireless_ARBL
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.214.1/24
 !
 interface Vlan3307
    description Wireless_Atmospheric_Science
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.48.1/24
 !
 interface Vlan3308
    description Wireless_CSFS
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.248.1/24
 !
 interface Vlan3309
    description Wireless_ERC
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.232.1/24
 !
 interface Vlan3310
    description Wireless_ERL
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.216.1/24
 !
 interface Vlan3311
    description Wireless_IDA
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.179.1/24
 !
 interface Vlan3312
    description Wireless_RBL
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.26.1/24
 !
 interface Vlan3313
    description Wireless_Temple_Grandin
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.227.1/24
 !
 interface Vlan3349
    description ACNS_UPS-MGMT_WC
    no shutdown
-   vrf WCC
+   vrf campus
    ip address virtual 10.111.2.1/23
 !
 interface Vlan4093
@@ -1612,8 +1566,6 @@ interface Vlan4094
 | VLAN | VNI | Flood List | Multicast Group |
 | ---- | --- | ---------- | --------------- |
 | 8 | 10008 | - | - |
-| 21 | 10021 | - | - |
-| 22 | 10022 | - | - |
 | 26 | 10026 | - | - |
 | 48 | 10048 | - | - |
 | 50 | 10050 | - | - |
@@ -1714,8 +1666,7 @@ interface Vlan4094
 
 | VRF | VNI | Multicast Group |
 | ---- | --- | --------------- |
-| VRF11 | 11 | - |
-| WCC | 10 | - |
+| campus | 10 | - |
 
 #### VXLAN Interface Device Configuration
 
@@ -1727,8 +1678,6 @@ interface Vxlan1
    vxlan virtual-router encapsulation mac-address mlag-system-id
    vxlan udp-port 4789
    vxlan vlan 8 vni 10008
-   vxlan vlan 21 vni 10021
-   vxlan vlan 22 vni 10022
    vxlan vlan 26 vni 10026
    vxlan vlan 48 vni 10048
    vxlan vlan 50 vni 10050
@@ -1824,8 +1773,7 @@ interface Vxlan1
    vxlan vlan 3785 vni 13785
    vxlan vlan 3900 vni 13900
    vxlan vlan 3903 vni 13903
-   vxlan vrf VRF11 vni 11
-   vxlan vrf WCC vni 10
+   vxlan vrf campus vni 10
 ```
 
 ## Routing
@@ -1859,18 +1807,16 @@ ip virtual-router mac-address 00:1c:73:00:00:99
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | True |
-| MGMT | True |
-| VRF11 | True |
-| WCC | True |
+| campus | True |
+| mgmt | True |
 
 #### IP Routing Device Configuration
 
 ```eos
 !
 ip routing
-ip routing vrf MGMT
-ip routing vrf VRF11
-ip routing vrf WCC
+ip routing vrf campus
+ip routing vrf mgmt
 ```
 
 ### IPv6 Routing
@@ -1880,9 +1826,8 @@ ip routing vrf WCC
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | False |
-| MGMT | false |
-| VRF11 | false |
-| WCC | false |
+| campus | false |
+| mgmt | false |
 
 ### Static Routes
 
@@ -1890,13 +1835,13 @@ ip routing vrf WCC
 
 | VRF | Destination Prefix | Next Hop IP | Exit interface | Administrative Distance | Tag | Route Name | Metric |
 | --- | ------------------ | ----------- | -------------- | ----------------------- | --- | ---------- | ------ |
-| MGMT | 0.0.0.0/0 | 192.168.100.1 | - | 1 | - | - | - |
+| mgmt | 0.0.0.0/0 | 192.168.100.1 | - | 1 | - | - | - |
 
 #### Static Routes Device Configuration
 
 ```eos
 !
-ip route vrf MGMT 0.0.0.0/0 192.168.100.1
+ip route vrf mgmt 0.0.0.0/0 192.168.100.1
 ```
 
 ### Router BGP
@@ -1954,8 +1899,7 @@ ASN Notation: asplain
 | 10.255.1.101 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | default | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
 | 10.255.255.8 | 65100 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.255.255.10 | 65100 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
-| 10.255.1.101 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | VRF11 | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
-| 10.255.1.101 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | WCC | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
+| 10.255.1.101 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | campus | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
 
 #### Router BGP EVPN Address Family
 
@@ -1970,8 +1914,6 @@ ASN Notation: asplain
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
 | 8 | 10.255.0.5:10008 | 10008:10008 | - | - | learned |
-| 21 | 10.255.0.5:10021 | 10021:10021 | - | - | learned |
-| 22 | 10.255.0.5:10022 | 10022:10022 | - | - | learned |
 | 26 | 10.255.0.5:10026 | 10026:10026 | - | - | learned |
 | 48 | 10.255.0.5:10048 | 10048:10048 | - | - | learned |
 | 50 | 10.255.0.5:10050 | 10050:10050 | - | - | learned |
@@ -2072,8 +2014,7 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute |
 | --- | ------------------- | ------------ |
-| VRF11 | 10.255.0.5:11 | connected |
-| WCC | 10.255.0.5:10 | connected |
+| campus | 10.255.0.5:10 | connected |
 
 #### Router BGP Device Configuration
 
@@ -2121,16 +2062,6 @@ router bgp 65102
    vlan 8
       rd 10.255.0.5:10008
       route-target both 10008:10008
-      redistribute learned
-   !
-   vlan 21
-      rd 10.255.0.5:10021
-      route-target both 10021:10021
-      redistribute learned
-   !
-   vlan 22
-      rd 10.255.0.5:10022
-      route-target both 10022:10022
       redistribute learned
    !
    vlan 26
@@ -2616,16 +2547,7 @@ router bgp 65102
       neighbor IPv4-UNDERLAY-PEERS activate
       neighbor MLAG-IPv4-UNDERLAY-PEER activate
    !
-   vrf VRF11
-      rd 10.255.0.5:11
-      route-target import evpn 11:11
-      route-target export evpn 11:11
-      router-id 10.255.0.5
-      neighbor 10.255.1.101 peer group MLAG-IPv4-UNDERLAY-PEER
-      neighbor 10.255.1.101 description SCC2_Vlan3010
-      redistribute connected route-map RM-CONN-2-BGP-VRFS
-   !
-   vrf WCC
+   vrf campus
       rd 10.255.0.5:10
       route-target import evpn 10:10
       route-target export evpn 10:10
@@ -2759,19 +2681,16 @@ ip access-list mgmt-acl
 
 | VRF Name | IP Routing |
 | -------- | ---------- |
-| MGMT | enabled |
-| VRF11 | enabled |
-| WCC | enabled |
+| campus | enabled |
+| mgmt | enabled |
 
 ### VRF Instances Device Configuration
 
 ```eos
 !
-vrf instance MGMT
+vrf instance campus
 !
-vrf instance VRF11
-!
-vrf instance WCC
+vrf instance mgmt
 ```
 
 ## Virtual Source NAT
@@ -2780,13 +2699,11 @@ vrf instance WCC
 
 | Source NAT VRF | Source NAT IP Address |
 | -------------- | --------------------- |
-| VRF11 | 10.255.11.5 |
-| WCC | 10.255.10.5 |
+| campus | 10.255.10.5 |
 
 ### Virtual Source NAT Configuration
 
 ```eos
 !
-ip address virtual source-nat vrf VRF11 address 10.255.11.5
-ip address virtual source-nat vrf WCC address 10.255.10.5
+ip address virtual source-nat vrf campus address 10.255.10.5
 ```

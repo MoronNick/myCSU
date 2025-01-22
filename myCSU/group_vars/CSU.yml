@@ -18,13 +18,13 @@ name_servers:
 custom_structured_configuration_ntp:
   local_interface:
     name: Management1
-    vrf: MGMT
+    vrf: mgmt
   servers:
     - name: 132.163.96.3
-      vrf: MGMT
+      vrf: mgmt
 
 mgmt_interface: Management1
-mgmt_interface_vrf: MGMT
+mgmt_interface_vrf: mgmt
 mgmt_gateway: 192.168.100.1
 mgmt_vrf_routing: yes
 
@@ -32,7 +32,7 @@ snmp_server:
   contact: "noc@colostate.edu"
   hosts:
     - host: "10.100.201.199"
-      vrf: MGMT
+      vrf: mgmt
       version: 2c
       community: "csUn0c"
   communities:
@@ -57,7 +57,7 @@ banners:
 
 logging:
   vrfs:
-    - name: MGMT
+    - name: mgmt
       # Source interface name.
       source_interface: Management1
       hosts:
@@ -87,7 +87,7 @@ ip_access_lists:
 management_ssh:
   access_groups:
     - name: mgmt-acl
-      vrf: MGMT
+      vrf: mgmt
 
 aaa_authorization:
   exec:
