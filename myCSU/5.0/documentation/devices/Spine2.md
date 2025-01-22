@@ -52,13 +52,13 @@
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB_MANAGEMENT | oob | MGMT | 192.168.100.201/24 | 192.168.100.1 |
+| Management1 | OOB_MANAGEMENT | oob | mgmt | 192.168.100.201/24 | 192.168.100.1 |
 
 ##### IPv6
 
 | Management Interface | Description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | OOB_MANAGEMENT | oob | MGMT | - | - |
+| Management1 | OOB_MANAGEMENT | oob | mgmt | - | - |
 
 #### Management Interfaces Device Configuration
 
@@ -67,7 +67,7 @@
 interface Management1
    description OOB_MANAGEMENT
    no shutdown
-   vrf MGMT
+   vrf mgmt
    ip address 192.168.100.201/24
 ```
 
@@ -77,12 +77,12 @@ interface Management1
 
 | Name Server | VRF | Priority |
 | ----------- | --- | -------- |
-| 8.8.8.8 | MGMT | - |
+| 8.8.8.8 | mgmt | - |
 
 #### IP Name Servers Device Configuration
 
 ```eos
-ip name-server vrf MGMT 8.8.8.8
+ip name-server vrf mgmt 8.8.8.8
 ```
 
 ### NTP
@@ -93,20 +93,20 @@ ip name-server vrf MGMT 8.8.8.8
 
 | Interface | VRF |
 | --------- | --- |
-| Management1 | MGMT |
+| Management1 | mgmt |
 
 ##### NTP Servers
 
 | Server | VRF | Preferred | Burst | iBurst | Version | Min Poll | Max Poll | Local-interface | Key |
 | ------ | --- | --------- | ----- | ------ | ------- | -------- | -------- | --------------- | --- |
-| 132.163.96.3 | MGMT | - | - | - | - | - | - | - | - |
+| 132.163.96.3 | mgmt | - | - | - | - | - | - | - | - |
 
 #### NTP Device Configuration
 
 ```eos
 !
-ntp local-interface vrf MGMT Management1
-ntp server vrf MGMT 132.163.96.3
+ntp local-interface vrf mgmt Management1
+ntp server vrf mgmt 132.163.96.3
 ```
 
 ### Management SSH
@@ -115,7 +115,7 @@ ntp server vrf MGMT 132.163.96.3
 
 | IPv4 ACL | VRF |
 | -------- | --- |
-| mgmt-acl | MGMT |
+| mgmt-acl | mgmt |
 
 #### SSH Timeout and Management
 
@@ -141,7 +141,7 @@ ntp server vrf MGMT 132.163.96.3
 ```eos
 !
 management ssh
-   ip access-group mgmt-acl vrf MGMT in
+   ip access-group mgmt-acl vrf mgmt in
 ```
 
 ### Management API HTTP
@@ -156,7 +156,7 @@ management ssh
 
 | VRF Name | IPv4 ACL | IPv6 ACL |
 | -------- | -------- | -------- |
-| MGMT | - | - |
+| mgmt | - | - |
 
 #### Management API HTTP Device Configuration
 
@@ -166,7 +166,7 @@ management api http-commands
    protocol https
    no shutdown
    !
-   vrf MGMT
+   vrf mgmt
       no shutdown
 ```
 
@@ -218,14 +218,14 @@ aaa authorization exec default local
 
 | CV Compression | CloudVision Servers | VRF | Authentication | Smash Excludes | Ingest Exclude | Bypass AAA |
 | -------------- | ------------------- | --- | -------------- | -------------- | -------------- | ---------- |
-| gzip | apiserver.cv-staging.corp.arista.io:443 | MGMT | token-secure,/tmp/cv-onboarding-token | ale,flexCounter,hardware,kni,pulse,strata | /Sysdb/cell/1/agent,/Sysdb/cell/2/agent | True |
+| gzip | apiserver.cv-staging.corp.arista.io:443 | mgmt | token-secure,/tmp/cv-onboarding-token | ale,flexCounter,hardware,kni,pulse,strata | /Sysdb/cell/1/agent,/Sysdb/cell/2/agent | True |
 
 #### TerminAttr Daemon Device Configuration
 
 ```eos
 !
 daemon TerminAttr
-   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443 -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=MGMT -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
+   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443 -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
    no shutdown
 ```
 
@@ -238,18 +238,18 @@ daemon TerminAttr
 
 | VRF | Source Interface |
 | --- | ---------------- |
-| MGMT | Management1 |
+| mgmt | Management1 |
 
 | VRF | Hosts | Ports | Protocol |
 | --- | ----- | ----- | -------- |
-| MGMT | 129.82.111.172 | Default | UDP |
+| mgmt | 129.82.111.172 | Default | UDP |
 
 #### Logging Servers and Features Device Configuration
 
 ```eos
 !
-logging vrf MGMT host 129.82.111.172
-logging vrf MGMT source-interface Management1
+logging vrf mgmt host 129.82.111.172
+logging vrf mgmt source-interface Management1
 ```
 
 ### SNMP
@@ -264,7 +264,7 @@ logging vrf MGMT source-interface Management1
 
 | Host | VRF | Community | Username | Authentication level | SNMP Version |
 | ---- |---- | --------- | -------- | -------------------- | ------------ |
-| 10.100.201.199 | MGMT | <removed> | - | - | 2c |
+| 10.100.201.199 | mgmt | <removed> | - | - | 2c |
 
 #### SNMP Communities
 
@@ -278,7 +278,7 @@ logging vrf MGMT source-interface Management1
 !
 snmp-server contact noc@colostate.edu
 snmp-server community <removed> ro
-snmp-server host 10.100.201.199 vrf MGMT version 2c <removed>
+snmp-server host 10.100.201.199 vrf mgmt version 2c <removed>
 ```
 
 ## Spanning Tree
@@ -408,14 +408,14 @@ service routing protocols model multi-agent
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | True |
-| MGMT | True |
+| mgmt | True |
 
 #### IP Routing Device Configuration
 
 ```eos
 !
 ip routing
-ip routing vrf MGMT
+ip routing vrf mgmt
 ```
 
 ### IPv6 Routing
@@ -425,7 +425,7 @@ ip routing vrf MGMT
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | False |
-| MGMT | false |
+| mgmt | false |
 
 ### Static Routes
 
@@ -433,13 +433,13 @@ ip routing vrf MGMT
 
 | VRF | Destination Prefix | Next Hop IP | Exit interface | Administrative Distance | Tag | Route Name | Metric |
 | --- | ------------------ | ----------- | -------------- | ----------------------- | --- | ---------- | ------ |
-| MGMT | 0.0.0.0/0 | 192.168.100.1 | - | 1 | - | - | - |
+| mgmt | 0.0.0.0/0 | 192.168.100.1 | - | 1 | - | - | - |
 
 #### Static Routes Device Configuration
 
 ```eos
 !
-ip route vrf MGMT 0.0.0.0/0 192.168.100.1
+ip route vrf mgmt 0.0.0.0/0 192.168.100.1
 ```
 
 ### Router BGP
@@ -632,11 +632,11 @@ ip access-list mgmt-acl
 
 | VRF Name | IP Routing |
 | -------- | ---------- |
-| MGMT | enabled |
+| mgmt | enabled |
 
 ### VRF Instances Device Configuration
 
 ```eos
 !
-vrf instance MGMT
+vrf instance mgmt
 ```

@@ -3,7 +3,7 @@
 mgmt_gateway: 192.168.100.1
 mgmt_vrf_routing: yes
 default_mgmt_method: oob
-mgmt_interface_vrf: MGMT
+mgmt_interface_vrf: mgmt
 # Spine switch group
 spine:
   # Definition of default values that will be configured to all nodes defined in this group

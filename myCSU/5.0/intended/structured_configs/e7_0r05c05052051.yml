@@ -1,7 +1,7 @@
 hostname: e7_0r05c05052051
 is_deployed: true
 static_routes:
-- vrf: MGMT
+- vrf: mgmt
   destination_address_prefix: 0.0.0.0/0
   gateway: 192.168.100.1
 service_routing_protocols_model: multi-agent
@@ -11,7 +11,7 @@ daemon_terminattr:
   cvauth:
     method: token-secure
     token_file: /tmp/cv-onboarding-token
-  cvvrf: MGMT
+  cvvrf: mgmt
   smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
   ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
   disable_aaa: true
@@ -28,7 +28,7 @@ enable_password:
 transceiver_qsfp_default_mode_4x10: true
 ip_name_servers:
 - ip_address: 8.8.8.8
-  vrf: MGMT
+  vrf: mgmt
 spanning_tree:
   mode: rapid-pvst
   no_spanning_tree_vlan: '4094'
@@ -43,19 +43,19 @@ local_users:
   role: network-admin
   sha512_password: $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/
 vrfs:
-- name: MGMT
+- name: mgmt
   ip_routing: true
 management_interfaces:
 - name: Management1
   description: OOB_MANAGEMENT
   shutdown: false
-  vrf: MGMT
+  vrf: mgmt
   ip_address: 192.168.100.206/24
   gateway: 192.168.100.1
   type: oob
 management_api_http:
   enable_vrfs:
-  - name: MGMT
+  - name: mgmt
   enable_https: true
 vlans:
 - id: 4094
@@ -224,7 +224,7 @@ ip_igmp_snooping:
 ntp:
   local_interface:
     name: Management1
-    vrf: MGMT
+    vrf: mgmt
   servers:
   - name: 132.163.96.3
-    vrf: MGMT
+    vrf: mgmt
