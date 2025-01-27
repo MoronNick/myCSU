@@ -97,4 +97,57 @@ l3leaf:
           uplink_switch_interfaces:
             - Ethernet4
             - Ethernet4
-
+    - group: DC1_Borderleaf
+      bgp_as: 65103
+      nodes:
+        - name: borderleaf1
+          id: 10
+          mgmt_ip: 192.168.100.204/24
+          uplink_switch_interfaces:
+            - Ethernet5
+          uplink_interfaces:
+            - Ethernet11
+            - Ethernet12
+          mlag_interfaces: 
+            - Ethernet1
+            - Ethernet2
+        - name: borderleaf2
+          id: 11
+          mgmt_ip: 192.168.100.205/24
+          uplink_switch_interfaces:
+            - Ethernet6
+          uplink_interfaces:
+            - Ethernet11
+            - Ethernet12
+          mlag_interfaces: 
+            - Ethernet1
+            - Ethernet2
+l3_edge:
+  # p2p_links_ip_pools:
+  #   - name: Palo
+  #     ipv4_pool: 172.16.0.0/29
+  #     # prefix-size: 29
+  # p2p_links_profiles:
+  #   - name: Palo
+  #     id: 1
+  #     speed: auto
+  #     ip_pool: Palo
+  #     subnet: 172.16.0.0/29
+  #     ip:
+  #       - 172.16.0.2/29
+  #     nodes:
+  #       - borderleaf1
+  #     interfaces: 
+  #       - Ethernet3
+  #     as:
+  #       - 65103
+  # p2p_links:
+  #   - nodes:
+  #     - borderleaf1
+  #     id: 1
+  #     speed: auto
+  #     subnet: 172.16.0.0/29
+  #     ip: 
+  #       - 172.16.0.2/29
+  #     interfaces: 
+  #       - Ethernet3
