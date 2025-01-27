@@ -488,6 +488,8 @@ ASN Notation: asplain
 | 10.255.0.4 | 65101 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.255.0.5 | 65102 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.255.0.6 | 65102 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
+| 10.255.0.12 | 65103 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
+| 10.255.0.13 | 65103 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.255.255.3 | 65101 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.255.255.7 | 65101 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.255.255.11 | 65102 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
@@ -534,6 +536,12 @@ router bgp 65100
    neighbor 10.255.0.6 peer group EVPN-OVERLAY-PEERS
    neighbor 10.255.0.6 remote-as 65102
    neighbor 10.255.0.6 description SCC2_Loopback0
+   neighbor 10.255.0.12 peer group EVPN-OVERLAY-PEERS
+   neighbor 10.255.0.12 remote-as 65103
+   neighbor 10.255.0.12 description borderleaf1_Loopback0
+   neighbor 10.255.0.13 peer group EVPN-OVERLAY-PEERS
+   neighbor 10.255.0.13 remote-as 65103
+   neighbor 10.255.0.13 description borderleaf2_Loopback0
    neighbor 10.255.255.3 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.255.255.3 remote-as 65101
    neighbor 10.255.255.3 description WCC1_Ethernet8

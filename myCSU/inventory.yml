@@ -35,6 +35,12 @@ all:
                       ansible_host: 192.168.100.204
                     SCC2:
                       ansible_host: 192.168.100.205
+                DC1_borderleaf:
+                  hosts:
+                    borderleaf1:
+                      ansible_host: 192.168.100.208
+                    borderleaf2:
+                      ansible_host: 192.168.100.209
         Standalone: 
           children:
             L2_LEAVES:
@@ -49,6 +55,7 @@ all:
       children:
         DC1_L3_LEAVES:
         DC1_L2_LEAVES:
+        DC1_borderleaf:
     CONNECTED_ENDPOINTS:
       children:
         DC1_L3_LEAVES:

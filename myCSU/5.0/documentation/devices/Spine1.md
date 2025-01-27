@@ -330,6 +330,8 @@ vlan internal order ascending range 1006 1199
 | Ethernet2 | P2P_WCC2_Ethernet7 | - | 10.255.255.4/31 | default | 1500 | False | - | - |
 | Ethernet3 | P2P_SCC1_Ethernet7 | - | 10.255.255.8/31 | default | 1500 | False | - | - |
 | Ethernet4 | P2P_SCC2_Ethernet7 | - | 10.255.255.12/31 | default | 1500 | False | - | - |
+| Ethernet5 | P2P_borderleaf1_Ethernet11 | - | 10.255.255.36/31 | default | 1500 | False | - | - |
+| Ethernet6 | P2P_borderleaf2_Ethernet11 | - | 10.255.255.40/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -362,6 +364,20 @@ interface Ethernet4
    mtu 1500
    no switchport
    ip address 10.255.255.12/31
+!
+interface Ethernet5
+   description P2P_borderleaf1_Ethernet11
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 10.255.255.36/31
+!
+interface Ethernet6
+   description P2P_borderleaf2_Ethernet11
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 10.255.255.40/31
 ```
 
 ### Loopback Interfaces
@@ -488,10 +504,14 @@ ASN Notation: asplain
 | 10.255.0.4 | 65101 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.255.0.5 | 65102 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.255.0.6 | 65102 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
+| 10.255.0.12 | 65103 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
+| 10.255.0.13 | 65103 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.255.255.1 | 65101 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.255.255.5 | 65101 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.255.255.9 | 65102 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.255.255.13 | 65102 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
+| 10.255.255.37 | 65103 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
+| 10.255.255.41 | 65103 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 
 #### Router BGP EVPN Address Family
 
@@ -534,6 +554,12 @@ router bgp 65100
    neighbor 10.255.0.6 peer group EVPN-OVERLAY-PEERS
    neighbor 10.255.0.6 remote-as 65102
    neighbor 10.255.0.6 description SCC2_Loopback0
+   neighbor 10.255.0.12 peer group EVPN-OVERLAY-PEERS
+   neighbor 10.255.0.12 remote-as 65103
+   neighbor 10.255.0.12 description borderleaf1_Loopback0
+   neighbor 10.255.0.13 peer group EVPN-OVERLAY-PEERS
+   neighbor 10.255.0.13 remote-as 65103
+   neighbor 10.255.0.13 description borderleaf2_Loopback0
    neighbor 10.255.255.1 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.255.255.1 remote-as 65101
    neighbor 10.255.255.1 description WCC1_Ethernet7
@@ -546,6 +572,12 @@ router bgp 65100
    neighbor 10.255.255.13 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.255.255.13 remote-as 65102
    neighbor 10.255.255.13 description SCC2_Ethernet7
+   neighbor 10.255.255.37 peer group IPv4-UNDERLAY-PEERS
+   neighbor 10.255.255.37 remote-as 65103
+   neighbor 10.255.255.37 description borderleaf1_Ethernet11
+   neighbor 10.255.255.41 peer group IPv4-UNDERLAY-PEERS
+   neighbor 10.255.255.41 remote-as 65103
+   neighbor 10.255.255.41 description borderleaf2_Ethernet11
    redistribute connected route-map RM-CONN-2-BGP
    !
    address-family evpn

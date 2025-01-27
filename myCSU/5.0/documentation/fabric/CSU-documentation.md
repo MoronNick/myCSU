@@ -17,6 +17,8 @@
 
 | POD | Type | Node | Management IP | Platform | Provisioned in CloudVision | Serial Number |
 | --- | ---- | ---- | ------------- | -------- | -------------------------- | ------------- |
+| CSU | l3leaf | borderleaf1 | 192.168.100.204/24 | vEOS-lab | Provisioned | - |
+| CSU | l3leaf | borderleaf2 | 192.168.100.205/24 | vEOS-lab | Provisioned | - |
 | CSU | l2leaf | e7_0r05c05052051 | 192.168.100.206/24 | - | Provisioned | - |
 | CSU | l2leaf | e7_0r05c05052052 | 192.168.100.207/24 | - | Provisioned | - |
 | CSU | l3leaf | SCC1 | 192.168.100.204/24 | vEOS-lab | Provisioned | - |
@@ -37,6 +39,10 @@
 
 | Type | Node | Node Interface | Peer Type | Peer Node | Peer Interface |
 | ---- | ---- | -------------- | --------- | ----------| -------------- |
+| l3leaf | borderleaf1 | Ethernet1 | mlag_peer | borderleaf2 | Ethernet1 |
+| l3leaf | borderleaf1 | Ethernet2 | mlag_peer | borderleaf2 | Ethernet2 |
+| l3leaf | borderleaf1 | Ethernet11 | spine | Spine1 | Ethernet5 |
+| l3leaf | borderleaf2 | Ethernet11 | spine | Spine1 | Ethernet6 |
 | l2leaf | e7_0r05c05052051 | Ethernet12 | mlag_peer | e7_0r05c05052052 | Ethernet12 |
 | l3leaf | SCC1 | Ethernet7 | spine | Spine1 | Ethernet3 |
 | l3leaf | SCC1 | Ethernet8 | spine | Spine2 | Ethernet3 |
@@ -57,12 +63,14 @@
 
 | Uplink IPv4 Pool | Available Addresses | Assigned addresses | Assigned Address % |
 | ---------------- | ------------------- | ------------------ | ------------------ |
-| 10.255.255.0/26 | 64 | 16 | 25.0 % |
+| 10.255.255.0/26 | 64 | 20 | 31.25 % |
 
 ### Point-To-Point Links Node Allocation
 
 | Node | Node Interface | Node IP Address | Peer Node | Peer Interface | Peer IP Address |
 | ---- | -------------- | --------------- | --------- | -------------- | --------------- |
+| borderleaf1 | Ethernet11 | 10.255.255.37/31 | Spine1 | Ethernet5 | 10.255.255.36/31 |
+| borderleaf2 | Ethernet11 | 10.255.255.41/31 | Spine1 | Ethernet6 | 10.255.255.40/31 |
 | SCC1 | Ethernet7 | 10.255.255.9/31 | Spine1 | Ethernet3 | 10.255.255.8/31 |
 | SCC1 | Ethernet8 | 10.255.255.11/31 | Spine2 | Ethernet3 | 10.255.255.10/31 |
 | SCC2 | Ethernet7 | 10.255.255.13/31 | Spine1 | Ethernet4 | 10.255.255.12/31 |
@@ -76,12 +84,14 @@
 
 | Loopback Pool | Available Addresses | Assigned addresses | Assigned Address % |
 | ------------- | ------------------- | ------------------ | ------------------ |
-| 10.255.0.0/27 | 32 | 6 | 18.75 % |
+| 10.255.0.0/27 | 32 | 8 | 25.0 % |
 
 ### Loopback0 Interfaces Node Allocation
 
 | POD | Node | Loopback0 |
 | --- | ---- | --------- |
+| CSU | borderleaf1 | 10.255.0.12/32 |
+| CSU | borderleaf2 | 10.255.0.13/32 |
 | CSU | SCC1 | 10.255.0.5/32 |
 | CSU | SCC2 | 10.255.0.6/32 |
 | CSU | Spine1 | 10.255.0.1/32 |
@@ -93,12 +103,14 @@
 
 | VTEP Loopback Pool | Available Addresses | Assigned addresses | Assigned Address % |
 | ------------------ | ------------------- | ------------------ | ------------------ |
-| 10.255.1.0/27 | 32 | 4 | 12.5 % |
+| 10.255.1.0/27 | 32 | 6 | 18.75 % |
 
 ### VTEP Loopback Node allocation
 
 | POD | Node | Loopback1 |
 | --- | ---- | --------- |
+| CSU | borderleaf1 | 10.255.1.12/32 |
+| CSU | borderleaf2 | 10.255.1.12/32 |
 | CSU | SCC1 | 10.255.1.5/32 |
 | CSU | SCC2 | 10.255.1.5/32 |
 | CSU | WCC1 | 10.255.1.3/32 |
