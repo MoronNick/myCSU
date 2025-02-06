@@ -1,0 +1,2097 @@
+hostname: borderleaf2
+is_deployed: true
+router_bgp:
+  as: '65103'
+  router_id: 10.255.0.13
+  bgp:
+    default:
+      ipv4_unicast: false
+  maximum_paths:
+    paths: 4
+    ecmp: 4
+  redistribute:
+    connected:
+      enabled: true
+      route_map: RM-CONN-2-BGP
+  peer_groups:
+  - name: MLAG-IPv4-UNDERLAY-PEER
+    type: ipv4
+    remote_as: '65103'
+    next_hop_self: true
+    description: borderleaf1
+    password: 4b21pAdCvWeAqpcKDFMdWw==
+    maximum_routes: 12000
+    send_community: all
+    route_map_in: RM-MLAG-PEER-IN
+  - name: IPv4-UNDERLAY-PEERS
+    type: ipv4
+    password: 7x4B4rnJhZB438m9+BrBfQ==
+    maximum_routes: 12000
+    send_community: all
+  - name: EVPN-OVERLAY-PEERS
+    type: evpn
+    update_source: Loopback0
+    bfd: true
+    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
+    send_community: all
+    maximum_routes: 0
+    ebgp_multihop: 3
+  address_family_ipv4:
+    peer_groups:
+    - name: MLAG-IPv4-UNDERLAY-PEER
+      activate: true
+    - name: IPv4-UNDERLAY-PEERS
+      activate: true
+    - name: EVPN-OVERLAY-PEERS
+      activate: false
+  neighbors:
+  - ip_address: 10.255.1.114
+    peer_group: MLAG-IPv4-UNDERLAY-PEER
+    peer: borderleaf1
+    description: borderleaf1_Vlan4093
+  - ip_address: 10.255.255.40
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65100'
+    peer: Spine1
+    description: Spine1_Ethernet6
+  - ip_address: 10.255.0.1
+    peer_group: EVPN-OVERLAY-PEERS
+    peer: Spine1
+    description: Spine1_Loopback0
+    remote_as: '65100'
+  - ip_address: 10.255.0.2
+    peer_group: EVPN-OVERLAY-PEERS
+    peer: Spine2
+    description: Spine2_Loopback0
+    remote_as: '65100'
+  address_family_evpn:
+    peer_groups:
+    - name: EVPN-OVERLAY-PEERS
+      activate: true
+  vrfs:
+  - name: campus
+    rd: 10.255.0.13:10
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - '10:10'
+      export:
+      - address_family: evpn
+        route_targets:
+        - '10:10'
+    router_id: 10.255.0.13
+    redistribute:
+      connected:
+        enabled: true
+        route_map: RM-CONN-2-BGP-VRFS
+    neighbors:
+    - ip_address: 10.255.1.114
+      peer_group: MLAG-IPv4-UNDERLAY-PEER
+      description: borderleaf1_Vlan3009
+  - name: wifi
+    rd: 10.255.0.13:20
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - '20:20'
+      export:
+      - address_family: evpn
+        route_targets:
+        - '20:20'
+    router_id: 10.255.0.13
+    redistribute:
+      connected:
+        enabled: true
+        route_map: RM-CONN-2-BGP-VRFS
+    neighbors:
+    - ip_address: 10.255.1.114
+      peer_group: MLAG-IPv4-UNDERLAY-PEER
+      description: borderleaf1_Vlan3019
+  vlans:
+  - id: 8
+    tenant: TENANT1
+    rd: 10.255.0.13:10008
+    route_targets:
+      both:
+      - 10008:10008
+    redistribute_routes:
+    - learned
+  - id: 26
+    tenant: TENANT1
+    rd: 10.255.0.13:10026
+    route_targets:
+      both:
+      - 10026:10026
+    redistribute_routes:
+    - learned
+  - id: 48
+    tenant: TENANT1
+    rd: 10.255.0.13:10048
+    route_targets:
+      both:
+      - 10048:10048
+    redistribute_routes:
+    - learned
+  - id: 50
+    tenant: TENANT1
+    rd: 10.255.0.13:10050
+    route_targets:
+      both:
+      - 10050:10050
+    redistribute_routes:
+    - learned
+  - id: 84
+    tenant: TENANT1
+    rd: 10.255.0.13:10084
+    route_targets:
+      both:
+      - 10084:10084
+    redistribute_routes:
+    - learned
+  - id: 108
+    tenant: TENANT1
+    rd: 10.255.0.13:10108
+    route_targets:
+      both:
+      - 10108:10108
+    redistribute_routes:
+    - learned
+  - id: 214
+    tenant: TENANT1
+    rd: 10.255.0.13:10214
+    route_targets:
+      both:
+      - 10214:10214
+    redistribute_routes:
+    - learned
+  - id: 232
+    tenant: TENANT1
+    rd: 10.255.0.13:10232
+    route_targets:
+      both:
+      - 10232:10232
+    redistribute_routes:
+    - learned
+  - id: 233
+    tenant: TENANT1
+    rd: 10.255.0.13:10233
+    route_targets:
+      both:
+      - 10233:10233
+    redistribute_routes:
+    - learned
+  - id: 248
+    tenant: TENANT1
+    rd: 10.255.0.13:10248
+    route_targets:
+      both:
+      - 10248:10248
+    redistribute_routes:
+    - learned
+  - id: 320
+    tenant: TENANT1
+    rd: 10.255.0.13:10320
+    route_targets:
+      both:
+      - 10320:10320
+    redistribute_routes:
+    - learned
+  - id: 322
+    tenant: TENANT1
+    rd: 10.255.0.13:10322
+    route_targets:
+      both:
+      - 10322:10322
+    redistribute_routes:
+    - learned
+  - id: 323
+    tenant: TENANT1
+    rd: 10.255.0.13:10323
+    route_targets:
+      both:
+      - 10323:10323
+    redistribute_routes:
+    - learned
+  - id: 331
+    tenant: TENANT1
+    rd: 10.255.0.13:10331
+    route_targets:
+      both:
+      - 10331:10331
+    redistribute_routes:
+    - learned
+  - id: 332
+    tenant: TENANT1
+    rd: 10.255.0.13:10332
+    route_targets:
+      both:
+      - 10332:10332
+    redistribute_routes:
+    - learned
+  - id: 351
+    tenant: TENANT1
+    rd: 10.255.0.13:10351
+    route_targets:
+      both:
+      - 10351:10351
+    redistribute_routes:
+    - learned
+  - id: 352
+    tenant: TENANT1
+    rd: 10.255.0.13:10352
+    route_targets:
+      both:
+      - 10352:10352
+    redistribute_routes:
+    - learned
+  - id: 375
+    tenant: TENANT1
+    rd: 10.255.0.13:10375
+    route_targets:
+      both:
+      - 10375:10375
+    redistribute_routes:
+    - learned
+  - id: 376
+    tenant: TENANT1
+    rd: 10.255.0.13:10376
+    route_targets:
+      both:
+      - 10376:10376
+    redistribute_routes:
+    - learned
+  - id: 384
+    tenant: TENANT1
+    rd: 10.255.0.13:10384
+    route_targets:
+      both:
+      - 10384:10384
+    redistribute_routes:
+    - learned
+  - id: 386
+    tenant: TENANT1
+    rd: 10.255.0.13:10386
+    route_targets:
+      both:
+      - 10386:10386
+    redistribute_routes:
+    - learned
+  - id: 387
+    tenant: TENANT1
+    rd: 10.255.0.13:10387
+    route_targets:
+      both:
+      - 10387:10387
+    redistribute_routes:
+    - learned
+  - id: 388
+    tenant: TENANT1
+    rd: 10.255.0.13:10388
+    route_targets:
+      both:
+      - 10388:10388
+    redistribute_routes:
+    - learned
+  - id: 395
+    tenant: TENANT1
+    rd: 10.255.0.13:10395
+    route_targets:
+      both:
+      - 10395:10395
+    redistribute_routes:
+    - learned
+  - id: 397
+    tenant: TENANT1
+    rd: 10.255.0.13:10397
+    route_targets:
+      both:
+      - 10397:10397
+    redistribute_routes:
+    - learned
+  - id: 401
+    tenant: TENANT1
+    rd: 10.255.0.13:10401
+    route_targets:
+      both:
+      - 10401:10401
+    redistribute_routes:
+    - learned
+  - id: 409
+    tenant: TENANT1
+    rd: 10.255.0.13:10409
+    route_targets:
+      both:
+      - 10409:10409
+    redistribute_routes:
+    - learned
+  - id: 421
+    tenant: TENANT1
+    rd: 10.255.0.13:10421
+    route_targets:
+      both:
+      - 10421:10421
+    redistribute_routes:
+    - learned
+  - id: 422
+    tenant: TENANT1
+    rd: 10.255.0.13:10422
+    route_targets:
+      both:
+      - 10422:10422
+    redistribute_routes:
+    - learned
+  - id: 426
+    tenant: TENANT1
+    rd: 10.255.0.13:10426
+    route_targets:
+      both:
+      - 10426:10426
+    redistribute_routes:
+    - learned
+  - id: 428
+    tenant: TENANT1
+    rd: 10.255.0.13:10428
+    route_targets:
+      both:
+      - 10428:10428
+    redistribute_routes:
+    - learned
+  - id: 472
+    tenant: TENANT1
+    rd: 10.255.0.13:10472
+    route_targets:
+      both:
+      - 10472:10472
+    redistribute_routes:
+    - learned
+  - id: 512
+    tenant: TENANT1
+    rd: 10.255.0.13:10512
+    route_targets:
+      both:
+      - 10512:10512
+    redistribute_routes:
+    - learned
+  - id: 513
+    tenant: TENANT1
+    rd: 10.255.0.13:10513
+    route_targets:
+      both:
+      - 10513:10513
+    redistribute_routes:
+    - learned
+  - id: 525
+    tenant: TENANT1
+    rd: 10.255.0.13:10525
+    route_targets:
+      both:
+      - 10525:10525
+    redistribute_routes:
+    - learned
+  - id: 540
+    tenant: TENANT1
+    rd: 10.255.0.13:10540
+    route_targets:
+      both:
+      - 10540:10540
+    redistribute_routes:
+    - learned
+  - id: 584
+    tenant: TENANT1
+    rd: 10.255.0.13:10584
+    route_targets:
+      both:
+      - 10584:10584
+    redistribute_routes:
+    - learned
+  - id: 600
+    tenant: TENANT1
+    rd: 10.255.0.13:10600
+    route_targets:
+      both:
+      - 10600:10600
+    redistribute_routes:
+    - learned
+  - id: 653
+    tenant: TENANT1
+    rd: 10.255.0.13:10653
+    route_targets:
+      both:
+      - 10653:10653
+    redistribute_routes:
+    - learned
+  - id: 1107
+    tenant: TENANT1
+    rd: 10.255.0.13:11107
+    route_targets:
+      both:
+      - 11107:11107
+    redistribute_routes:
+    - learned
+  - id: 1108
+    tenant: TENANT1
+    rd: 10.255.0.13:11108
+    route_targets:
+      both:
+      - 11108:11108
+    redistribute_routes:
+    - learned
+  - id: 1112
+    tenant: TENANT1
+    rd: 10.255.0.13:11112
+    route_targets:
+      both:
+      - 11112:11112
+    redistribute_routes:
+    - learned
+  - id: 1208
+    tenant: TENANT1
+    rd: 10.255.0.13:11208
+    route_targets:
+      both:
+      - 11208:11208
+    redistribute_routes:
+    - learned
+  - id: 1226
+    tenant: TENANT1
+    rd: 10.255.0.13:11226
+    route_targets:
+      both:
+      - 11226:11226
+    redistribute_routes:
+    - learned
+  - id: 1300
+    tenant: TENANT1
+    rd: 10.255.0.13:11300
+    route_targets:
+      both:
+      - 11300:11300
+    redistribute_routes:
+    - learned
+  - id: 2326
+    tenant: TENANT1
+    rd: 10.255.0.13:12326
+    route_targets:
+      both:
+      - 12326:12326
+    redistribute_routes:
+    - learned
+  - id: 2670
+    tenant: TENANT1
+    rd: 10.255.0.13:12670
+    route_targets:
+      both:
+      - 12670:12670
+    redistribute_routes:
+    - learned
+  - id: 2672
+    tenant: TENANT1
+    rd: 10.255.0.13:12672
+    route_targets:
+      both:
+      - 12672:12672
+    redistribute_routes:
+    - learned
+  - id: 2676
+    tenant: TENANT1
+    rd: 10.255.0.13:12676
+    route_targets:
+      both:
+      - 12676:12676
+    redistribute_routes:
+    - learned
+  - id: 2677
+    tenant: TENANT1
+    rd: 10.255.0.13:12677
+    route_targets:
+      both:
+      - 12677:12677
+    redistribute_routes:
+    - learned
+  - id: 2680
+    tenant: TENANT1
+    rd: 10.255.0.13:12680
+    route_targets:
+      both:
+      - 12680:12680
+    redistribute_routes:
+    - learned
+  - id: 2684
+    tenant: TENANT1
+    rd: 10.255.0.13:12684
+    route_targets:
+      both:
+      - 12684:12684
+    redistribute_routes:
+    - learned
+  - id: 2689
+    tenant: TENANT1
+    rd: 10.255.0.13:12689
+    route_targets:
+      both:
+      - 12689:12689
+    redistribute_routes:
+    - learned
+  - id: 2691
+    tenant: TENANT1
+    rd: 10.255.0.13:12691
+    route_targets:
+      both:
+      - 12691:12691
+    redistribute_routes:
+    - learned
+  - id: 2694
+    tenant: TENANT1
+    rd: 10.255.0.13:12694
+    route_targets:
+      both:
+      - 12694:12694
+    redistribute_routes:
+    - learned
+  - id: 2698
+    tenant: TENANT1
+    rd: 10.255.0.13:12698
+    route_targets:
+      both:
+      - 12698:12698
+    redistribute_routes:
+    - learned
+  - id: 2699
+    tenant: TENANT1
+    rd: 10.255.0.13:12699
+    route_targets:
+      both:
+      - 12699:12699
+    redistribute_routes:
+    - learned
+  - id: 2712
+    tenant: TENANT1
+    rd: 10.255.0.13:12712
+    route_targets:
+      both:
+      - 12712:12712
+    redistribute_routes:
+    - learned
+  - id: 2716
+    tenant: TENANT1
+    rd: 10.255.0.13:12716
+    route_targets:
+      both:
+      - 12716:12716
+    redistribute_routes:
+    - learned
+  - id: 2717
+    tenant: TENANT1
+    rd: 10.255.0.13:12717
+    route_targets:
+      both:
+      - 12717:12717
+    redistribute_routes:
+    - learned
+  - id: 2718
+    tenant: TENANT1
+    rd: 10.255.0.13:12718
+    route_targets:
+      both:
+      - 12718:12718
+    redistribute_routes:
+    - learned
+  - id: 2719
+    tenant: TENANT1
+    rd: 10.255.0.13:12719
+    route_targets:
+      both:
+      - 12719:12719
+    redistribute_routes:
+    - learned
+  - id: 2720
+    tenant: TENANT1
+    rd: 10.255.0.13:12720
+    route_targets:
+      both:
+      - 12720:12720
+    redistribute_routes:
+    - learned
+  - id: 3300
+    tenant: TENANT1
+    rd: 10.255.0.13:13300
+    route_targets:
+      both:
+      - 13300:13300
+    redistribute_routes:
+    - learned
+  - id: 3301
+    tenant: TENANT1
+    rd: 10.255.0.13:13301
+    route_targets:
+      both:
+      - 13301:13301
+    redistribute_routes:
+    - learned
+  - id: 3302
+    tenant: TENANT1
+    rd: 10.255.0.13:13302
+    route_targets:
+      both:
+      - 13302:13302
+    redistribute_routes:
+    - learned
+  - id: 3303
+    tenant: TENANT1
+    rd: 10.255.0.13:13303
+    route_targets:
+      both:
+      - 13303:13303
+    redistribute_routes:
+    - learned
+  - id: 3304
+    tenant: TENANT1
+    rd: 10.255.0.13:13304
+    route_targets:
+      both:
+      - 13304:13304
+    redistribute_routes:
+    - learned
+  - id: 3305
+    tenant: TENANT1
+    rd: 10.255.0.13:13305
+    route_targets:
+      both:
+      - 13305:13305
+    redistribute_routes:
+    - learned
+  - id: 3306
+    tenant: TENANT1
+    rd: 10.255.0.13:13306
+    route_targets:
+      both:
+      - 13306:13306
+    redistribute_routes:
+    - learned
+  - id: 3307
+    tenant: TENANT1
+    rd: 10.255.0.13:13307
+    route_targets:
+      both:
+      - 13307:13307
+    redistribute_routes:
+    - learned
+  - id: 3308
+    tenant: TENANT1
+    rd: 10.255.0.13:13308
+    route_targets:
+      both:
+      - 13308:13308
+    redistribute_routes:
+    - learned
+  - id: 3309
+    tenant: TENANT1
+    rd: 10.255.0.13:13309
+    route_targets:
+      both:
+      - 13309:13309
+    redistribute_routes:
+    - learned
+  - id: 3310
+    tenant: TENANT1
+    rd: 10.255.0.13:13310
+    route_targets:
+      both:
+      - 13310:13310
+    redistribute_routes:
+    - learned
+  - id: 3311
+    tenant: TENANT1
+    rd: 10.255.0.13:13311
+    route_targets:
+      both:
+      - 13311:13311
+    redistribute_routes:
+    - learned
+  - id: 3312
+    tenant: TENANT1
+    rd: 10.255.0.13:13312
+    route_targets:
+      both:
+      - 13312:13312
+    redistribute_routes:
+    - learned
+  - id: 3313
+    tenant: TENANT1
+    rd: 10.255.0.13:13313
+    route_targets:
+      both:
+      - 13313:13313
+    redistribute_routes:
+    - learned
+  - id: 3349
+    tenant: TENANT1
+    rd: 10.255.0.13:13349
+    route_targets:
+      both:
+      - 13349:13349
+    redistribute_routes:
+    - learned
+  - id: 99
+    tenant: TENANT1
+    rd: 10.255.0.13:10099
+    route_targets:
+      both:
+      - 10099:10099
+    redistribute_routes:
+    - learned
+  - id: 3714
+    tenant: TENANT1
+    rd: 10.255.0.13:13714
+    route_targets:
+      both:
+      - 13714:13714
+    redistribute_routes:
+    - learned
+  - id: 2020
+    tenant: TENANT1
+    rd: 10.255.0.13:12020
+    route_targets:
+      both:
+      - 12020:12020
+    redistribute_routes:
+    - learned
+  - id: 2023
+    tenant: TENANT1
+    rd: 10.255.0.13:12023
+    route_targets:
+      both:
+      - 12023:12023
+    redistribute_routes:
+    - learned
+  - id: 1068
+    tenant: TENANT1
+    rd: 10.255.0.13:11068
+    route_targets:
+      both:
+      - 11068:11068
+    redistribute_routes:
+    - learned
+  - id: 168
+    tenant: TENANT1
+    rd: 10.255.0.13:10168
+    route_targets:
+      both:
+      - 10168:10168
+    redistribute_routes:
+    - learned
+  - id: 804
+    tenant: TENANT1
+    rd: 10.255.0.13:10804
+    route_targets:
+      both:
+      - 10804:10804
+    redistribute_routes:
+    - learned
+  - id: 814
+    tenant: TENANT1
+    rd: 10.255.0.13:10814
+    route_targets:
+      both:
+      - 10814:10814
+    redistribute_routes:
+    - learned
+  - id: 634
+    tenant: TENANT1
+    rd: 10.255.0.13:10634
+    route_targets:
+      both:
+      - 10634:10634
+    redistribute_routes:
+    - learned
+  - id: 817
+    tenant: TENANT1
+    rd: 10.255.0.13:10817
+    route_targets:
+      both:
+      - 10817:10817
+    redistribute_routes:
+    - learned
+  - id: 620
+    tenant: TENANT1
+    rd: 10.255.0.13:10620
+    route_targets:
+      both:
+      - 10620:10620
+    redistribute_routes:
+    - learned
+  - id: 815
+    tenant: TENANT1
+    rd: 10.255.0.13:10815
+    route_targets:
+      both:
+      - 10815:10815
+    redistribute_routes:
+    - learned
+  - id: 314
+    tenant: TENANT1
+    rd: 10.255.0.13:10314
+    route_targets:
+      both:
+      - 10314:10314
+    redistribute_routes:
+    - learned
+  - id: 315
+    tenant: TENANT1
+    rd: 10.255.0.13:10315
+    route_targets:
+      both:
+      - 10315:10315
+    redistribute_routes:
+    - learned
+  - id: 3900
+    tenant: TENANT1
+    rd: 10.255.0.13:13900
+    route_targets:
+      both:
+      - 13900:13900
+    redistribute_routes:
+    - learned
+  - id: 3903
+    tenant: TENANT1
+    rd: 10.255.0.13:13903
+    route_targets:
+      both:
+      - 13903:13903
+    redistribute_routes:
+    - learned
+  - id: 3785
+    tenant: TENANT1
+    rd: 10.255.0.13:13785
+    route_targets:
+      both:
+      - 13785:13785
+    redistribute_routes:
+    - learned
+  - id: 3500
+    tenant: TENANT1
+    rd: 10.255.0.13:13500
+    route_targets:
+      both:
+      - 13500:13500
+    redistribute_routes:
+    - learned
+  - id: 313
+    tenant: TENANT1
+    rd: 10.255.0.13:10313
+    route_targets:
+      both:
+      - 10313:10313
+    redistribute_routes:
+    - learned
+static_routes:
+- vrf: mgmt
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 192.168.100.1
+service_routing_protocols_model: multi-agent
+ip_routing: true
+daemon_terminattr:
+  cvaddrs:
+  - apiserver.cv-staging.corp.arista.io:443
+  cvauth:
+    method: token-secure
+    token_file: /tmp/cv-onboarding-token
+  cvvrf: mgmt
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: true
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+aaa_root:
+  disabled: true
+config_end: true
+enable_password:
+  disabled: true
+transceiver_qsfp_default_mode_4x10: true
+ip_name_servers:
+- ip_address: 8.8.8.8
+  vrf: mgmt
+spanning_tree:
+  mode: mstp
+  mst_instances:
+  - id: '0'
+    priority: 4096
+  no_spanning_tree_vlan: 4093-4094
+local_users:
+- name: admin
+  disabled: true
+- name: nmoore
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/
+vrfs:
+- name: mgmt
+  ip_routing: true
+- name: campus
+  tenant: TENANT1
+  ip_routing: true
+  ipv6_routing: true
+- name: wifi
+  tenant: TENANT1
+  ip_routing: true
+management_interfaces:
+- name: Management1
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: mgmt
+  ip_address: 192.168.100.205/24
+  gateway: 192.168.100.1
+  type: oob
+management_api_http:
+  enable_vrfs:
+  - name: mgmt
+  enable_https: true
+vlans:
+- id: 4093
+  tenant: system
+  name: MLAG_L3
+  trunk_groups:
+  - MLAG
+- id: 4094
+  tenant: system
+  name: MLAG
+  trunk_groups:
+  - MLAG
+- id: 8
+  name: West_Campus_Remote_Public
+  tenant: TENANT1
+- id: 26
+  name: CVMBS_RBL_Public
+  tenant: TENANT1
+- id: 48
+  name: COE_ATS_Public
+  tenant: TENANT1
+- id: 50
+  name: Drone_Pub
+  tenant: TENANT1
+- id: 84
+  name: vendor_foothills
+  tenant: TENANT1
+- id: 108
+  name: ACRC-CIRA_Public
+  tenant: TENANT1
+- id: 214
+  name: CVMBS_ARBL_Public
+  tenant: TENANT1
+- id: 232
+  name: ERC_Public
+  tenant: TENANT1
+- id: 233
+  name: ERC_Private
+  tenant: TENANT1
+- id: 248
+  name: CSFS_Public
+  tenant: TENANT1
+- id: 320
+  name: WCC_PA_PtP
+  tenant: TENANT1
+- id: 322
+  name: West_Campus_Remote_Private
+  tenant: TENANT1
+- id: 323
+  name: West_Campus_Remote_Utility
+  tenant: TENANT1
+- id: 331
+  name: CSFS_Public
+  tenant: TENANT1
+- id: 332
+  name: ARBL_Utility
+  tenant: TENANT1
+- id: 351
+  name: AIDL_Private
+  tenant: TENANT1
+- id: 352
+  name: AIDL_Utility
+  tenant: TENANT1
+- id: 375
+  name: IDA_Private
+  tenant: TENANT1
+- id: 376
+  name: IDA_Utility
+  tenant: TENANT1
+- id: 384
+  name: HHS_Aggie_Labs_Private
+  tenant: TENANT1
+- id: 386
+  name: ERL_Private
+  tenant: TENANT1
+- id: 387
+  name: CVMBS_Equine_Center_Private
+  tenant: TENANT1
+- id: 388
+  name: Equine_Center_Utility
+  tenant: TENANT1
+- id: 395
+  name: ACRC-CIRA_Utility
+  tenant: TENANT1
+- id: 397
+  name: ERC_Utility
+  tenant: TENANT1
+- id: 401
+  name: Atmos_Private
+  tenant: TENANT1
+- id: 409
+  name: ABL_Utility
+  tenant: TENANT1
+- id: 421
+  name: Aggie_Labs_Private
+  tenant: TENANT1
+- id: 422
+  name: Aggie_Labs_Utility
+  tenant: TENANT1
+- id: 426
+  name: RBL_Utility
+  tenant: TENANT1
+- id: 428
+  name: ATS_Utility
+  tenant: TENANT1
+- id: 472
+  name: SimLab_Public
+  tenant: TENANT1
+- id: 512
+  name: SimLab_Private
+  tenant: TENANT1
+- id: 513
+  name: SimLab_Utility
+  tenant: TENANT1
+- id: 525
+  name: ATS_Chem_Utility
+  tenant: TENANT1
+- id: 540
+  name: Beam_Lab_Private
+  tenant: TENANT1
+- id: 584
+  name: WCC_Public_Non_CSU
+  tenant: TENANT1
+- id: 600
+  name: WCC_ENDR_DREN_L2_link
+  tenant: TENANT1
+- id: 653
+  name: AECOM_Private
+  tenant: TENANT1
+- id: 1107
+  name: Temple_Grandin_Util
+  tenant: TENANT1
+- id: 1108
+  name: WCC_Public_Non_CSU
+  tenant: TENANT1
+- id: 1112
+  name: Engines_Lab_Priv2
+  tenant: TENANT1
+- id: 1208
+  name: ACRC-CIRA_Static_Private
+  tenant: TENANT1
+- id: 1226
+  name: CVMBS_RBL_Private
+  tenant: TENANT1
+- id: 1300
+  name: Temple_Grandin_Priv
+  tenant: TENANT1
+- id: 2326
+  name: VOIP_RIC
+  tenant: TENANT1
+- id: 2670
+  name: VOIP_ARBL
+  tenant: TENANT1
+- id: 2672
+  name: VOIP_RBL
+  tenant: TENANT1
+- id: 2676
+  name: VOIP_ERL
+  tenant: TENANT1
+- id: 2677
+  name: VOIP_Aggie_Labs
+  tenant: TENANT1
+- id: 2680
+  name: VOIP_BEAMLAB
+  tenant: TENANT1
+- id: 2684
+  name: VOIP_IDA
+  tenant: TENANT1
+- id: 2689
+  name: VOIP_CSFS
+  tenant: TENANT1
+- id: 2691
+  name: VOIP_AIDL
+  tenant: TENANT1
+- id: 2694
+  name: VOIP_AECOM
+  tenant: TENANT1
+- id: 2698
+  name: VOIP_ACRC-CIRA
+  tenant: TENANT1
+- id: 2699
+  name: VOIP_ERC
+  tenant: TENANT1
+- id: 2712
+  name: VOIP_FOOTHILLS_CATCHALL
+  tenant: TENANT1
+- id: 2716
+  name: VOIP_ATS_Main
+  tenant: TENANT1
+- id: 2717
+  name: VOIP_ATS_CMMAP
+  tenant: TENANT1
+- id: 2718
+  name: VOIP_ATS_Chem
+  tenant: TENANT1
+- id: 2719
+  name: VOIP_ATS_Annex
+  tenant: TENANT1
+- id: 2720
+  name: VOIP_SimLab
+  tenant: TENANT1
+- id: 3300
+  name: ACNS_SW-MGMT_WC
+  tenant: TENANT1
+- id: 3301
+  name: Wireless_ACRC
+  tenant: TENANT1
+- id: 3302
+  name: Wireless_ABL
+  tenant: TENANT1
+- id: 3303
+  name: Wireless_AECOM
+  tenant: TENANT1
+- id: 3304
+  name: Wireless_Aggie_Labs
+  tenant: TENANT1
+- id: 3305
+  name: Wireless_AIDL
+  tenant: TENANT1
+- id: 3306
+  name: Wireless_ARBL
+  tenant: TENANT1
+- id: 3307
+  name: Wireless_Atmospheric_Science
+  tenant: TENANT1
+- id: 3308
+  name: Wireless_CSFS
+  tenant: TENANT1
+- id: 3309
+  name: Wireless_ERC
+  tenant: TENANT1
+- id: 3310
+  name: Wireless_ERL
+  tenant: TENANT1
+- id: 3311
+  name: Wireless_IDA
+  tenant: TENANT1
+- id: 3312
+  name: Wireless_RBL
+  tenant: TENANT1
+- id: 3313
+  name: Wireless_Temple_Grandin
+  tenant: TENANT1
+- id: 3349
+  name: ACNS_UPS-MGMT_WC
+  tenant: TENANT1
+- id: 3009
+  name: MLAG_L3_VRF_campus
+  trunk_groups:
+  - MLAG
+  tenant: TENANT1
+- id: 99
+  name: Wifi
+  tenant: TENANT1
+- id: 3019
+  name: MLAG_L3_VRF_wifi
+  trunk_groups:
+  - MLAG
+  tenant: TENANT1
+- id: 168
+  name: Aruba_ctrlr_public
+  tenant: TENANT1
+- id: 313
+  name: csu-visitor
+  tenant: TENANT1
+- id: 314
+  name: IoT_Wireless
+  tenant: TENANT1
+- id: 315
+  name: NOC_Systems
+  tenant: TENANT1
+- id: 620
+  name: Heating_2_Chill
+  tenant: TENANT1
+- id: 634
+  name: Engr_Wifi
+  tenant: TENANT1
+- id: 804
+  name: Cardkey
+  tenant: TENANT1
+- id: 814
+  name: EMS
+  tenant: TENANT1
+- id: 815
+  name: IDRC_EMS
+  tenant: TENANT1
+- id: 817
+  name: GMP_EMS
+  tenant: TENANT1
+- id: 1068
+  name: Aruba_ctrlr_private
+  tenant: TENANT1
+- id: 2020
+  name: ARUBA_000
+  tenant: TENANT1
+- id: 2023
+  name: ARUBA_192
+  tenant: TENANT1
+- id: 3500
+  name: csu-net
+  tenant: TENANT1
+- id: 3714
+  name: .1x_foothills
+  tenant: TENANT1
+- id: 3785
+  name: aruba_guest
+  tenant: TENANT1
+- id: 3900
+  name: Wireless-1083_0
+  tenant: TENANT1
+- id: 3903
+  name: Wireless-1083_64
+  tenant: TENANT1
+vlan_interfaces:
+- name: Vlan4093
+  description: MLAG_L3
+  shutdown: false
+  mtu: 1500
+  ip_address: 10.255.1.115/31
+- name: Vlan4094
+  description: MLAG
+  shutdown: false
+  no_autostate: true
+  mtu: 1500
+  ip_address: 10.255.1.83/31
+- name: Vlan8
+  tenant: TENANT1
+  description: West_Campus_Remote_Public
+  shutdown: false
+  ipv6_enable: true
+  ip_address_virtual: 129.82.8.1/23
+  ipv6_address_virtuals:
+  - fec0:0:8::1/96
+  vrf: campus
+- name: Vlan26
+  tenant: TENANT1
+  description: CVMBS_RBL_Public
+  shutdown: false
+  ip_address_virtual: 129.82.26.1/23
+  vrf: campus
+- name: Vlan48
+  tenant: TENANT1
+  description: COE_ATS_Public
+  shutdown: false
+  ip_address_virtual: 129.82.48.1/24
+  vrf: campus
+- name: Vlan50
+  tenant: TENANT1
+  description: Drone_Pub
+  shutdown: false
+  ip_address_virtual: 129.82.5.193/26
+  vrf: campus
+- name: Vlan84
+  tenant: TENANT1
+  description: vendor_foothills
+  shutdown: false
+  ip_address_virtual: 129.82.84.129/26
+  vrf: campus
+- name: Vlan108
+  tenant: TENANT1
+  description: ACRC-CIRA_Public
+  shutdown: false
+  ip_address_virtual: 129.82.108.1/23
+  vrf: campus
+- name: Vlan214
+  tenant: TENANT1
+  description: CVMBS_ARBL_Public
+  shutdown: false
+  ip_address_virtual: 129.82.214.1/24
+  vrf: campus
+- name: Vlan232
+  tenant: TENANT1
+  description: ERC_Public
+  shutdown: false
+  ip_address_virtual: 129.82.232.1/23
+  vrf: campus
+- name: Vlan233
+  tenant: TENANT1
+  description: ERC_Private
+  shutdown: false
+  ip_address_virtual: 10.1.232.1/23
+  vrf: campus
+- name: Vlan248
+  tenant: TENANT1
+  description: CSFS_Public
+  shutdown: false
+  ip_address_virtual: 129.82.248.1/24
+  vrf: campus
+- name: Vlan320
+  tenant: TENANT1
+  description: WCC_PA_PtP
+  shutdown: false
+  ip_address_virtual: 129.82.1.138/29
+  vrf: campus
+- name: Vlan322
+  tenant: TENANT1
+  description: West_Campus_Remote_Private
+  shutdown: false
+  ip_address_virtual: 10.1.8.1/23
+  vrf: campus
+- name: Vlan323
+  tenant: TENANT1
+  description: West_Campus_Remote_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.8.1/23
+  vrf: campus
+- name: Vlan331
+  tenant: TENANT1
+  description: CSFS_Public
+  shutdown: false
+  ip_address_virtual: 10.1.214.1/24
+  vrf: campus
+- name: Vlan332
+  tenant: TENANT1
+  description: ARBL_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.214.1/24
+  vrf: campus
+- name: Vlan351
+  tenant: TENANT1
+  description: AIDL_Private
+  shutdown: false
+  ip_address_virtual: 10.1.178.1/24
+  vrf: campus
+- name: Vlan352
+  tenant: TENANT1
+  description: AIDL_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.178.1/24
+  vrf: campus
+- name: Vlan375
+  tenant: TENANT1
+  description: IDA_Private
+  shutdown: false
+  ip_address_virtual: 10.1.179.1/24
+  vrf: campus
+- name: Vlan376
+  tenant: TENANT1
+  description: IDA_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.179.1/24
+  vrf: campus
+- name: Vlan384
+  tenant: TENANT1
+  description: HHS_Aggie_Labs_Private
+  shutdown: false
+  ip_address_virtual: 10.3.152.1/24
+  vrf: campus
+- name: Vlan386
+  tenant: TENANT1
+  description: ERL_Private
+  shutdown: false
+  ip_address_virtual: 10.2.216.1/23
+  vrf: campus
+- name: Vlan387
+  tenant: TENANT1
+  description: CVMBS_Equine_Center_Private
+  shutdown: false
+  ip_address_virtual: 10.2.218.1/23
+  vrf: campus
+- name: Vlan388
+  tenant: TENANT1
+  description: Equine_Center_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.218.1/24
+  vrf: campus
+- name: Vlan395
+  tenant: TENANT1
+  description: ACRC-CIRA_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.108.1/24
+  vrf: campus
+- name: Vlan397
+  tenant: TENANT1
+  description: ERC_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.232.1/23
+  vrf: campus
+- name: Vlan401
+  tenant: TENANT1
+  description: Atmos_Private
+  shutdown: false
+  ip_address_virtual: 10.1.48.1/23
+  vrf: campus
+- name: Vlan409
+  tenant: TENANT1
+  description: ABL_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.228.1/24
+  vrf: campus
+- name: Vlan421
+  tenant: TENANT1
+  description: Aggie_Labs_Private
+  shutdown: false
+  ip_address_virtual: 10.2.255.1/24
+  vrf: campus
+- name: Vlan422
+  tenant: TENANT1
+  description: Aggie_Labs_Utility
+  shutdown: false
+  ip_address_virtual: 10.12.255.1/24
+  vrf: campus
+- name: Vlan426
+  tenant: TENANT1
+  description: RBL_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.26.1/23
+  vrf: campus
+- name: Vlan428
+  tenant: TENANT1
+  description: ATS_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.48.1/24
+  vrf: campus
+- name: Vlan472
+  tenant: TENANT1
+  description: SimLab_Public
+  shutdown: false
+  ip_address_virtual: 129.82.4.129/25
+  vrf: campus
+- name: Vlan512
+  tenant: TENANT1
+  description: SimLab_Private
+  shutdown: false
+  ip_address_virtual: 10.1.4.129/25
+  vrf: campus
+- name: Vlan513
+  tenant: TENANT1
+  description: SimLab_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.4.129/25
+  vrf: campus
+- name: Vlan525
+  tenant: TENANT1
+  description: ATS_Chem_Utility
+  shutdown: false
+  ip_address_virtual: 10.11.49.1/24
+  vrf: campus
+- name: Vlan540
+  tenant: TENANT1
+  description: Beam_Lab_Private
+  shutdown: false
+  ip_address_virtual: 10.1.228.1/24
+  vrf: campus
+- name: Vlan584
+  tenant: TENANT1
+  description: WCC_Public_Non_CSU
+  shutdown: false
+  ip_address_virtual: 129.82.18.129/25
+  vrf: campus
+- name: Vlan600
+  tenant: TENANT1
+  description: WCC_ENDR_DREN_L2_link
+  shutdown: false
+  ip_address_virtual: 129.82.1.72/28
+  vrf: campus
+- name: Vlan653
+  tenant: TENANT1
+  description: AECOM_Private
+  shutdown: false
+  ip_address_virtual: 10.2.228.1/24
+  vrf: campus
+- name: Vlan1107
+  tenant: TENANT1
+  description: Temple_Grandin_Util
+  shutdown: false
+  ip_address_virtual: 10.11.107.1/24
+  vrf: campus
+- name: Vlan1108
+  tenant: TENANT1
+  description: WCC_Public_Non_CSU
+  shutdown: false
+  ip_address_virtual: 10.1.108.1/23
+  vrf: campus
+- name: Vlan1112
+  tenant: TENANT1
+  description: Engines_Lab_Priv2
+  shutdown: false
+  ip_address_virtual: 10.3.106.1/24
+  vrf: campus
+- name: Vlan1208
+  tenant: TENANT1
+  description: ACRC-CIRA_Static_Private
+  shutdown: false
+  ip_address_virtual: 10.2.108.1/23
+  vrf: campus
+- name: Vlan1226
+  tenant: TENANT1
+  description: CVMBS_RBL_Private
+  shutdown: false
+  ip_address_virtual: 10.1.26.1/23
+  vrf: campus
+- name: Vlan1300
+  tenant: TENANT1
+  description: Temple_Grandin_Priv
+  shutdown: false
+  ip_address_virtual: 10.1.15.1/24
+  vrf: campus
+- name: Vlan2326
+  tenant: TENANT1
+  description: VOIP_RIC
+  shutdown: false
+  ip_address_virtual: 10.174.26.1/23
+  vrf: campus
+- name: Vlan2670
+  tenant: TENANT1
+  description: VOIP_ARBL
+  shutdown: false
+  ip_address_virtual: 10.20.138.1/23
+  vrf: campus
+- name: Vlan2672
+  tenant: TENANT1
+  description: VOIP_RBL
+  shutdown: false
+  ip_address_virtual: 10.20.142.1/23
+  vrf: campus
+- name: Vlan2676
+  tenant: TENANT1
+  description: VOIP_ERL
+  shutdown: false
+  ip_address_virtual: 10.20.150.1/23
+  vrf: campus
+- name: Vlan2677
+  tenant: TENANT1
+  description: VOIP_Aggie_Labs
+  shutdown: false
+  ip_address_virtual: 10.20.152.1/23
+  vrf: campus
+- name: Vlan2680
+  tenant: TENANT1
+  description: VOIP_BEAMLAB
+  shutdown: false
+  ip_address_virtual: 10.20.158.1/23
+  vrf: campus
+- name: Vlan2684
+  tenant: TENANT1
+  description: VOIP_IDA
+  shutdown: false
+  ip_address_virtual: 10.20.166.1/23
+  vrf: campus
+- name: Vlan2689
+  tenant: TENANT1
+  description: VOIP_CSFS
+  shutdown: false
+  ip_address_virtual: 10.20.176.1/23
+  vrf: campus
+- name: Vlan2691
+  tenant: TENANT1
+  description: VOIP_AIDL
+  shutdown: false
+  ip_address_virtual: 10.20.180.1/23
+  vrf: campus
+- name: Vlan2694
+  tenant: TENANT1
+  description: VOIP_AECOM
+  shutdown: false
+  ip_address_virtual: 10.20.186.1/23
+  vrf: campus
+- name: Vlan2698
+  tenant: TENANT1
+  description: VOIP_ACRC-CIRA
+  shutdown: false
+  ip_address_virtual: 10.20.194.1/23
+  vrf: campus
+- name: Vlan2699
+  tenant: TENANT1
+  description: VOIP_ERC
+  shutdown: false
+  ip_address_virtual: 10.20.196.1/23
+  vrf: campus
+- name: Vlan2712
+  tenant: TENANT1
+  description: VOIP_FOOTHILLS_CATCHALL
+  shutdown: false
+  ip_address_virtual: 10.20.222.1/23
+  vrf: campus
+- name: Vlan2716
+  tenant: TENANT1
+  description: VOIP_ATS_Main
+  shutdown: false
+  ip_address_virtual: 10.20.230.1/23
+  vrf: campus
+- name: Vlan2717
+  tenant: TENANT1
+  description: VOIP_ATS_CMMAP
+  shutdown: false
+  ip_address_virtual: 10.20.232.1/23
+  vrf: campus
+- name: Vlan2718
+  tenant: TENANT1
+  description: VOIP_ATS_Chem
+  shutdown: false
+  ip_address_virtual: 10.20.234.1/23
+  vrf: campus
+- name: Vlan2719
+  tenant: TENANT1
+  description: VOIP_ATS_Annex
+  shutdown: false
+  ip_address_virtual: 10.20.236.1/23
+  vrf: campus
+- name: Vlan2720
+  tenant: TENANT1
+  description: VOIP_SimLab
+  shutdown: false
+  ip_address_virtual: 10.20.238.1/23
+  vrf: campus
+- name: Vlan3300
+  tenant: TENANT1
+  description: ACNS_SW-MGMT_WC
+  shutdown: false
+  ip_address_virtual: 10.111.0.1/23
+  vrf: campus
+- name: Vlan3301
+  tenant: TENANT1
+  description: Wireless_ACRC
+  shutdown: false
+  ip_address_virtual: 10.111.108.1/24
+  vrf: campus
+- name: Vlan3302
+  tenant: TENANT1
+  description: Wireless_ABL
+  shutdown: false
+  ip_address_virtual: 10.111.228.1/24
+  vrf: campus
+- name: Vlan3303
+  tenant: TENANT1
+  description: Wireless_AECOM
+  shutdown: false
+  ip_address_virtual: 10.111.226.1/24
+  vrf: campus
+- name: Vlan3304
+  tenant: TENANT1
+  description: Wireless_Aggie_Labs
+  shutdown: false
+  ip_address_virtual: 10.111.255.1/24
+  vrf: campus
+- name: Vlan3305
+  tenant: TENANT1
+  description: Wireless_AIDL
+  shutdown: false
+  ip_address_virtual: 10.111.178.1/24
+  vrf: campus
+- name: Vlan3306
+  tenant: TENANT1
+  description: Wireless_ARBL
+  shutdown: false
+  ip_address_virtual: 10.111.214.1/24
+  vrf: campus
+- name: Vlan3307
+  tenant: TENANT1
+  description: Wireless_Atmospheric_Science
+  shutdown: false
+  ip_address_virtual: 10.111.48.1/24
+  vrf: campus
+- name: Vlan3308
+  tenant: TENANT1
+  description: Wireless_CSFS
+  shutdown: false
+  ip_address_virtual: 10.111.248.1/24
+  vrf: campus
+- name: Vlan3309
+  tenant: TENANT1
+  description: Wireless_ERC
+  shutdown: false
+  ip_address_virtual: 10.111.232.1/24
+  vrf: campus
+- name: Vlan3310
+  tenant: TENANT1
+  description: Wireless_ERL
+  shutdown: false
+  ip_address_virtual: 10.111.216.1/24
+  vrf: campus
+- name: Vlan3311
+  tenant: TENANT1
+  description: Wireless_IDA
+  shutdown: false
+  ip_address_virtual: 10.111.179.1/24
+  vrf: campus
+- name: Vlan3312
+  tenant: TENANT1
+  description: Wireless_RBL
+  shutdown: false
+  ip_address_virtual: 10.111.26.1/24
+  vrf: campus
+- name: Vlan3313
+  tenant: TENANT1
+  description: Wireless_Temple_Grandin
+  shutdown: false
+  ip_address_virtual: 10.111.227.1/24
+  vrf: campus
+- name: Vlan3349
+  tenant: TENANT1
+  description: ACNS_UPS-MGMT_WC
+  shutdown: false
+  ip_address_virtual: 10.111.2.1/23
+  vrf: campus
+- name: Vlan3009
+  tenant: TENANT1
+  type: underlay_peering
+  shutdown: false
+  description: MLAG_L3_VRF_campus
+  vrf: campus
+  mtu: 1500
+  ip_address: 10.255.1.115/31
+- name: Vlan99
+  tenant: TENANT1
+  description: Wifi
+  shutdown: false
+  ip_address_virtual: 129.82.99.1/24
+  vrf: wifi
+- name: Vlan3019
+  tenant: TENANT1
+  type: underlay_peering
+  shutdown: false
+  description: MLAG_L3_VRF_wifi
+  vrf: wifi
+  mtu: 1500
+  ip_address: 10.255.1.115/31
+port_channel_interfaces:
+- name: Port-Channel1
+  description: MLAG_borderleaf1_Port-Channel1
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      groups:
+      - MLAG
+  shutdown: false
+ethernet_interfaces:
+- name: Ethernet1
+  peer: borderleaf1
+  peer_interface: Ethernet1
+  peer_type: mlag_peer
+  description: MLAG_borderleaf1_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 1
+    mode: active
+- name: Ethernet2
+  peer: borderleaf1
+  peer_interface: Ethernet2
+  peer_type: mlag_peer
+  description: MLAG_borderleaf1_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 1
+    mode: active
+- name: Ethernet11
+  peer: Spine1
+  peer_interface: Ethernet6
+  peer_type: spine
+  description: P2P_Spine1_Ethernet6
+  shutdown: false
+  mtu: 1500
+  switchport:
+    enabled: false
+  ip_address: 10.255.255.41/31
+mlag_configuration:
+  domain_id: DC1_Borderleaf
+  local_interface: Vlan4094
+  peer_address: 10.255.1.82
+  peer_link: Port-Channel1
+  reload_delay_mlag: '300'
+  reload_delay_non_mlag: '330'
+route_maps:
+- name: RM-MLAG-PEER-IN
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    set:
+    - origin incomplete
+    description: Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
+- name: RM-CONN-2-BGP
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+- name: RM-CONN-2-BGP-VRFS
+  sequence_numbers:
+  - sequence: 10
+    type: deny
+    match:
+    - ip address prefix-list PL-MLAG-PEER-VRFS
+  - sequence: 20
+    type: permit
+loopback_interfaces:
+- name: Loopback0
+  description: ROUTER_ID
+  shutdown: false
+  ip_address: 10.255.0.13/32
+- name: Loopback1
+  description: VXLAN_TUNNEL_SOURCE
+  shutdown: false
+  ip_address: 10.255.1.12/32
+- name: Loopback10
+  description: DIAG_VRF_campus
+  shutdown: false
+  vrf: campus
+  ip_address: 10.255.10.13/32
+- name: Loopback11
+  description: DIAG_VRF_wifi
+  shutdown: false
+  vrf: wifi
+  ip_address: 10.255.11.13/32
+prefix_lists:
+- name: PL-LOOPBACKS-EVPN-OVERLAY
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.255.0.0/27 eq 32
+  - sequence: 20
+    action: permit 10.255.1.0/27 eq 32
+- name: PL-MLAG-PEER-VRFS
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.255.1.114/31
+router_bfd:
+  multihop:
+    interval: 300
+    min_rx: 300
+    multiplier: 3
+ip_igmp_snooping:
+  globally_enabled: true
+ip_virtual_router_mac_address: 00:1c:73:00:00:99
+vxlan_interface:
+  vxlan1:
+    description: borderleaf2_VTEP
+    vxlan:
+      udp_port: 4789
+      source_interface: Loopback1
+      virtual_router_encapsulation_mac_address: mlag-system-id
+      vlans:
+      - id: 8
+        vni: 10008
+      - id: 26
+        vni: 10026
+      - id: 48
+        vni: 10048
+      - id: 50
+        vni: 10050
+      - id: 84
+        vni: 10084
+      - id: 108
+        vni: 10108
+      - id: 214
+        vni: 10214
+      - id: 232
+        vni: 10232
+      - id: 233
+        vni: 10233
+      - id: 248
+        vni: 10248
+      - id: 320
+        vni: 10320
+      - id: 322
+        vni: 10322
+      - id: 323
+        vni: 10323
+      - id: 331
+        vni: 10331
+      - id: 332
+        vni: 10332
+      - id: 351
+        vni: 10351
+      - id: 352
+        vni: 10352
+      - id: 375
+        vni: 10375
+      - id: 376
+        vni: 10376
+      - id: 384
+        vni: 10384
+      - id: 386
+        vni: 10386
+      - id: 387
+        vni: 10387
+      - id: 388
+        vni: 10388
+      - id: 395
+        vni: 10395
+      - id: 397
+        vni: 10397
+      - id: 401
+        vni: 10401
+      - id: 409
+        vni: 10409
+      - id: 421
+        vni: 10421
+      - id: 422
+        vni: 10422
+      - id: 426
+        vni: 10426
+      - id: 428
+        vni: 10428
+      - id: 472
+        vni: 10472
+      - id: 512
+        vni: 10512
+      - id: 513
+        vni: 10513
+      - id: 525
+        vni: 10525
+      - id: 540
+        vni: 10540
+      - id: 584
+        vni: 10584
+      - id: 600
+        vni: 10600
+      - id: 653
+        vni: 10653
+      - id: 1107
+        vni: 11107
+      - id: 1108
+        vni: 11108
+      - id: 1112
+        vni: 11112
+      - id: 1208
+        vni: 11208
+      - id: 1226
+        vni: 11226
+      - id: 1300
+        vni: 11300
+      - id: 2326
+        vni: 12326
+      - id: 2670
+        vni: 12670
+      - id: 2672
+        vni: 12672
+      - id: 2676
+        vni: 12676
+      - id: 2677
+        vni: 12677
+      - id: 2680
+        vni: 12680
+      - id: 2684
+        vni: 12684
+      - id: 2689
+        vni: 12689
+      - id: 2691
+        vni: 12691
+      - id: 2694
+        vni: 12694
+      - id: 2698
+        vni: 12698
+      - id: 2699
+        vni: 12699
+      - id: 2712
+        vni: 12712
+      - id: 2716
+        vni: 12716
+      - id: 2717
+        vni: 12717
+      - id: 2718
+        vni: 12718
+      - id: 2719
+        vni: 12719
+      - id: 2720
+        vni: 12720
+      - id: 3300
+        vni: 13300
+      - id: 3301
+        vni: 13301
+      - id: 3302
+        vni: 13302
+      - id: 3303
+        vni: 13303
+      - id: 3304
+        vni: 13304
+      - id: 3305
+        vni: 13305
+      - id: 3306
+        vni: 13306
+      - id: 3307
+        vni: 13307
+      - id: 3308
+        vni: 13308
+      - id: 3309
+        vni: 13309
+      - id: 3310
+        vni: 13310
+      - id: 3311
+        vni: 13311
+      - id: 3312
+        vni: 13312
+      - id: 3313
+        vni: 13313
+      - id: 3349
+        vni: 13349
+      - id: 99
+        vni: 10099
+      - id: 168
+        vni: 10168
+      - id: 313
+        vni: 10313
+      - id: 314
+        vni: 10314
+      - id: 315
+        vni: 10315
+      - id: 620
+        vni: 10620
+      - id: 634
+        vni: 10634
+      - id: 804
+        vni: 10804
+      - id: 814
+        vni: 10814
+      - id: 815
+        vni: 10815
+      - id: 817
+        vni: 10817
+      - id: 1068
+        vni: 11068
+      - id: 2020
+        vni: 12020
+      - id: 2023
+        vni: 12023
+      - id: 3500
+        vni: 13500
+      - id: 3714
+        vni: 13714
+      - id: 3785
+        vni: 13785
+      - id: 3900
+        vni: 13900
+      - id: 3903
+        vni: 13903
+      vrfs:
+      - name: campus
+        vni: 10
+      - name: wifi
+        vni: 20
+virtual_source_nat_vrfs:
+- name: campus
+  ip_address: 10.255.10.13
+- name: wifi
+  ip_address: 10.255.11.13
+metadata:
+  platform: vEOS-lab
+ntp:
+  local_interface:
+    name: Management1
+    vrf: mgmt
+  servers:
+  - name: 132.163.96.3
+    vrf: mgmt
