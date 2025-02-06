@@ -25,6 +25,20 @@ tenants:
           # Loopback ip range, a unique ip is derived from this ranged and assigned- *Need to carve out IP space for each VRF*
           # to each l3 leaf based on it's unique id.
           loopback_ip_range: 10.255.10.0/27
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+        l3_interfaces:
+          - interfaces:
+            - Ethernet3
+            ip_addresses:
+              - 172.16.10.2/30
+            nodes:
+            - borderleaf1
+        bgp_peers:
+          - ip_address: 172.16.0.2
+            remote_as: 64512
+            description: BGP_To_Palo
+            nodes:
+              - borderleaf1
         svis:
           # SVI definitions.
           - id: 8
@@ -347,20 +361,47 @@ tenants:
             name: ACNS_UPS-MGMT_WC
             enabled: true
             ip_address_virtual: 10.111.2.1/23 
-#BORDERLEAF P2P connection to Palo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-        l3_interfaces:
-          - interfaces:
-            - Ethernet3
-            ip_addresses:
-              - 172.16.10.2/30
-            nodes: 
-            - borderleaf1
-        bgp_peers:
-          - ip_address: 172.16.0.2
-            remote_as: 64512
-            description: BGP_To_Palo
-            nodes:
-              - borderleaf1
+      - name: wifi
+        # VRF VNI definition.
+        vrf_vni: 20
+        # Enable VTEP Network diagnostics
+        # This will create a loopback with virtual source-nat enable to perform diagnostics from the switch.
+        vtep_diagnostic:
+          # Loopback interface number
+          loopback: 11
+          # Loopback ip range, a unique ip is derived from this ranged and assigned- *Need to carve out IP space for each VRF*
+          # to each l3 leaf based on it's unique id.
+          loopback_ip_range: 10.255.11.0/27
+        svis:
+          # SVI definitions.
+          - id: 99
+            # SVI Description
+            name: Wifi
+            enabled: true
+            # IP anycast gateway to be used in the SVI in every leaf.
+            ip_address_virtual: 129.82.99.1/24
+  
+      # - name: facilities
+      #   # VRF VNI definition.
+      #   vrf_vni: 30
+      #   # Enable VTEP Network diagnostics
+      #   # This will create a loopback with virtual source-nat enable to perform diagnostics from the switch.
+      #   vtep_diagnostic:
+      #     # Loopback interface number
+      #     loopback: 12
+      #     # Loopback ip range, a unique ip is derived from this ranged and assigned- *Need to carve out IP space for each VRF*
+      #     # to each l3 leaf based on it's unique id.
+      #     loopback_ip_range: 10.255.11.0/27
+      #   # nodes:
+      #   #   - borderleaf1
+      #   svis: 
+      #     - id: 456
+      #       name: facilities
+      #       enabled: true
+      #       # IP anycast gateway to be used in the SVI in every leaf.
+      #       ip_address_virtual: 129.82.254.1/23
+                   
+
 #BORDERLEAF P2P connection to Palo    
     l2vlans:
       # These are pure L2 vlans. They do not have a SVI defined in the l3leafs and they will be bridged inside the VXLAN fabric
