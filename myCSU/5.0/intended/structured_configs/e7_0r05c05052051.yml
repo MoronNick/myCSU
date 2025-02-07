@@ -1,0 +1,230 @@
+hostname: e7_0r05c05052051
+is_deployed: true
+static_routes:
+- vrf: mgmt
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 192.168.100.1
+service_routing_protocols_model: multi-agent
+daemon_terminattr:
+  cvaddrs:
+  - apiserver.cv-staging.corp.arista.io:443
+  cvauth:
+    method: token-secure
+    token_file: /tmp/cv-onboarding-token
+  cvvrf: mgmt
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: true
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+aaa_root:
+  disabled: true
+config_end: true
+enable_password:
+  disabled: true
+transceiver_qsfp_default_mode_4x10: true
+ip_name_servers:
+- ip_address: 8.8.8.8
+  vrf: mgmt
+spanning_tree:
+  mode: rapid-pvst
+  no_spanning_tree_vlan: '4094'
+  rapid_pvst_instances:
+  - id: 1-4094
+    priority: 32768
+local_users:
+- name: admin
+  disabled: true
+- name: nmoore
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/
+vrfs:
+- name: mgmt
+  ip_routing: true
+management_interfaces:
+- name: Management1
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: mgmt
+  ip_address: 192.168.100.206/24
+  gateway: 192.168.100.1
+  type: oob
+management_api_http:
+  enable_vrfs:
+  - name: mgmt
+  enable_https: true
+vlans:
+- id: 4094
+  tenant: system
+  name: MLAG
+  trunk_groups:
+  - MLAG
+- id: 553
+  name: Windows_Unix_MGMT
+  tenant: default
+- id: 592
+  name: Security_Cameras
+  tenant: default
+- id: 1000
+  name: san_0
+  tenant: default
+- id: 1001
+  name: san_1
+  tenant: default
+vlan_interfaces:
+- name: Vlan4094
+  description: MLAG
+  shutdown: false
+  no_autostate: true
+  mtu: 9214
+  ip_address: 192.168.0.0/31
+port_channel_interfaces:
+- name: Port-Channel12
+  description: MLAG_e7_0r05c05052052_Port-Channel12
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      groups:
+      - MLAG
+  shutdown: false
+- name: Port-Channel461
+  description: level1_spine_int
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: trunk
+  mlag: 461
+ethernet_interfaces:
+- name: Ethernet12
+  peer: e7_0r05c05052052
+  peer_interface: Ethernet12
+  peer_type: mlag_peer
+  description: MLAG_e7_0r05c05052052_Ethernet12
+  shutdown: false
+  channel_group:
+    id: 12
+    mode: active
+- name: Ethernet1
+  peer_type: network_port
+  description: Po461_
+  shutdown: false
+  channel_group:
+    id: 461
+    mode: active
+- name: Ethernet2
+  peer: UNIX_R5C7U1-2_CAMSYSPIVOT1
+  peer_interface: San0
+  peer_type: server
+  description: SERVER_UNIX_R5C7U1-2_CAMSYSPIVOT1_San0
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: '1000'
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet3
+  peer: UNIX_R5C7U1-2_CAMSYSPIVOT1
+  peer_interface: App0
+  peer_type: server
+  description: SERVER_UNIX_R5C7U1-2_CAMSYSPIVOT1_App0
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: '592'
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet4
+  peer: UNIX_R5C7U3-4_CAMSYSPIVOT2
+  peer_interface: MGMT0
+  peer_type: server
+  description: SERVER_UNIX_R5C7U3-4_CAMSYSPIVOT2_MGMT0
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: '553'
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet5
+  peer: UNIX_R5C7U3-4_CAMSYSPIVOT2
+  peer_interface: San0
+  peer_type: server
+  description: SERVER_UNIX_R5C7U3-4_CAMSYSPIVOT2_San0
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: '1000'
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet6
+  peer: UNIX_R5C7U3-4_CAMSYSPIVOT2
+  peer_interface: App0
+  peer_type: server
+  description: SERVER_UNIX_R5C7U3-4_CAMSYSPIVOT2_App0
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: '592'
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet7
+  peer: UNIX_R5C7U4-5_CAMSYSPIVOT3
+  peer_interface: MGMT0
+  peer_type: server
+  description: SERVER_UNIX_R5C7U4-5_CAMSYSPIVOT3_MGMT0
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: '553'
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet8
+  peer: UNIX_R5C7U4-5_CAMSYSPIVOT3
+  peer_interface: San0
+  peer_type: server
+  description: SERVER_UNIX_R5C7U4-5_CAMSYSPIVOT3_San0
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: '1000'
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet9
+  peer: UNIX_R5C7U4-5_CAMSYSPIVOT3
+  peer_interface: App0
+  peer_type: server
+  description: SERVER_UNIX_R5C7U4-5_CAMSYSPIVOT3_App0
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: '592'
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+mlag_configuration:
+  domain_id: MLAG
+  local_interface: Vlan4094
+  peer_address: 192.168.0.1
+  peer_link: Port-Channel12
+  reload_delay_mlag: '300'
+  reload_delay_non_mlag: '330'
+ip_igmp_snooping:
+  globally_enabled: true
+ntp:
+  local_interface:
+    name: Management1
+    vrf: mgmt
+  servers:
+  - name: 132.163.96.3
+    vrf: mgmt
