@@ -14,6 +14,7 @@ tenants:
 
             # IPv4_address.
             gateway: 192.168.3.1
+#VRF CAMPUS with VLANs and SVIs that ar
       - name: campus
         # VRF VNI definition.
         vrf_vni: 10
@@ -25,20 +26,36 @@ tenants:
           # Loopback ip range, a unique ip is derived from this ranged and assigned- *Need to carve out IP space for each VRF*
           # to each l3 leaf based on it's unique id.
           loopback_ip_range: 10.255.10.0/27
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+
+ #########################################################         
+ #WIP for borderleaf to Palo configuration                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
         l3_interfaces:
           - interfaces:
             - Ethernet3
+            - Ethernet3
             ip_addresses:
               - 172.16.10.2/30
+              - 172.16.20.2/30
             nodes:
             - borderleaf1
+            - borderleaf2
         bgp_peers:
-          - ip_address: 172.16.0.2
+          - ip_address: 172.16.10.1
             remote_as: 64512
             description: BGP_To_Palo
+            route_map_in: test_in
+            route_map_out: test_out        
             nodes:
               - borderleaf1
+          - ip_address: 172.16.20.1
+            remote_as: 64512
+            description: BGP_To_Palo
+            route_map_in: test_in
+            route_map_out: test_out           
+            nodes:
+              - borderleaf2
+################################################
         svis:
           # SVI definitions.
           - id: 8
@@ -361,6 +378,7 @@ tenants:
             name: ACNS_UPS-MGMT_WC
             enabled: true
             ip_address_virtual: 10.111.2.1/23 
+##### ADDING WIFI VRF  ###################            
       - name: wifi
         # VRF VNI definition.
         vrf_vni: 20
@@ -380,7 +398,8 @@ tenants:
             enabled: true
             # IP anycast gateway to be used in the SVI in every leaf.
             ip_address_virtual: 129.82.99.1/24
-  
+
+###COMMENTED OUT POSSIBLE FACILITES VRF  
       # - name: facilities
       #   # VRF VNI definition.
       #   vrf_vni: 30
@@ -400,9 +419,8 @@ tenants:
       #       enabled: true
       #       # IP anycast gateway to be used in the SVI in every leaf.
       #       ip_address_virtual: 129.82.254.1/23
-                   
 
-#BORDERLEAF P2P connection to Palo    
+
     l2vlans:
       # These are pure L2 vlans. They do not have a SVI defined in the l3leafs and they will be bridged inside the VXLAN fabric
       - id: 168
