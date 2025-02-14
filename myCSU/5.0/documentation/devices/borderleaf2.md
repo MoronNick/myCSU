@@ -45,6 +45,8 @@
   - [Router BFD](#router-bfd)
 - [Multicast](#multicast)
   - [IP IGMP Snooping](#ip-igmp-snooping)
+  - [Router Multicast](#router-multicast)
+  - [PIM Sparse Mode](#pim-sparse-mode)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
   - [Route-maps](#route-maps)
@@ -798,6 +800,7 @@ vlan 4094
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
+| Ethernet3 | - | - | 172.16.20.2/30 | campus | - | False | - | - |
 | Ethernet11 | P2P_Spine1_Ethernet6 | - | 10.255.255.41/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
@@ -814,12 +817,19 @@ interface Ethernet2
    no shutdown
    channel-group 1 mode active
 !
+interface Ethernet3
+   no shutdown
+   no switchport
+   vrf campus
+   ip address 172.16.20.2/30
+!
 interface Ethernet11
    description P2P_Spine1_Ethernet6
    no shutdown
    mtu 1500
    no switchport
    ip address 10.255.255.41/31
+   pim ipv4 sparse-mode
 ```
 
 ### Port-Channel Interfaces
@@ -1086,6 +1096,8 @@ interface Vlan8
    no shutdown
    vrf campus
    ipv6 enable
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.8.1/23
    ipv6 address virtual fec0:0:8::1/96
 !
@@ -1093,378 +1105,504 @@ interface Vlan26
    description CVMBS_RBL_Public
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.26.1/23
 !
 interface Vlan48
    description COE_ATS_Public
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.48.1/24
 !
 interface Vlan50
    description Drone_Pub
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.5.193/26
 !
 interface Vlan84
    description vendor_foothills
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.84.129/26
 !
 interface Vlan99
    description Wifi
    no shutdown
    vrf wifi
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback11
    ip address virtual 129.82.99.1/24
 !
 interface Vlan108
    description ACRC-CIRA_Public
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.108.1/23
 !
 interface Vlan214
    description CVMBS_ARBL_Public
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.214.1/24
 !
 interface Vlan232
    description ERC_Public
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.232.1/23
 !
 interface Vlan233
    description ERC_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.1.232.1/23
 !
 interface Vlan248
    description CSFS_Public
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.248.1/24
 !
 interface Vlan320
    description WCC_PA_PtP
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.1.138/29
 !
 interface Vlan322
    description West_Campus_Remote_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.1.8.1/23
 !
 interface Vlan323
    description West_Campus_Remote_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.8.1/23
 !
 interface Vlan331
    description CSFS_Public
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.1.214.1/24
 !
 interface Vlan332
    description ARBL_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.214.1/24
 !
 interface Vlan351
    description AIDL_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.1.178.1/24
 !
 interface Vlan352
    description AIDL_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.178.1/24
 !
 interface Vlan375
    description IDA_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.1.179.1/24
 !
 interface Vlan376
    description IDA_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.179.1/24
 !
 interface Vlan384
    description HHS_Aggie_Labs_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.3.152.1/24
 !
 interface Vlan386
    description ERL_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.2.216.1/23
 !
 interface Vlan387
    description CVMBS_Equine_Center_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.2.218.1/23
 !
 interface Vlan388
    description Equine_Center_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.218.1/24
 !
 interface Vlan395
    description ACRC-CIRA_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.108.1/24
 !
 interface Vlan397
    description ERC_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.232.1/23
 !
 interface Vlan401
    description Atmos_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.1.48.1/23
 !
 interface Vlan409
    description ABL_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.228.1/24
 !
 interface Vlan421
    description Aggie_Labs_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.2.255.1/24
 !
 interface Vlan422
    description Aggie_Labs_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.12.255.1/24
 !
 interface Vlan426
    description RBL_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.26.1/23
 !
 interface Vlan428
    description ATS_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.48.1/24
 !
 interface Vlan472
    description SimLab_Public
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.4.129/25
 !
 interface Vlan512
    description SimLab_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.1.4.129/25
 !
 interface Vlan513
    description SimLab_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.4.129/25
 !
 interface Vlan525
    description ATS_Chem_Utility
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.49.1/24
 !
 interface Vlan540
    description Beam_Lab_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.1.228.1/24
 !
 interface Vlan584
    description WCC_Public_Non_CSU
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.18.129/25
 !
 interface Vlan600
    description WCC_ENDR_DREN_L2_link
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 129.82.1.72/28
 !
 interface Vlan653
    description AECOM_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.2.228.1/24
 !
 interface Vlan1107
    description Temple_Grandin_Util
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.11.107.1/24
 !
 interface Vlan1108
    description WCC_Public_Non_CSU
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.1.108.1/23
 !
 interface Vlan1112
    description Engines_Lab_Priv2
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.3.106.1/24
 !
 interface Vlan1208
    description ACRC-CIRA_Static_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.2.108.1/23
 !
 interface Vlan1226
    description CVMBS_RBL_Private
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.1.26.1/23
 !
 interface Vlan1300
    description Temple_Grandin_Priv
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.1.15.1/24
 !
 interface Vlan2326
    description VOIP_RIC
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.174.26.1/23
 !
 interface Vlan2670
    description VOIP_ARBL
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.138.1/23
 !
 interface Vlan2672
    description VOIP_RBL
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.142.1/23
 !
 interface Vlan2676
    description VOIP_ERL
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.150.1/23
 !
 interface Vlan2677
    description VOIP_Aggie_Labs
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.152.1/23
 !
 interface Vlan2680
    description VOIP_BEAMLAB
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.158.1/23
 !
 interface Vlan2684
    description VOIP_IDA
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.166.1/23
 !
 interface Vlan2689
    description VOIP_CSFS
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.176.1/23
 !
 interface Vlan2691
    description VOIP_AIDL
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.180.1/23
 !
 interface Vlan2694
    description VOIP_AECOM
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.186.1/23
 !
 interface Vlan2698
    description VOIP_ACRC-CIRA
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.194.1/23
 !
 interface Vlan2699
    description VOIP_ERC
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.196.1/23
 !
 interface Vlan2712
    description VOIP_FOOTHILLS_CATCHALL
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.222.1/23
 !
 interface Vlan2716
    description VOIP_ATS_Main
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.230.1/23
 !
 interface Vlan2717
    description VOIP_ATS_CMMAP
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.232.1/23
 !
 interface Vlan2718
    description VOIP_ATS_Chem
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.234.1/23
 !
 interface Vlan2719
    description VOIP_ATS_Annex
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.236.1/23
 !
 interface Vlan2720
    description VOIP_SimLab
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.20.238.1/23
 !
 interface Vlan3009
@@ -1485,90 +1623,120 @@ interface Vlan3300
    description ACNS_SW-MGMT_WC
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.0.1/23
 !
 interface Vlan3301
    description Wireless_ACRC
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.108.1/24
 !
 interface Vlan3302
    description Wireless_ABL
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.228.1/24
 !
 interface Vlan3303
    description Wireless_AECOM
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.226.1/24
 !
 interface Vlan3304
    description Wireless_Aggie_Labs
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.255.1/24
 !
 interface Vlan3305
    description Wireless_AIDL
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.178.1/24
 !
 interface Vlan3306
    description Wireless_ARBL
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.214.1/24
 !
 interface Vlan3307
    description Wireless_Atmospheric_Science
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.48.1/24
 !
 interface Vlan3308
    description Wireless_CSFS
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.248.1/24
 !
 interface Vlan3309
    description Wireless_ERC
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.232.1/24
 !
 interface Vlan3310
    description Wireless_ERL
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.216.1/24
 !
 interface Vlan3311
    description Wireless_IDA
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.179.1/24
 !
 interface Vlan3312
    description Wireless_RBL
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.26.1/24
 !
 interface Vlan3313
    description Wireless_Temple_Grandin
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.227.1/24
 !
 interface Vlan3349
    description ACNS_UPS-MGMT_WC
    no shutdown
    vrf campus
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback10
    ip address virtual 10.111.2.1/23
 !
 interface Vlan4093
@@ -1576,6 +1744,7 @@ interface Vlan4093
    no shutdown
    mtu 1500
    ip address 10.255.1.115/31
+   pim ipv4 sparse-mode
 !
 interface Vlan4094
    description MLAG
@@ -1591,7 +1760,8 @@ interface Vlan4094
 
 | Setting | Value |
 | ------- | ----- |
-| Source Interface | Loopback1 |
+| Source Interface | Loopback0 |
+| MLAG Source Interface | Loopback1 |
 | UDP port | 4789 |
 | EVPN MLAG Shared Router MAC | mlag-system-id |
 
@@ -1701,8 +1871,8 @@ interface Vlan4094
 
 | VRF | VNI | Multicast Group |
 | ---- | --- | --------------- |
-| campus | 10 | - |
-| wifi | 20 | - |
+| campus | 10 | 239.0.0.0/20 |
+| wifi | 20 | 239.0.0.19 |
 
 #### VXLAN Interface Device Configuration
 
@@ -1710,7 +1880,7 @@ interface Vlan4094
 !
 interface Vxlan1
    description borderleaf2_VTEP
-   vxlan source-interface Loopback1
+   vxlan source-interface Loopback0
    vxlan virtual-router encapsulation mac-address mlag-system-id
    vxlan udp-port 4789
    vxlan vlan 8 vni 10008
@@ -1812,6 +1982,9 @@ interface Vxlan1
    vxlan vlan 3903 vni 13903
    vxlan vrf campus vni 10
    vxlan vrf wifi vni 20
+   vxlan mlag source-interface Loopback1
+   vxlan vrf campus multicast group 239.0.0.0/20
+   vxlan vrf wifi multicast group 239.0.0.19
 ```
 
 ## Routing
@@ -1940,6 +2113,7 @@ ASN Notation: asplain
 | 10.255.1.114 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | default | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
 | 10.255.255.40 | 65100 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.255.1.114 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | campus | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
+| 172.16.20.1 | 64512 | campus | - | - | - | - | - | - | - | - | - |
 | 10.255.1.114 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | wifi | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
 
 #### Router BGP EVPN Address Family
@@ -2054,10 +2228,10 @@ ASN Notation: asplain
 
 #### Router BGP VRFs
 
-| VRF | Route-Distinguisher | Redistribute |
-| --- | ------------------- | ------------ |
-| campus | 10.255.0.13:10 | connected |
-| wifi | 10.255.0.13:20 | connected |
+| VRF | Route-Distinguisher | Redistribute | EVPN Multicast |
+| --- | ------------------- | ------------ | -------------- |
+| campus | 10.255.0.13:10 | connected | IPv4: True<br>Transit: False |
+| wifi | 10.255.0.13:20 | connected | IPv4: True<br>Transit: False |
 
 #### Router BGP Device Configuration
 
@@ -2599,7 +2773,15 @@ router bgp 65103
       router-id 10.255.0.13
       neighbor 10.255.1.114 peer group MLAG-IPv4-UNDERLAY-PEER
       neighbor 10.255.1.114 description borderleaf1_Vlan3009
+      neighbor 172.16.20.1 remote-as 64512
+      neighbor 172.16.20.1 description BGP_To_Palo
+      neighbor 172.16.20.1 route-map test_in in
+      neighbor 172.16.20.1 route-map test_out out
       redistribute connected route-map RM-CONN-2-BGP-VRFS
+      !
+      address-family ipv4
+         neighbor 172.16.20.1 activate
+      evpn multicast
    !
    vrf wifi
       rd 10.255.0.13:20
@@ -2609,6 +2791,7 @@ router bgp 65103
       neighbor 10.255.1.114 peer group MLAG-IPv4-UNDERLAY-PEER
       neighbor 10.255.1.114 description borderleaf1_Vlan3019
       redistribute connected route-map RM-CONN-2-BGP-VRFS
+      evpn multicast
 ```
 
 ## BFD
@@ -2643,6 +2826,126 @@ router bfd
 
 ```eos
 ```
+
+### Router Multicast
+
+#### IP Router Multicast Summary
+
+- Routing for IPv4 multicast is enabled.
+- Software forwarding by the Software Forwarding Engine (SFE)
+
+#### IP Router Multicast VRFs
+
+| VRF Name | Multicast Routing |
+| -------- | ----------------- |
+| campus | enabled |
+| wifi | enabled |
+
+#### Router Multicast Device Configuration
+
+```eos
+!
+router multicast
+   ipv4
+      routing
+      software-forwarding sfe
+   !
+   vrf campus
+      ipv4
+         routing
+   !
+   vrf wifi
+      ipv4
+         routing
+```
+
+### PIM Sparse Mode
+
+#### PIM Sparse Mode Enabled Interfaces
+
+| Interface Name | VRF Name | IP Version | Border Router | DR Priority | Local Interface |
+| -------------- | -------- | ---------- | ------------- | ----------- | --------------- |
+| Ethernet11 | - | IPv4 | - | - | - |
+| Vlan8 | campus | IPv4 | - | - | Loopback10 |
+| Vlan26 | campus | IPv4 | - | - | Loopback10 |
+| Vlan48 | campus | IPv4 | - | - | Loopback10 |
+| Vlan50 | campus | IPv4 | - | - | Loopback10 |
+| Vlan84 | campus | IPv4 | - | - | Loopback10 |
+| Vlan99 | wifi | IPv4 | - | - | Loopback11 |
+| Vlan108 | campus | IPv4 | - | - | Loopback10 |
+| Vlan214 | campus | IPv4 | - | - | Loopback10 |
+| Vlan232 | campus | IPv4 | - | - | Loopback10 |
+| Vlan233 | campus | IPv4 | - | - | Loopback10 |
+| Vlan248 | campus | IPv4 | - | - | Loopback10 |
+| Vlan320 | campus | IPv4 | - | - | Loopback10 |
+| Vlan322 | campus | IPv4 | - | - | Loopback10 |
+| Vlan323 | campus | IPv4 | - | - | Loopback10 |
+| Vlan331 | campus | IPv4 | - | - | Loopback10 |
+| Vlan332 | campus | IPv4 | - | - | Loopback10 |
+| Vlan351 | campus | IPv4 | - | - | Loopback10 |
+| Vlan352 | campus | IPv4 | - | - | Loopback10 |
+| Vlan375 | campus | IPv4 | - | - | Loopback10 |
+| Vlan376 | campus | IPv4 | - | - | Loopback10 |
+| Vlan384 | campus | IPv4 | - | - | Loopback10 |
+| Vlan386 | campus | IPv4 | - | - | Loopback10 |
+| Vlan387 | campus | IPv4 | - | - | Loopback10 |
+| Vlan388 | campus | IPv4 | - | - | Loopback10 |
+| Vlan395 | campus | IPv4 | - | - | Loopback10 |
+| Vlan397 | campus | IPv4 | - | - | Loopback10 |
+| Vlan401 | campus | IPv4 | - | - | Loopback10 |
+| Vlan409 | campus | IPv4 | - | - | Loopback10 |
+| Vlan421 | campus | IPv4 | - | - | Loopback10 |
+| Vlan422 | campus | IPv4 | - | - | Loopback10 |
+| Vlan426 | campus | IPv4 | - | - | Loopback10 |
+| Vlan428 | campus | IPv4 | - | - | Loopback10 |
+| Vlan472 | campus | IPv4 | - | - | Loopback10 |
+| Vlan512 | campus | IPv4 | - | - | Loopback10 |
+| Vlan513 | campus | IPv4 | - | - | Loopback10 |
+| Vlan525 | campus | IPv4 | - | - | Loopback10 |
+| Vlan540 | campus | IPv4 | - | - | Loopback10 |
+| Vlan584 | campus | IPv4 | - | - | Loopback10 |
+| Vlan600 | campus | IPv4 | - | - | Loopback10 |
+| Vlan653 | campus | IPv4 | - | - | Loopback10 |
+| Vlan1107 | campus | IPv4 | - | - | Loopback10 |
+| Vlan1108 | campus | IPv4 | - | - | Loopback10 |
+| Vlan1112 | campus | IPv4 | - | - | Loopback10 |
+| Vlan1208 | campus | IPv4 | - | - | Loopback10 |
+| Vlan1226 | campus | IPv4 | - | - | Loopback10 |
+| Vlan1300 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2326 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2670 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2672 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2676 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2677 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2680 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2684 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2689 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2691 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2694 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2698 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2699 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2712 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2716 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2717 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2718 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2719 | campus | IPv4 | - | - | Loopback10 |
+| Vlan2720 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3300 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3301 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3302 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3303 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3304 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3305 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3306 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3307 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3308 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3309 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3310 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3311 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3312 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3313 | campus | IPv4 | - | - | Loopback10 |
+| Vlan3349 | campus | IPv4 | - | - | Loopback10 |
+| Vlan4093 | - | IPv4 | - | - | - |
 
 ## Filters
 

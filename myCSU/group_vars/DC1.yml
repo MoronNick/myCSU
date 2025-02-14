@@ -105,9 +105,10 @@ l3leaf:
           mgmt_ip: 192.168.100.204/24
           uplink_switch_interfaces:
             - Ethernet5
+            - Ethernet5
           uplink_interfaces:
-            - Ethernet11
-            - Ethernet12
+            - Ethernet9
+            - Ethernet20
           mlag_interfaces: 
             - Ethernet1
             - Ethernet2

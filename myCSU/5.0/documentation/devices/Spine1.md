@@ -33,6 +33,9 @@
   - [Router BGP](#router-bgp)
 - [BFD](#bfd)
   - [Router BFD](#router-bfd)
+- [Multicast](#multicast)
+  - [Router Multicast](#router-multicast)
+  - [PIM Sparse Mode](#pim-sparse-mode)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
   - [Route-maps](#route-maps)
@@ -330,7 +333,7 @@ vlan internal order ascending range 1006 1199
 | Ethernet2 | P2P_WCC2_Ethernet7 | - | 10.255.255.4/31 | default | 1500 | False | - | - |
 | Ethernet3 | P2P_SCC1_Ethernet7 | - | 10.255.255.8/31 | default | 1500 | False | - | - |
 | Ethernet4 | P2P_SCC2_Ethernet7 | - | 10.255.255.12/31 | default | 1500 | False | - | - |
-| Ethernet5 | P2P_borderleaf1_Ethernet11 | - | 10.255.255.36/31 | default | 1500 | False | - | - |
+| Ethernet5 | P2P_borderleaf1_Ethernet9 | - | 10.255.255.36/31 | default | 1500 | False | - | - |
 | Ethernet6 | P2P_borderleaf2_Ethernet11 | - | 10.255.255.40/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
@@ -343,6 +346,7 @@ interface Ethernet1
    mtu 1500
    no switchport
    ip address 10.255.255.0/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet2
    description P2P_WCC2_Ethernet7
@@ -350,6 +354,7 @@ interface Ethernet2
    mtu 1500
    no switchport
    ip address 10.255.255.4/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet3
    description P2P_SCC1_Ethernet7
@@ -357,6 +362,7 @@ interface Ethernet3
    mtu 1500
    no switchport
    ip address 10.255.255.8/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet4
    description P2P_SCC2_Ethernet7
@@ -364,13 +370,15 @@ interface Ethernet4
    mtu 1500
    no switchport
    ip address 10.255.255.12/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet5
-   description P2P_borderleaf1_Ethernet11
+   description P2P_borderleaf1_Ethernet9
    no shutdown
    mtu 1500
    no switchport
    ip address 10.255.255.36/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet6
    description P2P_borderleaf2_Ethernet11
@@ -378,6 +386,7 @@ interface Ethernet6
    mtu 1500
    no switchport
    ip address 10.255.255.40/31
+   pim ipv4 sparse-mode
 ```
 
 ### Loopback Interfaces
@@ -574,7 +583,7 @@ router bgp 65100
    neighbor 10.255.255.13 description SCC2_Ethernet7
    neighbor 10.255.255.37 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.255.255.37 remote-as 65103
-   neighbor 10.255.255.37 description borderleaf1_Ethernet11
+   neighbor 10.255.255.37 description borderleaf1_Ethernet9
    neighbor 10.255.255.41 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.255.255.41 remote-as 65103
    neighbor 10.255.255.41 description borderleaf2_Ethernet11
@@ -605,6 +614,36 @@ router bgp 65100
 router bfd
    multihop interval 300 min-rx 300 multiplier 3
 ```
+
+## Multicast
+
+### Router Multicast
+
+#### IP Router Multicast Summary
+
+- Routing for IPv4 multicast is enabled.
+
+#### Router Multicast Device Configuration
+
+```eos
+!
+router multicast
+   ipv4
+      routing
+```
+
+### PIM Sparse Mode
+
+#### PIM Sparse Mode Enabled Interfaces
+
+| Interface Name | VRF Name | IP Version | Border Router | DR Priority | Local Interface |
+| -------------- | -------- | ---------- | ------------- | ----------- | --------------- |
+| Ethernet1 | - | IPv4 | - | - | - |
+| Ethernet2 | - | IPv4 | - | - | - |
+| Ethernet3 | - | IPv4 | - | - | - |
+| Ethernet4 | - | IPv4 | - | - | - |
+| Ethernet5 | - | IPv4 | - | - | - |
+| Ethernet6 | - | IPv4 | - | - | - |
 
 ## Filters
 

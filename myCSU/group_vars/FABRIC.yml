@@ -2,6 +2,8 @@
 # Define underlay and overlay routing protocol to be used
 underlay_routing_protocol: ebgp
 overlay_routing_protocol: ebgp
+underlay_multicast: true
+evpn_multicast: true
 
 custom_structured_configuration_local_users:
   # Define a new user, which is called "ansible"

@@ -33,6 +33,9 @@
   - [Router BGP](#router-bgp)
 - [BFD](#bfd)
   - [Router BFD](#router-bfd)
+- [Multicast](#multicast)
+  - [Router Multicast](#router-multicast)
+  - [PIM Sparse Mode](#pim-sparse-mode)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
   - [Route-maps](#route-maps)
@@ -330,6 +333,7 @@ vlan internal order ascending range 1006 1199
 | Ethernet2 | P2P_WCC2_Ethernet8 | - | 10.255.255.6/31 | default | 1500 | False | - | - |
 | Ethernet3 | P2P_SCC1_Ethernet8 | - | 10.255.255.10/31 | default | 1500 | False | - | - |
 | Ethernet4 | P2P_SCC2_Ethernet8 | - | 10.255.255.14/31 | default | 1500 | False | - | - |
+| Ethernet5 | P2P_borderleaf1_Ethernet20 | - | 10.255.255.38/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -341,6 +345,7 @@ interface Ethernet1
    mtu 1500
    no switchport
    ip address 10.255.255.2/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet2
    description P2P_WCC2_Ethernet8
@@ -348,6 +353,7 @@ interface Ethernet2
    mtu 1500
    no switchport
    ip address 10.255.255.6/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet3
    description P2P_SCC1_Ethernet8
@@ -355,6 +361,7 @@ interface Ethernet3
    mtu 1500
    no switchport
    ip address 10.255.255.10/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet4
    description P2P_SCC2_Ethernet8
@@ -362,6 +369,15 @@ interface Ethernet4
    mtu 1500
    no switchport
    ip address 10.255.255.14/31
+   pim ipv4 sparse-mode
+!
+interface Ethernet5
+   description P2P_borderleaf1_Ethernet20
+   no shutdown
+   mtu 1500
+   no switchport
+   ip address 10.255.255.38/31
+   pim ipv4 sparse-mode
 ```
 
 ### Loopback Interfaces
@@ -494,6 +510,7 @@ ASN Notation: asplain
 | 10.255.255.7 | 65101 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.255.255.11 | 65102 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.255.255.15 | 65102 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
+| 10.255.255.39 | 65103 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 
 #### Router BGP EVPN Address Family
 
@@ -554,6 +571,9 @@ router bgp 65100
    neighbor 10.255.255.15 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.255.255.15 remote-as 65102
    neighbor 10.255.255.15 description SCC2_Ethernet8
+   neighbor 10.255.255.39 peer group IPv4-UNDERLAY-PEERS
+   neighbor 10.255.255.39 remote-as 65103
+   neighbor 10.255.255.39 description borderleaf1_Ethernet20
    redistribute connected route-map RM-CONN-2-BGP
    !
    address-family evpn
@@ -581,6 +601,35 @@ router bgp 65100
 router bfd
    multihop interval 300 min-rx 300 multiplier 3
 ```
+
+## Multicast
+
+### Router Multicast
+
+#### IP Router Multicast Summary
+
+- Routing for IPv4 multicast is enabled.
+
+#### Router Multicast Device Configuration
+
+```eos
+!
+router multicast
+   ipv4
+      routing
+```
+
+### PIM Sparse Mode
+
+#### PIM Sparse Mode Enabled Interfaces
+
+| Interface Name | VRF Name | IP Version | Border Router | DR Priority | Local Interface |
+| -------------- | -------- | ---------- | ------------- | ----------- | --------------- |
+| Ethernet1 | - | IPv4 | - | - | - |
+| Ethernet2 | - | IPv4 | - | - | - |
+| Ethernet3 | - | IPv4 | - | - | - |
+| Ethernet4 | - | IPv4 | - | - | - |
+| Ethernet5 | - | IPv4 | - | - | - |
 
 ## Filters
 

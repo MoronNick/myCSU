@@ -41,7 +41,8 @@
 | ---- | ---- | -------------- | --------- | ----------| -------------- |
 | l3leaf | borderleaf1 | Ethernet1 | mlag_peer | borderleaf2 | Ethernet1 |
 | l3leaf | borderleaf1 | Ethernet2 | mlag_peer | borderleaf2 | Ethernet2 |
-| l3leaf | borderleaf1 | Ethernet11 | spine | Spine1 | Ethernet5 |
+| l3leaf | borderleaf1 | Ethernet9 | spine | Spine1 | Ethernet5 |
+| l3leaf | borderleaf1 | Ethernet20 | spine | Spine2 | Ethernet5 |
 | l3leaf | borderleaf2 | Ethernet11 | spine | Spine1 | Ethernet6 |
 | l2leaf | e7_0r05c05052051 | Ethernet12 | mlag_peer | e7_0r05c05052052 | Ethernet12 |
 | l3leaf | SCC1 | Ethernet7 | spine | Spine1 | Ethernet3 |
@@ -63,13 +64,14 @@
 
 | Uplink IPv4 Pool | Available Addresses | Assigned addresses | Assigned Address % |
 | ---------------- | ------------------- | ------------------ | ------------------ |
-| 10.255.255.0/26 | 64 | 20 | 31.25 % |
+| 10.255.255.0/26 | 64 | 22 | 34.38 % |
 
 ### Point-To-Point Links Node Allocation
 
 | Node | Node Interface | Node IP Address | Peer Node | Peer Interface | Peer IP Address |
 | ---- | -------------- | --------------- | --------- | -------------- | --------------- |
-| borderleaf1 | Ethernet11 | 10.255.255.37/31 | Spine1 | Ethernet5 | 10.255.255.36/31 |
+| borderleaf1 | Ethernet9 | 10.255.255.37/31 | Spine1 | Ethernet5 | 10.255.255.36/31 |
+| borderleaf1 | Ethernet20 | 10.255.255.39/31 | Spine2 | Ethernet5 | 10.255.255.38/31 |
 | borderleaf2 | Ethernet11 | 10.255.255.41/31 | Spine1 | Ethernet6 | 10.255.255.40/31 |
 | SCC1 | Ethernet7 | 10.255.255.9/31 | Spine1 | Ethernet3 | 10.255.255.8/31 |
 | SCC1 | Ethernet8 | 10.255.255.11/31 | Spine2 | Ethernet3 | 10.255.255.10/31 |

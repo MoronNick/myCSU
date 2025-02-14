@@ -85,6 +85,7 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - '10:10'
+    evpn_multicast: true
     router_id: 10.255.0.5
     redistribute:
       connected:
@@ -105,6 +106,7 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - '20:20'
+    evpn_multicast: true
     router_id: 10.255.0.5
     redistribute:
       connected:
@@ -897,6 +899,17 @@ static_routes:
   gateway: 192.168.100.1
 service_routing_protocols_model: multi-agent
 ip_routing: true
+router_multicast:
+  ipv4:
+    routing: true
+    software_forwarding: sfe
+  vrfs:
+  - name: campus
+    ipv4:
+      routing: true
+  - name: wifi
+    ipv4:
+      routing: true
 daemon_terminattr:
   cvaddrs:
   - apiserver.cv-staging.corp.arista.io:443
@@ -1274,6 +1287,9 @@ vlan_interfaces:
   shutdown: false
   mtu: 1500
   ip_address: 10.255.1.100/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Vlan4094
   description: MLAG
   shutdown: false
@@ -1286,6 +1302,10 @@ vlan_interfaces:
   shutdown: false
   ipv6_enable: true
   ip_address_virtual: 129.82.8.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   ipv6_address_virtuals:
   - fec0:0:8::1/96
   vrf: campus
@@ -1294,462 +1314,770 @@ vlan_interfaces:
   description: CVMBS_RBL_Public
   shutdown: false
   ip_address_virtual: 129.82.26.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan48
   tenant: TENANT1
   description: COE_ATS_Public
   shutdown: false
   ip_address_virtual: 129.82.48.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan50
   tenant: TENANT1
   description: Drone_Pub
   shutdown: false
   ip_address_virtual: 129.82.5.193/26
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan84
   tenant: TENANT1
   description: vendor_foothills
   shutdown: false
   ip_address_virtual: 129.82.84.129/26
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan108
   tenant: TENANT1
   description: ACRC-CIRA_Public
   shutdown: false
   ip_address_virtual: 129.82.108.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan214
   tenant: TENANT1
   description: CVMBS_ARBL_Public
   shutdown: false
   ip_address_virtual: 129.82.214.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan232
   tenant: TENANT1
   description: ERC_Public
   shutdown: false
   ip_address_virtual: 129.82.232.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan233
   tenant: TENANT1
   description: ERC_Private
   shutdown: false
   ip_address_virtual: 10.1.232.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan248
   tenant: TENANT1
   description: CSFS_Public
   shutdown: false
   ip_address_virtual: 129.82.248.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan320
   tenant: TENANT1
   description: WCC_PA_PtP
   shutdown: false
   ip_address_virtual: 129.82.1.138/29
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan322
   tenant: TENANT1
   description: West_Campus_Remote_Private
   shutdown: false
   ip_address_virtual: 10.1.8.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan323
   tenant: TENANT1
   description: West_Campus_Remote_Utility
   shutdown: false
   ip_address_virtual: 10.11.8.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan331
   tenant: TENANT1
   description: CSFS_Public
   shutdown: false
   ip_address_virtual: 10.1.214.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan332
   tenant: TENANT1
   description: ARBL_Utility
   shutdown: false
   ip_address_virtual: 10.11.214.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan351
   tenant: TENANT1
   description: AIDL_Private
   shutdown: false
   ip_address_virtual: 10.1.178.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan352
   tenant: TENANT1
   description: AIDL_Utility
   shutdown: false
   ip_address_virtual: 10.11.178.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan375
   tenant: TENANT1
   description: IDA_Private
   shutdown: false
   ip_address_virtual: 10.1.179.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan376
   tenant: TENANT1
   description: IDA_Utility
   shutdown: false
   ip_address_virtual: 10.11.179.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan384
   tenant: TENANT1
   description: HHS_Aggie_Labs_Private
   shutdown: false
   ip_address_virtual: 10.3.152.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan386
   tenant: TENANT1
   description: ERL_Private
   shutdown: false
   ip_address_virtual: 10.2.216.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan387
   tenant: TENANT1
   description: CVMBS_Equine_Center_Private
   shutdown: false
   ip_address_virtual: 10.2.218.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan388
   tenant: TENANT1
   description: Equine_Center_Utility
   shutdown: false
   ip_address_virtual: 10.11.218.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan395
   tenant: TENANT1
   description: ACRC-CIRA_Utility
   shutdown: false
   ip_address_virtual: 10.11.108.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan397
   tenant: TENANT1
   description: ERC_Utility
   shutdown: false
   ip_address_virtual: 10.11.232.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan401
   tenant: TENANT1
   description: Atmos_Private
   shutdown: false
   ip_address_virtual: 10.1.48.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan409
   tenant: TENANT1
   description: ABL_Utility
   shutdown: false
   ip_address_virtual: 10.11.228.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan421
   tenant: TENANT1
   description: Aggie_Labs_Private
   shutdown: false
   ip_address_virtual: 10.2.255.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan422
   tenant: TENANT1
   description: Aggie_Labs_Utility
   shutdown: false
   ip_address_virtual: 10.12.255.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan426
   tenant: TENANT1
   description: RBL_Utility
   shutdown: false
   ip_address_virtual: 10.11.26.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan428
   tenant: TENANT1
   description: ATS_Utility
   shutdown: false
   ip_address_virtual: 10.11.48.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan472
   tenant: TENANT1
   description: SimLab_Public
   shutdown: false
   ip_address_virtual: 129.82.4.129/25
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan512
   tenant: TENANT1
   description: SimLab_Private
   shutdown: false
   ip_address_virtual: 10.1.4.129/25
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan513
   tenant: TENANT1
   description: SimLab_Utility
   shutdown: false
   ip_address_virtual: 10.11.4.129/25
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan525
   tenant: TENANT1
   description: ATS_Chem_Utility
   shutdown: false
   ip_address_virtual: 10.11.49.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan540
   tenant: TENANT1
   description: Beam_Lab_Private
   shutdown: false
   ip_address_virtual: 10.1.228.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan584
   tenant: TENANT1
   description: WCC_Public_Non_CSU
   shutdown: false
   ip_address_virtual: 129.82.18.129/25
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan600
   tenant: TENANT1
   description: WCC_ENDR_DREN_L2_link
   shutdown: false
   ip_address_virtual: 129.82.1.72/28
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan653
   tenant: TENANT1
   description: AECOM_Private
   shutdown: false
   ip_address_virtual: 10.2.228.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1107
   tenant: TENANT1
   description: Temple_Grandin_Util
   shutdown: false
   ip_address_virtual: 10.11.107.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1108
   tenant: TENANT1
   description: WCC_Public_Non_CSU
   shutdown: false
   ip_address_virtual: 10.1.108.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1112
   tenant: TENANT1
   description: Engines_Lab_Priv2
   shutdown: false
   ip_address_virtual: 10.3.106.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1208
   tenant: TENANT1
   description: ACRC-CIRA_Static_Private
   shutdown: false
   ip_address_virtual: 10.2.108.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1226
   tenant: TENANT1
   description: CVMBS_RBL_Private
   shutdown: false
   ip_address_virtual: 10.1.26.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1300
   tenant: TENANT1
   description: Temple_Grandin_Priv
   shutdown: false
   ip_address_virtual: 10.1.15.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2326
   tenant: TENANT1
   description: VOIP_RIC
   shutdown: false
   ip_address_virtual: 10.174.26.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2670
   tenant: TENANT1
   description: VOIP_ARBL
   shutdown: false
   ip_address_virtual: 10.20.138.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2672
   tenant: TENANT1
   description: VOIP_RBL
   shutdown: false
   ip_address_virtual: 10.20.142.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2676
   tenant: TENANT1
   description: VOIP_ERL
   shutdown: false
   ip_address_virtual: 10.20.150.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2677
   tenant: TENANT1
   description: VOIP_Aggie_Labs
   shutdown: false
   ip_address_virtual: 10.20.152.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2680
   tenant: TENANT1
   description: VOIP_BEAMLAB
   shutdown: false
   ip_address_virtual: 10.20.158.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2684
   tenant: TENANT1
   description: VOIP_IDA
   shutdown: false
   ip_address_virtual: 10.20.166.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2689
   tenant: TENANT1
   description: VOIP_CSFS
   shutdown: false
   ip_address_virtual: 10.20.176.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2691
   tenant: TENANT1
   description: VOIP_AIDL
   shutdown: false
   ip_address_virtual: 10.20.180.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2694
   tenant: TENANT1
   description: VOIP_AECOM
   shutdown: false
   ip_address_virtual: 10.20.186.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2698
   tenant: TENANT1
   description: VOIP_ACRC-CIRA
   shutdown: false
   ip_address_virtual: 10.20.194.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2699
   tenant: TENANT1
   description: VOIP_ERC
   shutdown: false
   ip_address_virtual: 10.20.196.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2712
   tenant: TENANT1
   description: VOIP_FOOTHILLS_CATCHALL
   shutdown: false
   ip_address_virtual: 10.20.222.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2716
   tenant: TENANT1
   description: VOIP_ATS_Main
   shutdown: false
   ip_address_virtual: 10.20.230.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2717
   tenant: TENANT1
   description: VOIP_ATS_CMMAP
   shutdown: false
   ip_address_virtual: 10.20.232.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2718
   tenant: TENANT1
   description: VOIP_ATS_Chem
   shutdown: false
   ip_address_virtual: 10.20.234.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2719
   tenant: TENANT1
   description: VOIP_ATS_Annex
   shutdown: false
   ip_address_virtual: 10.20.236.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2720
   tenant: TENANT1
   description: VOIP_SimLab
   shutdown: false
   ip_address_virtual: 10.20.238.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3300
   tenant: TENANT1
   description: ACNS_SW-MGMT_WC
   shutdown: false
   ip_address_virtual: 10.111.0.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3301
   tenant: TENANT1
   description: Wireless_ACRC
   shutdown: false
   ip_address_virtual: 10.111.108.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3302
   tenant: TENANT1
   description: Wireless_ABL
   shutdown: false
   ip_address_virtual: 10.111.228.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3303
   tenant: TENANT1
   description: Wireless_AECOM
   shutdown: false
   ip_address_virtual: 10.111.226.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3304
   tenant: TENANT1
   description: Wireless_Aggie_Labs
   shutdown: false
   ip_address_virtual: 10.111.255.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3305
   tenant: TENANT1
   description: Wireless_AIDL
   shutdown: false
   ip_address_virtual: 10.111.178.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3306
   tenant: TENANT1
   description: Wireless_ARBL
   shutdown: false
   ip_address_virtual: 10.111.214.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3307
   tenant: TENANT1
   description: Wireless_Atmospheric_Science
   shutdown: false
   ip_address_virtual: 10.111.48.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3308
   tenant: TENANT1
   description: Wireless_CSFS
   shutdown: false
   ip_address_virtual: 10.111.248.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3309
   tenant: TENANT1
   description: Wireless_ERC
   shutdown: false
   ip_address_virtual: 10.111.232.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3310
   tenant: TENANT1
   description: Wireless_ERL
   shutdown: false
   ip_address_virtual: 10.111.216.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3311
   tenant: TENANT1
   description: Wireless_IDA
   shutdown: false
   ip_address_virtual: 10.111.179.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3312
   tenant: TENANT1
   description: Wireless_RBL
   shutdown: false
   ip_address_virtual: 10.111.26.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3313
   tenant: TENANT1
   description: Wireless_Temple_Grandin
   shutdown: false
   ip_address_virtual: 10.111.227.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3349
   tenant: TENANT1
   description: ACNS_UPS-MGMT_WC
   shutdown: false
   ip_address_virtual: 10.111.2.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3009
   tenant: TENANT1
@@ -1764,6 +2092,10 @@ vlan_interfaces:
   description: Wifi
   shutdown: false
   ip_address_virtual: 129.82.99.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback11
   vrf: wifi
 - name: Vlan3019
   tenant: TENANT1
@@ -1812,6 +2144,9 @@ ethernet_interfaces:
   switchport:
     enabled: false
   ip_address: 10.255.255.9/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Ethernet8
   peer: Spine2
   peer_interface: Ethernet3
@@ -1822,6 +2157,9 @@ ethernet_interfaces:
   switchport:
     enabled: false
   ip_address: 10.255.255.11/31
+  pim:
+    ipv4:
+      sparse_mode: true
 mlag_configuration:
   domain_id: DC1_L3_LEAF2
   local_interface: Vlan4094
@@ -1894,7 +2232,8 @@ vxlan_interface:
     description: SCC1_VTEP
     vxlan:
       udp_port: 4789
-      source_interface: Loopback1
+      source_interface: Loopback0
+      mlag_source_interface: Loopback1
       virtual_router_encapsulation_mac_address: mlag-system-id
       vlans:
       - id: 8
@@ -2094,8 +2433,10 @@ vxlan_interface:
       vrfs:
       - name: campus
         vni: 10
+        multicast_group: 239.0.0.0/20
       - name: wifi
         vni: 20
+        multicast_group: 239.0.0.19
 virtual_source_nat_vrfs:
 - name: campus
   ip_address: 10.255.10.5

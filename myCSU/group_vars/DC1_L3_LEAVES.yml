@@ -1,2 +1,10 @@
 ---
 type: l3leaf
+
+router_multicast:
+  ipv4:
+    routing: true
+  vrfs: 
+    - name: campus
+      ipv4:
+        routing: true
