@@ -16,6 +16,7 @@
   - [TerminAttr Daemon](#terminattr-daemon)
   - [Logging](#logging)
   - [SNMP](#snmp)
+  - [Event Handler](#event-handler)
 - [MLAG](#mlag)
   - [MLAG Summary](#mlag-summary)
   - [MLAG Device Configuration](#mlag-device-configuration)
@@ -67,19 +68,19 @@
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB_MANAGEMENT | oob | mgmt | 192.168.100.204/24 | 192.168.100.1 |
+| Management0 | OOB_MANAGEMENT | oob | mgmt | 192.168.100.204/24 | 192.168.100.1 |
 
 ##### IPv6
 
 | Management Interface | Description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | OOB_MANAGEMENT | oob | mgmt | - | - |
+| Management0 | OOB_MANAGEMENT | oob | mgmt | - | - |
 
 #### Management Interfaces Device Configuration
 
 ```eos
 !
-interface Management1
+interface Management0
    description OOB_MANAGEMENT
    no shutdown
    vrf mgmt
@@ -108,7 +109,7 @@ ip name-server vrf mgmt 8.8.8.8
 
 | Interface | VRF |
 | --------- | --- |
-| Management1 | mgmt |
+| Management0 | mgmt |
 
 ##### NTP Servers
 
@@ -120,7 +121,7 @@ ip name-server vrf mgmt 8.8.8.8
 
 ```eos
 !
-ntp local-interface vrf mgmt Management1
+ntp local-interface vrf mgmt Management0
 ntp server vrf mgmt 132.163.96.3
 ```
 
@@ -253,7 +254,7 @@ daemon TerminAttr
 
 | VRF | Source Interface |
 | --- | ---------------- |
-| mgmt | Management1 |
+| mgmt | Management0 |
 
 | VRF | Hosts | Ports | Protocol |
 | --- | ----- | ----- | -------- |
@@ -264,7 +265,7 @@ daemon TerminAttr
 ```eos
 !
 logging vrf mgmt host 129.82.111.172
-logging vrf mgmt source-interface Management1
+logging vrf mgmt source-interface Management0
 ```
 
 ### SNMP
@@ -294,6 +295,24 @@ logging vrf mgmt source-interface Management1
 snmp-server contact noc@colostate.edu
 snmp-server community <removed> ro
 snmp-server host 10.100.201.199 vrf mgmt version 2c <removed>
+```
+
+### Event Handler
+
+#### Event Handler Summary
+
+| Handler | Actions | Trigger | Trigger Config |
+| ------- | ------- | ------- | -------------- |
+| renameInterfaces | bash <code>bash /mnt/flash/renameInterfaces.sh</code> | on-boot | - |
+
+#### Event Handler Device Configuration
+
+```eos
+!
+event-handler renameInterfaces
+   trigger on-boot
+   action bash bash /mnt/flash/renameInterfaces.sh
+   delay 30
 ```
 
 ## MLAG

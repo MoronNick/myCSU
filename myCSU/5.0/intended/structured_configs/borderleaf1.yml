@@ -89,12 +89,14 @@ router_bgp:
     - ip_address: 10.255.1.115
       peer_group: MLAG-IPv4-UNDERLAY-PEER
       description: borderleaf2_Vlan3009
-    - ip_address: 172.16.0.2
+    - ip_address: 172.16.10.1
       remote_as: '64512'
       description: BGP_To_Palo
+      route_map_in: test_in
+      route_map_out: test_out
     address_family_ipv4:
       neighbors:
-      - ip_address: 172.16.0.2
+      - ip_address: 172.16.10.1
         activate: true
   - name: wifi
     rd: 10.255.0.12:20
@@ -920,6 +922,12 @@ config_end: true
 enable_password:
   disabled: true
 transceiver_qsfp_default_mode_4x10: true
+event_handlers:
+- name: renameInterfaces
+  actions:
+    bash_command: bash /mnt/flash/renameInterfaces.sh
+  trigger: on-boot
+  delay: 30
 ip_name_servers:
 - ip_address: 8.8.8.8
   vrf: mgmt
@@ -947,7 +955,7 @@ vrfs:
   tenant: TENANT1
   ip_routing: true
 management_interfaces:
-- name: Management1
+- name: Management0
   description: OOB_MANAGEMENT
   shutdown: false
   vrf: mgmt
@@ -2104,7 +2112,7 @@ metadata:
   platform: vEOS-lab
 ntp:
   local_interface:
-    name: Management1
+    name: Management0
     vrf: mgmt
   servers:
   - name: 132.163.96.3

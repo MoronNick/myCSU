@@ -17,13 +17,13 @@ name_servers:
 # NTP Servers IP or DNS name, first NTP server will be prefered, and sourced from Management VRF
 custom_structured_configuration_ntp:
   local_interface:
-    name: Management1
+    name: Management0
     vrf: mgmt
   servers:
     - name: 132.163.96.3
       vrf: mgmt
 
-mgmt_interface: Management1
+mgmt_interface: Management0
 mgmt_interface_vrf: mgmt
 mgmt_gateway: 192.168.100.1
 mgmt_vrf_routing: yes
@@ -59,7 +59,7 @@ logging:
   vrfs:
     - name: mgmt
       # Source interface name.
-      source_interface: Management1
+      source_interface: Management0
       hosts:
         - name: 129.82.111.172
 
@@ -92,3 +92,14 @@ management_ssh:
 aaa_authorization:
   exec:
     default: local
+
+event_handlers:
+  - name: renameInterfaces
+    actions:
+      bash_command: "bash /mnt/flash/renameInterfaces.sh"
+    trigger: on-boot 
+    delay: 30
+# eos_cli: "event-handler renameInterfaces
+#    trigger on-boot
+#    action bash bash /mnt/flash/renameInterfaces.sh
+#    delay 30"

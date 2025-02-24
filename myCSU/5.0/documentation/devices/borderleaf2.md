@@ -16,6 +16,7 @@
   - [TerminAttr Daemon](#terminattr-daemon)
   - [Logging](#logging)
   - [SNMP](#snmp)
+  - [Event Handler](#event-handler)
 - [MLAG](#mlag)
   - [MLAG Summary](#mlag-summary)
   - [MLAG Device Configuration](#mlag-device-configuration)
@@ -67,19 +68,19 @@
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB_MANAGEMENT | oob | mgmt | 192.168.100.205/24 | 192.168.100.1 |
+| Management0 | OOB_MANAGEMENT | oob | mgmt | 192.168.100.205/24 | 192.168.100.1 |
 
 ##### IPv6
 
 | Management Interface | Description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | OOB_MANAGEMENT | oob | mgmt | - | - |
+| Management0 | OOB_MANAGEMENT | oob | mgmt | - | - |
 
 #### Management Interfaces Device Configuration
 
 ```eos
 !
-interface Management1
+interface Management0
    description OOB_MANAGEMENT
    no shutdown
    vrf mgmt
@@ -108,7 +109,7 @@ ip name-server vrf mgmt 8.8.8.8
 
 | Interface | VRF |
 | --------- | --- |
-| Management1 | mgmt |
+| Management0 | mgmt |
 
 ##### NTP Servers
 
@@ -120,7 +121,7 @@ ip name-server vrf mgmt 8.8.8.8
 
 ```eos
 !
-ntp local-interface vrf mgmt Management1
+ntp local-interface vrf mgmt Management0
 ntp server vrf mgmt 132.163.96.3
 ```
 
@@ -253,7 +254,7 @@ daemon TerminAttr
 
 | VRF | Source Interface |
 | --- | ---------------- |
-| mgmt | Management1 |
+| mgmt | Management0 |
 
 | VRF | Hosts | Ports | Protocol |
 | --- | ----- | ----- | -------- |
@@ -264,7 +265,7 @@ daemon TerminAttr
 ```eos
 !
 logging vrf mgmt host 129.82.111.172
-logging vrf mgmt source-interface Management1
+logging vrf mgmt source-interface Management0
 ```
 
 ### SNMP
@@ -294,6 +295,24 @@ logging vrf mgmt source-interface Management1
 snmp-server contact noc@colostate.edu
 snmp-server community <removed> ro
 snmp-server host 10.100.201.199 vrf mgmt version 2c <removed>
+```
+
+### Event Handler
+
+#### Event Handler Summary
+
+| Handler | Actions | Trigger | Trigger Config |
+| ------- | ------- | ------- | -------------- |
+| renameInterfaces | bash <code>bash /mnt/flash/renameInterfaces.sh</code> | on-boot | - |
+
+#### Event Handler Device Configuration
+
+```eos
+!
+event-handler renameInterfaces
+   trigger on-boot
+   action bash bash /mnt/flash/renameInterfaces.sh
+   delay 30
 ```
 
 ## MLAG
@@ -798,6 +817,7 @@ vlan 4094
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
+| Ethernet3 | - | - | 172.16.20.2/30 | campus | - | False | - | - |
 | Ethernet11 | P2P_Spine1_Ethernet6 | - | 10.255.255.41/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
@@ -813,6 +833,12 @@ interface Ethernet2
    description MLAG_borderleaf1_Ethernet2
    no shutdown
    channel-group 1 mode active
+!
+interface Ethernet3
+   no shutdown
+   no switchport
+   vrf campus
+   ip address 172.16.20.2/30
 !
 interface Ethernet11
    description P2P_Spine1_Ethernet6
@@ -1940,6 +1966,7 @@ ASN Notation: asplain
 | 10.255.1.114 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | default | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
 | 10.255.255.40 | 65100 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.255.1.114 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | campus | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
+| 172.16.20.1 | 64512 | campus | - | - | - | - | - | - | - | - | - |
 | 10.255.1.114 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | wifi | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
 
 #### Router BGP EVPN Address Family
@@ -2599,7 +2626,14 @@ router bgp 65103
       router-id 10.255.0.13
       neighbor 10.255.1.114 peer group MLAG-IPv4-UNDERLAY-PEER
       neighbor 10.255.1.114 description borderleaf1_Vlan3009
+      neighbor 172.16.20.1 remote-as 64512
+      neighbor 172.16.20.1 description BGP_To_Palo
+      neighbor 172.16.20.1 route-map test_in in
+      neighbor 172.16.20.1 route-map test_out out
       redistribute connected route-map RM-CONN-2-BGP-VRFS
+      !
+      address-family ipv4
+         neighbor 172.16.20.1 activate
    !
    vrf wifi
       rd 10.255.0.13:20
