@@ -1,0 +1,20 @@
+---
+# Definition of connected endpoints in the fabric.
+
+      
+servers:
+
+  # Name of the defined server.
+  - name: Palo-A-Side
+    adapters:
+      - endpoint_ports: [Etherent1, Ethernet2]
+        switch_ports: [Ethernet14, Ethernet14]
+        switches: [borderleaf1, borderleaf2]
+        description: Trunk_to_Palos_A
+        vlans: 2,3
+        mode: trunk
+        port_channel:
+          description: Po_to_Palo_A
+          channel_id: 100
+          mode: active
+

@@ -194,14 +194,14 @@ management api http-commands
 
 | User | Privilege | Role | Disabled | Shell |
 | ---- | --------- | ---- | -------- | ----- |
-| admin | - | - | True | - |
+| admin | 15 | network-admin | False | - |
 | nmoore | 15 | network-admin | False | - |
 
 #### Local Users Device Configuration
 
 ```eos
 !
-no username admin
+username admin privilege 15 role network-admin secret sha512 <removed>
 username nmoore privilege 15 role network-admin secret sha512 <removed>
 ```
 
@@ -384,6 +384,7 @@ vlan internal order ascending range 1006 1199
 
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
+| 2 | BGP_to_Palo | - |
 | 8 | West_Campus_Remote_Public | - |
 | 26 | CVMBS_RBL_Public | - |
 | 48 | COE_ATS_Public | - |
@@ -489,6 +490,9 @@ vlan internal order ascending range 1006 1199
 ### VLANs Device Configuration
 
 ```eos
+!
+vlan 2
+   name BGP_to_Palo
 !
 vlan 8
    name West_Campus_Remote_Public
@@ -926,6 +930,7 @@ interface Loopback11
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
+| Vlan2 | BGP_to_Palo | campus | - | False |
 | Vlan8 | West_Campus_Remote_Public | campus | - | False |
 | Vlan26 | CVMBS_RBL_Public | campus | - | False |
 | Vlan48 | COE_ATS_Public | campus | - | False |
@@ -1014,6 +1019,7 @@ interface Loopback11
 
 | Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | ACL In | ACL Out |
 | --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
+| Vlan2 |  campus  |  -  |  -  |  -  |  -  |  -  |
 | Vlan8 |  campus  |  -  |  129.82.8.1/23  |  -  |  -  |  -  |
 | Vlan26 |  campus  |  -  |  129.82.26.1/23  |  -  |  -  |  -  |
 | Vlan48 |  campus  |  -  |  129.82.48.1/24  |  -  |  -  |  -  |
@@ -1107,6 +1113,11 @@ interface Loopback11
 #### VLAN Interfaces Device Configuration
 
 ```eos
+!
+interface Vlan2
+   description BGP_to_Palo
+   no shutdown
+   vrf campus
 !
 interface Vlan8
    description West_Campus_Remote_Public
@@ -1626,6 +1637,7 @@ interface Vlan4094
 
 | VLAN | VNI | Flood List | Multicast Group |
 | ---- | --- | ---------- | --------------- |
+| 2 | 10002 | - | - |
 | 8 | 10008 | - | - |
 | 26 | 10026 | - | - |
 | 48 | 10048 | - | - |
@@ -1740,6 +1752,7 @@ interface Vxlan1
    vxlan source-interface Loopback1
    vxlan virtual-router encapsulation mac-address mlag-system-id
    vxlan udp-port 4789
+   vxlan vlan 2 vni 10002
    vxlan vlan 8 vni 10008
    vxlan vlan 26 vni 10026
    vxlan vlan 48 vni 10048
@@ -1982,6 +1995,7 @@ ASN Notation: asplain
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
+| 2 | 10.255.0.6:10002 | 10002:10002 | - | - | learned |
 | 8 | 10.255.0.6:10008 | 10008:10008 | - | - | learned |
 | 26 | 10.255.0.6:10026 | 10026:10026 | - | - | learned |
 | 48 | 10.255.0.6:10048 | 10048:10048 | - | - | learned |
@@ -2129,6 +2143,11 @@ router bgp 65102
    neighbor 10.255.255.14 remote-as 65100
    neighbor 10.255.255.14 description Spine2_Ethernet4
    redistribute connected route-map RM-CONN-2-BGP
+   !
+   vlan 2
+      rd 10.255.0.6:10002
+      route-target both 10002:10002
+      redistribute learned
    !
    vlan 8
       rd 10.255.0.6:10008

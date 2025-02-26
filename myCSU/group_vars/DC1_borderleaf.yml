@@ -1,1 +1,19 @@
 type: l3leaf
+custom_structured_configuration_route_maps:
+  - name: RM_to_PALO_OUT
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - "ip address prefix-list blah"
+          
+custom_structured_configuration_prefix_lists:
+  - name: PFX-PALO-PFX
+    sequence_numbers:
+      - sequence: 10
+        # Action as string.
+        action: "permit 10.1.1.0/24 eq 32"
+
+  # custom_structured_configurations_trunk_groups_enabled: true
+
+only_local_vlan_trunk_groups: true 

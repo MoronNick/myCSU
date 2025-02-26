@@ -141,7 +141,9 @@ spanning_tree:
   mode: none
 local_users:
 - name: admin
-  disabled: true
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$YgU0Vu08uADiI8fN$syMSy9xabQgiqPc17E.hFhGkpmmxsfW/zf6GuydT20BP1sikf6vWWm8bomv7KW0pIykf2EysufUd6PAxP.HqI/
 - name: nmoore
   privilege: 15
   role: network-admin

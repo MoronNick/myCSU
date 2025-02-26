@@ -17,8 +17,8 @@
 
 | POD | Type | Node | Management IP | Platform | Provisioned in CloudVision | Serial Number |
 | --- | ---- | ---- | ------------- | -------- | -------------------------- | ------------- |
-| CSU | l3leaf | borderleaf1 | 192.168.100.204/24 | vEOS-lab | Provisioned | - |
-| CSU | l3leaf | borderleaf2 | 192.168.100.205/24 | vEOS-lab | Provisioned | - |
+| CSU | l3leaf | borderleaf1 | 192.168.100.208/24 | vEOS-lab | Provisioned | - |
+| CSU | l3leaf | borderleaf2 | 192.168.100.209/24 | vEOS-lab | Provisioned | - |
 | CSU | l2leaf | e7_0r05c05052051 | 192.168.100.206/24 | - | Provisioned | - |
 | CSU | l2leaf | e7_0r05c05052052 | 192.168.100.207/24 | - | Provisioned | - |
 | CSU | l3leaf | SCC1 | 192.168.100.204/24 | vEOS-lab | Provisioned | - |

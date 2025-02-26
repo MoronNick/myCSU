@@ -179,14 +179,14 @@ management api http-commands
 
 | User | Privilege | Role | Disabled | Shell |
 | ---- | --------- | ---- | -------- | ----- |
-| admin | - | - | True | - |
+| admin | 15 | network-admin | False | - |
 | nmoore | 15 | network-admin | False | - |
 
 #### Local Users Device Configuration
 
 ```eos
 !
-no username admin
+username admin privilege 15 role network-admin secret sha512 <removed>
 username nmoore privilege 15 role network-admin secret sha512 <removed>
 ```
 

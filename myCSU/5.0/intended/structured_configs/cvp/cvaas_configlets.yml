@@ -1,6 +1,7 @@
 cvp_configlets:
-  CSU_SCC1: "!\nno enable password\nno aaa root\n!\nno username admin\nusername nmoore
-    privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
+  CSU_SCC1: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15 role
+    network-admin secret sha512 $6$YgU0Vu08uADiI8fN$syMSy9xabQgiqPc17E.hFhGkpmmxsfW/zf6GuydT20BP1sikf6vWWm8bomv7KW0pIykf2EysufUd6PAxP.HqI/\nusername
+    nmoore privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
     TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
     -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs\n   no shutdown\n!\nvlan
@@ -429,8 +430,9 @@ cvp_configlets:
     group MLAG-IPv4-UNDERLAY-PEER\n      neighbor 10.255.1.101 description SCC2_Vlan3019\n
     \     redistribute connected route-map RM-CONN-2-BGP-VRFS\n!\nmanagement ssh\n
     \  ip access-group mgmt-acl vrf mgmt in\n!\nend\n"
-  CSU_SCC2: "!\nno enable password\nno aaa root\n!\nno username admin\nusername nmoore
-    privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
+  CSU_SCC2: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15 role
+    network-admin secret sha512 $6$YgU0Vu08uADiI8fN$syMSy9xabQgiqPc17E.hFhGkpmmxsfW/zf6GuydT20BP1sikf6vWWm8bomv7KW0pIykf2EysufUd6PAxP.HqI/\nusername
+    nmoore privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
     TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
     -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs\n   no shutdown\n!\nvlan
@@ -859,7 +861,8 @@ cvp_configlets:
     group MLAG-IPv4-UNDERLAY-PEER\n      neighbor 10.255.1.100 description SCC1_Vlan3019\n
     \     redistribute connected route-map RM-CONN-2-BGP-VRFS\n!\nmanagement ssh\n
     \  ip access-group mgmt-acl vrf mgmt in\n!\nend\n"
-  CSU_Spine1: "!\nno enable password\nno aaa root\n!\nno username admin\nusername
+  CSU_Spine1: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15
+    role network-admin secret sha512 $6$YgU0Vu08uADiI8fN$syMSy9xabQgiqPc17E.hFhGkpmmxsfW/zf6GuydT20BP1sikf6vWWm8bomv7KW0pIykf2EysufUd6PAxP.HqI/\nusername
     nmoore privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
     TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
@@ -940,7 +943,8 @@ cvp_configlets:
     EVPN-OVERLAY-PEERS activate\n   !\n   address-family ipv4\n      no neighbor EVPN-OVERLAY-PEERS
     activate\n      neighbor IPv4-UNDERLAY-PEERS activate\n!\nmanagement ssh\n   ip
     access-group mgmt-acl vrf mgmt in\n!\nend\n"
-  CSU_Spine2: "!\nno enable password\nno aaa root\n!\nno username admin\nusername
+  CSU_Spine2: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15
+    role network-admin secret sha512 $6$YgU0Vu08uADiI8fN$syMSy9xabQgiqPc17E.hFhGkpmmxsfW/zf6GuydT20BP1sikf6vWWm8bomv7KW0pIykf2EysufUd6PAxP.HqI/\nusername
     nmoore privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
     TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
@@ -1014,8 +1018,9 @@ cvp_configlets:
     EVPN-OVERLAY-PEERS activate\n   !\n   address-family ipv4\n      no neighbor EVPN-OVERLAY-PEERS
     activate\n      neighbor IPv4-UNDERLAY-PEERS activate\n!\nmanagement ssh\n   ip
     access-group mgmt-acl vrf mgmt in\n!\nend\n"
-  CSU_WCC1: "!\nno enable password\nno aaa root\n!\nno username admin\nusername nmoore
-    privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
+  CSU_WCC1: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15 role
+    network-admin secret sha512 $6$YgU0Vu08uADiI8fN$syMSy9xabQgiqPc17E.hFhGkpmmxsfW/zf6GuydT20BP1sikf6vWWm8bomv7KW0pIykf2EysufUd6PAxP.HqI/\nusername
+    nmoore privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
     TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
     -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs\n   no shutdown\n!\nvlan
@@ -1449,8 +1454,9 @@ cvp_configlets:
     group MLAG-IPv4-UNDERLAY-PEER\n      neighbor 10.255.1.97 description WCC2_Vlan3019\n
     \     redistribute connected route-map RM-CONN-2-BGP-VRFS\n!\nmanagement ssh\n
     \  ip access-group mgmt-acl vrf mgmt in\n!\nend\n"
-  CSU_WCC2: "!\nno enable password\nno aaa root\n!\nno username admin\nusername nmoore
-    privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
+  CSU_WCC2: "!\nno enable password\nno aaa root\n!\nusername admin privilege 15 role
+    network-admin secret sha512 $6$YgU0Vu08uADiI8fN$syMSy9xabQgiqPc17E.hFhGkpmmxsfW/zf6GuydT20BP1sikf6vWWm8bomv7KW0pIykf2EysufUd6PAxP.HqI/\nusername
+    nmoore privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
     TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
     -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs\n   no shutdown\n!\nvlan
@@ -1884,7 +1890,8 @@ cvp_configlets:
     group MLAG-IPv4-UNDERLAY-PEER\n      neighbor 10.255.1.96 description WCC1_Vlan3019\n
     \     redistribute connected route-map RM-CONN-2-BGP-VRFS\n!\nmanagement ssh\n
     \  ip access-group mgmt-acl vrf mgmt in\n!\nend\n"
-  CSU_borderleaf1: "!\nno enable password\nno aaa root\n!\nno username admin\nusername
+  CSU_borderleaf1: "!\nno enable password\nno aaa root\n!\nusername admin privilege
+    15 role network-admin secret sha512 $6$YgU0Vu08uADiI8fN$syMSy9xabQgiqPc17E.hFhGkpmmxsfW/zf6GuydT20BP1sikf6vWWm8bomv7KW0pIykf2EysufUd6PAxP.HqI/\nusername
     nmoore privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
     TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
@@ -1970,7 +1977,7 @@ cvp_configlets:
     Loopback10\n   description DIAG_VRF_campus\n   no shutdown\n   vrf campus\n   ip
     address 10.255.10.12/32\n!\ninterface Loopback11\n   description DIAG_VRF_wifi\n
     \  no shutdown\n   vrf wifi\n   ip address 10.255.11.12/32\n!\ninterface Management0\n
-    \  description OOB_MANAGEMENT\n   no shutdown\n   vrf mgmt\n   ip address 192.168.100.204/24\n!\ninterface
+    \  description OOB_MANAGEMENT\n   no shutdown\n   vrf mgmt\n   ip address 192.168.100.208/24\n!\ninterface
     Vlan8\n   description West_Campus_Remote_Public\n   no shutdown\n   vrf campus\n
     \  ipv6 enable\n   ip address virtual 129.82.8.1/23\n   ipv6 address virtual fec0:0:8::1/96\n!\ninterface
     Vlan26\n   description CVMBS_RBL_Public\n   no shutdown\n   vrf campus\n   ip
@@ -2138,22 +2145,24 @@ cvp_configlets:
     vrf wifi address 10.255.11.12\n!\nip access-list mgmt-acl\n   10 permit ip 192.168.1.0/24
     any\n   20 permit ip 192.168.3.0/24 any\n   30 permit ip 192.168.100.0/24 any\n!\nip
     routing\nip routing vrf campus\nip routing vrf mgmt\nip routing vrf wifi\n!\nip
-    prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n   seq 10 permit 10.255.0.0/27 eq 32\n
-    \  seq 20 permit 10.255.1.0/27 eq 32\n!\nip prefix-list PL-MLAG-PEER-VRFS\n   seq
-    10 permit 10.255.1.114/31\n!\nipv6 unicast-routing vrf campus\n!\nmlag configuration\n
-    \  domain-id DC1_Borderleaf\n   local-interface Vlan4094\n   peer-address 10.255.1.83\n
-    \  peer-link Port-Channel1\n   reload-delay mlag 300\n   reload-delay non-mlag
-    330\n!\nip route vrf mgmt 0.0.0.0/0 192.168.100.1\n!\nntp local-interface vrf
-    mgmt Management0\nntp server vrf mgmt 132.163.96.3\n!\nroute-map RM-CONN-2-BGP
-    permit 10\n   match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n!\nroute-map
-    RM-CONN-2-BGP-VRFS deny 10\n   match ip address prefix-list PL-MLAG-PEER-VRFS\n!\nroute-map
-    RM-CONN-2-BGP-VRFS permit 20\n!\nroute-map RM-MLAG-PEER-IN permit 10\n   description
-    Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal
-    routing\n   set origin incomplete\n!\nrouter bfd\n   multihop interval 300 min-rx
-    300 multiplier 3\n!\nrouter bgp 65103\n   router-id 10.255.0.12\n   no bgp default
-    ipv4-unicast\n   maximum-paths 4 ecmp 4\n   neighbor EVPN-OVERLAY-PEERS peer group\n
-    \  neighbor EVPN-OVERLAY-PEERS update-source Loopback0\n   neighbor EVPN-OVERLAY-PEERS
-    bfd\n   neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3\n   neighbor EVPN-OVERLAY-PEERS
+    prefix-list PFX-PALO-PFX\n   seq 10 permit 10.1.1.0/24 eq 32\n!\nip prefix-list
+    PL-LOOPBACKS-EVPN-OVERLAY\n   seq 10 permit 10.255.0.0/27 eq 32\n   seq 20 permit
+    10.255.1.0/27 eq 32\n!\nip prefix-list PL-MLAG-PEER-VRFS\n   seq 10 permit 10.255.1.114/31\n!\nipv6
+    unicast-routing vrf campus\n!\nmlag configuration\n   domain-id DC1_Borderleaf\n
+    \  local-interface Vlan4094\n   peer-address 10.255.1.83\n   peer-link Port-Channel1\n
+    \  reload-delay mlag 300\n   reload-delay non-mlag 330\n!\nip route vrf mgmt 0.0.0.0/0
+    192.168.100.1\n!\nntp local-interface vrf mgmt Management0\nntp server vrf mgmt
+    132.163.96.3\n!\nroute-map RM-CONN-2-BGP permit 10\n   match ip address prefix-list
+    PL-LOOPBACKS-EVPN-OVERLAY\n!\nroute-map RM-CONN-2-BGP-VRFS deny 10\n   match ip
+    address prefix-list PL-MLAG-PEER-VRFS\n!\nroute-map RM-CONN-2-BGP-VRFS permit
+    20\n!\nroute-map RM-MLAG-PEER-IN permit 10\n   description Make routes learned
+    over MLAG Peer-link less preferred on spines to ensure optimal routing\n   set
+    origin incomplete\n!\nroute-map RM_to_PALO_OUT permit 10\n   match ip address
+    prefix-list blah\n!\nrouter bfd\n   multihop interval 300 min-rx 300 multiplier
+    3\n!\nrouter bgp 65103\n   router-id 10.255.0.12\n   no bgp default ipv4-unicast\n
+    \  maximum-paths 4 ecmp 4\n   neighbor EVPN-OVERLAY-PEERS peer group\n   neighbor
+    EVPN-OVERLAY-PEERS update-source Loopback0\n   neighbor EVPN-OVERLAY-PEERS bfd\n
+    \  neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3\n   neighbor EVPN-OVERLAY-PEERS
     password 7 Q4fqtbqcZ7oQuKfuWtNGRQ==\n   neighbor EVPN-OVERLAY-PEERS send-community\n
     \  neighbor EVPN-OVERLAY-PEERS maximum-routes 0\n   neighbor IPv4-UNDERLAY-PEERS
     peer group\n   neighbor IPv4-UNDERLAY-PEERS password 7 7x4B4rnJhZB438m9+BrBfQ==\n
@@ -2315,7 +2324,8 @@ cvp_configlets:
     group MLAG-IPv4-UNDERLAY-PEER\n      neighbor 10.255.1.115 description borderleaf2_Vlan3019\n
     \     redistribute connected route-map RM-CONN-2-BGP-VRFS\n!\nmanagement ssh\n
     \  ip access-group mgmt-acl vrf mgmt in\n!\nend\n"
-  CSU_borderleaf2: "!\nno enable password\nno aaa root\n!\nno username admin\nusername
+  CSU_borderleaf2: "!\nno enable password\nno aaa root\n!\nusername admin privilege
+    15 role network-admin secret sha512 $6$YgU0Vu08uADiI8fN$syMSy9xabQgiqPc17E.hFhGkpmmxsfW/zf6GuydT20BP1sikf6vWWm8bomv7KW0pIykf2EysufUd6PAxP.HqI/\nusername
     nmoore privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
     TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
@@ -2401,7 +2411,7 @@ cvp_configlets:
     Loopback10\n   description DIAG_VRF_campus\n   no shutdown\n   vrf campus\n   ip
     address 10.255.10.13/32\n!\ninterface Loopback11\n   description DIAG_VRF_wifi\n
     \  no shutdown\n   vrf wifi\n   ip address 10.255.11.13/32\n!\ninterface Management0\n
-    \  description OOB_MANAGEMENT\n   no shutdown\n   vrf mgmt\n   ip address 192.168.100.205/24\n!\ninterface
+    \  description OOB_MANAGEMENT\n   no shutdown\n   vrf mgmt\n   ip address 192.168.100.209/24\n!\ninterface
     Vlan8\n   description West_Campus_Remote_Public\n   no shutdown\n   vrf campus\n
     \  ipv6 enable\n   ip address virtual 129.82.8.1/23\n   ipv6 address virtual fec0:0:8::1/96\n!\ninterface
     Vlan26\n   description CVMBS_RBL_Public\n   no shutdown\n   vrf campus\n   ip
@@ -2569,22 +2579,24 @@ cvp_configlets:
     vrf wifi address 10.255.11.13\n!\nip access-list mgmt-acl\n   10 permit ip 192.168.1.0/24
     any\n   20 permit ip 192.168.3.0/24 any\n   30 permit ip 192.168.100.0/24 any\n!\nip
     routing\nip routing vrf campus\nip routing vrf mgmt\nip routing vrf wifi\n!\nip
-    prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n   seq 10 permit 10.255.0.0/27 eq 32\n
-    \  seq 20 permit 10.255.1.0/27 eq 32\n!\nip prefix-list PL-MLAG-PEER-VRFS\n   seq
-    10 permit 10.255.1.114/31\n!\nipv6 unicast-routing vrf campus\n!\nmlag configuration\n
-    \  domain-id DC1_Borderleaf\n   local-interface Vlan4094\n   peer-address 10.255.1.82\n
-    \  peer-link Port-Channel1\n   reload-delay mlag 300\n   reload-delay non-mlag
-    330\n!\nip route vrf mgmt 0.0.0.0/0 192.168.100.1\n!\nntp local-interface vrf
-    mgmt Management0\nntp server vrf mgmt 132.163.96.3\n!\nroute-map RM-CONN-2-BGP
-    permit 10\n   match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY\n!\nroute-map
-    RM-CONN-2-BGP-VRFS deny 10\n   match ip address prefix-list PL-MLAG-PEER-VRFS\n!\nroute-map
-    RM-CONN-2-BGP-VRFS permit 20\n!\nroute-map RM-MLAG-PEER-IN permit 10\n   description
-    Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal
-    routing\n   set origin incomplete\n!\nrouter bfd\n   multihop interval 300 min-rx
-    300 multiplier 3\n!\nrouter bgp 65103\n   router-id 10.255.0.13\n   no bgp default
-    ipv4-unicast\n   maximum-paths 4 ecmp 4\n   neighbor EVPN-OVERLAY-PEERS peer group\n
-    \  neighbor EVPN-OVERLAY-PEERS update-source Loopback0\n   neighbor EVPN-OVERLAY-PEERS
-    bfd\n   neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3\n   neighbor EVPN-OVERLAY-PEERS
+    prefix-list PFX-PALO-PFX\n   seq 10 permit 10.1.1.0/24 eq 32\n!\nip prefix-list
+    PL-LOOPBACKS-EVPN-OVERLAY\n   seq 10 permit 10.255.0.0/27 eq 32\n   seq 20 permit
+    10.255.1.0/27 eq 32\n!\nip prefix-list PL-MLAG-PEER-VRFS\n   seq 10 permit 10.255.1.114/31\n!\nipv6
+    unicast-routing vrf campus\n!\nmlag configuration\n   domain-id DC1_Borderleaf\n
+    \  local-interface Vlan4094\n   peer-address 10.255.1.82\n   peer-link Port-Channel1\n
+    \  reload-delay mlag 300\n   reload-delay non-mlag 330\n!\nip route vrf mgmt 0.0.0.0/0
+    192.168.100.1\n!\nntp local-interface vrf mgmt Management0\nntp server vrf mgmt
+    132.163.96.3\n!\nroute-map RM-CONN-2-BGP permit 10\n   match ip address prefix-list
+    PL-LOOPBACKS-EVPN-OVERLAY\n!\nroute-map RM-CONN-2-BGP-VRFS deny 10\n   match ip
+    address prefix-list PL-MLAG-PEER-VRFS\n!\nroute-map RM-CONN-2-BGP-VRFS permit
+    20\n!\nroute-map RM-MLAG-PEER-IN permit 10\n   description Make routes learned
+    over MLAG Peer-link less preferred on spines to ensure optimal routing\n   set
+    origin incomplete\n!\nroute-map RM_to_PALO_OUT permit 10\n   match ip address
+    prefix-list blah\n!\nrouter bfd\n   multihop interval 300 min-rx 300 multiplier
+    3\n!\nrouter bgp 65103\n   router-id 10.255.0.13\n   no bgp default ipv4-unicast\n
+    \  maximum-paths 4 ecmp 4\n   neighbor EVPN-OVERLAY-PEERS peer group\n   neighbor
+    EVPN-OVERLAY-PEERS update-source Loopback0\n   neighbor EVPN-OVERLAY-PEERS bfd\n
+    \  neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3\n   neighbor EVPN-OVERLAY-PEERS
     password 7 Q4fqtbqcZ7oQuKfuWtNGRQ==\n   neighbor EVPN-OVERLAY-PEERS send-community\n
     \  neighbor EVPN-OVERLAY-PEERS maximum-routes 0\n   neighbor IPv4-UNDERLAY-PEERS
     peer group\n   neighbor IPv4-UNDERLAY-PEERS password 7 7x4B4rnJhZB438m9+BrBfQ==\n
@@ -2746,7 +2758,8 @@ cvp_configlets:
     group MLAG-IPv4-UNDERLAY-PEER\n      neighbor 10.255.1.114 description borderleaf1_Vlan3019\n
     \     redistribute connected route-map RM-CONN-2-BGP-VRFS\n!\nmanagement ssh\n
     \  ip access-group mgmt-acl vrf mgmt in\n!\nend\n"
-  CSU_e7_0r05c05052051: "!\nno enable password\nno aaa root\n!\nno username admin\nusername
+  CSU_e7_0r05c05052051: "!\nno enable password\nno aaa root\n!\nusername admin privilege
+    15 role network-admin secret sha512 $6$YgU0Vu08uADiI8fN$syMSy9xabQgiqPc17E.hFhGkpmmxsfW/zf6GuydT20BP1sikf6vWWm8bomv7KW0pIykf2EysufUd6PAxP.HqI/\nusername
     nmoore privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
     TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata
@@ -2813,7 +2826,8 @@ cvp_configlets:
     330\n!\nip route vrf mgmt 0.0.0.0/0 192.168.100.1\n!\nntp local-interface vrf
     mgmt Management0\nntp server vrf mgmt 132.163.96.3\n!\nmanagement ssh\n   ip access-group
     mgmt-acl vrf mgmt in\n!\nend\n"
-  CSU_e7_0r05c05052052: "!\nno enable password\nno aaa root\n!\nno username admin\nusername
+  CSU_e7_0r05c05052052: "!\nno enable password\nno aaa root\n!\nusername admin privilege
+    15 role network-admin secret sha512 $6$YgU0Vu08uADiI8fN$syMSy9xabQgiqPc17E.hFhGkpmmxsfW/zf6GuydT20BP1sikf6vWWm8bomv7KW0pIykf2EysufUd6PAxP.HqI/\nusername
     nmoore privilege 15 role network-admin secret sha512 $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/\n!\ndaemon
     TerminAttr\n   exec /usr/bin/TerminAttr -cvaddr=apiserver.cv-staging.corp.arista.io:443
     -cvauth=token-secure,/tmp/cv-onboarding-token -cvvrf=mgmt -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata

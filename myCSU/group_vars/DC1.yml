@@ -102,7 +102,7 @@ l3leaf:
       nodes:
         - name: borderleaf1
           id: 10
-          mgmt_ip: 192.168.100.204/24
+          mgmt_ip: 192.168.100.208/24
           uplink_switch_interfaces:
             - Ethernet5
           uplink_interfaces:
@@ -113,7 +113,7 @@ l3leaf:
             - Ethernet2
         - name: borderleaf2
           id: 11
-          mgmt_ip: 192.168.100.205/24
+          mgmt_ip: 192.168.100.209/24
           uplink_switch_interfaces:
             - Ethernet6
           uplink_interfaces:

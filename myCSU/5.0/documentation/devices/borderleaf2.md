@@ -68,7 +68,7 @@
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management0 | OOB_MANAGEMENT | oob | mgmt | 192.168.100.205/24 | 192.168.100.1 |
+| Management0 | OOB_MANAGEMENT | oob | mgmt | 192.168.100.209/24 | 192.168.100.1 |
 
 ##### IPv6
 
@@ -84,7 +84,7 @@ interface Management0
    description OOB_MANAGEMENT
    no shutdown
    vrf mgmt
-   ip address 192.168.100.205/24
+   ip address 192.168.100.209/24
 ```
 
 ### IP Name Servers
@@ -194,14 +194,14 @@ management api http-commands
 
 | User | Privilege | Role | Disabled | Shell |
 | ---- | --------- | ---- | -------- | ----- |
-| admin | - | - | True | - |
+| admin | 15 | network-admin | False | - |
 | nmoore | 15 | network-admin | False | - |
 
 #### Local Users Device Configuration
 
 ```eos
 !
-no username admin
+username admin privilege 15 role network-admin secret sha512 <removed>
 username nmoore privilege 15 role network-admin secret sha512 <removed>
 ```
 
@@ -384,6 +384,7 @@ vlan internal order ascending range 1006 1199
 
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
+| 2 | BGP_to_Palo | - |
 | 8 | West_Campus_Remote_Public | - |
 | 26 | CVMBS_RBL_Public | - |
 | 48 | COE_ATS_Public | - |
@@ -489,6 +490,9 @@ vlan internal order ascending range 1006 1199
 ### VLANs Device Configuration
 
 ```eos
+!
+vlan 2
+   name BGP_to_Palo
 !
 vlan 8
    name West_Campus_Remote_Public
@@ -810,6 +814,7 @@ vlan 4094
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
 | Ethernet1 | MLAG_borderleaf1_Ethernet1 | *trunk | *- | *- | *MLAG | 1 |
 | Ethernet2 | MLAG_borderleaf1_Ethernet2 | *trunk | *- | *- | *MLAG | 1 |
+| Ethernet14 | Trunk_to_Palos_A | *trunk | *2-3 | *- | *- | 100 |
 
 *Inherited from Port-Channel Interface
 
@@ -846,6 +851,11 @@ interface Ethernet11
    mtu 1500
    no switchport
    ip address 10.255.255.41/31
+!
+interface Ethernet14
+   description Trunk_to_Palos_A
+   no shutdown
+   channel-group 100 mode active
 ```
 
 ### Port-Channel Interfaces
@@ -857,6 +867,7 @@ interface Ethernet11
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
 | Port-Channel1 | MLAG_borderleaf1_Port-Channel1 | trunk | - | - | MLAG | - | - | - | - |
+| Port-Channel100 | Po_to_Palo_A | trunk | 2-3 | - | - | - | - | 100 | - |
 
 #### Port-Channel Interfaces Device Configuration
 
@@ -868,6 +879,14 @@ interface Port-Channel1
    switchport mode trunk
    switchport trunk group MLAG
    switchport
+!
+interface Port-Channel100
+   description Po_to_Palo_A
+   no shutdown
+   switchport trunk allowed vlan 2,3
+   switchport mode trunk
+   switchport
+   mlag 100
 ```
 
 ### Loopback Interfaces
@@ -925,6 +944,7 @@ interface Loopback11
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
+| Vlan2 | BGP_to_Palo | campus | - | False |
 | Vlan8 | West_Campus_Remote_Public | campus | - | False |
 | Vlan26 | CVMBS_RBL_Public | campus | - | False |
 | Vlan48 | COE_ATS_Public | campus | - | False |
@@ -1013,6 +1033,7 @@ interface Loopback11
 
 | Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | ACL In | ACL Out |
 | --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
+| Vlan2 |  campus  |  1.1.1.2/29  |  -  |  -  |  -  |  -  |
 | Vlan8 |  campus  |  -  |  129.82.8.1/23  |  -  |  -  |  -  |
 | Vlan26 |  campus  |  -  |  129.82.26.1/23  |  -  |  -  |  -  |
 | Vlan48 |  campus  |  -  |  129.82.48.1/24  |  -  |  -  |  -  |
@@ -1106,6 +1127,12 @@ interface Loopback11
 #### VLAN Interfaces Device Configuration
 
 ```eos
+!
+interface Vlan2
+   description BGP_to_Palo
+   no shutdown
+   vrf campus
+   ip address 1.1.1.2/29
 !
 interface Vlan8
    description West_Campus_Remote_Public
@@ -1625,6 +1652,7 @@ interface Vlan4094
 
 | VLAN | VNI | Flood List | Multicast Group |
 | ---- | --- | ---------- | --------------- |
+| 2 | 10002 | - | - |
 | 8 | 10008 | - | - |
 | 26 | 10026 | - | - |
 | 48 | 10048 | - | - |
@@ -1739,6 +1767,7 @@ interface Vxlan1
    vxlan source-interface Loopback1
    vxlan virtual-router encapsulation mac-address mlag-system-id
    vxlan udp-port 4789
+   vxlan vlan 2 vni 10002
    vxlan vlan 8 vni 10008
    vxlan vlan 26 vni 10026
    vxlan vlan 48 vni 10048
@@ -1981,6 +2010,7 @@ ASN Notation: asplain
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
+| 2 | 10.255.0.13:10002 | 10002:10002 | - | - | learned |
 | 8 | 10.255.0.13:10008 | 10008:10008 | - | - | learned |
 | 26 | 10.255.0.13:10026 | 10026:10026 | - | - | learned |
 | 48 | 10.255.0.13:10048 | 10048:10048 | - | - | learned |
@@ -2125,6 +2155,11 @@ router bgp 65103
    neighbor 10.255.255.40 remote-as 65100
    neighbor 10.255.255.40 description Spine1_Ethernet6
    redistribute connected route-map RM-CONN-2-BGP
+   !
+   vlan 2
+      rd 10.255.0.13:10002
+      route-target both 10002:10002
+      redistribute learned
    !
    vlan 8
       rd 10.255.0.13:10008
@@ -2684,6 +2719,12 @@ router bfd
 
 #### Prefix-lists Summary
 
+##### PFX-PALO-PFX
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 10.1.1.0/24 eq 32 |
+
 ##### PL-LOOPBACKS-EVPN-OVERLAY
 
 | Sequence | Action |
@@ -2700,6 +2741,9 @@ router bfd
 #### Prefix-lists Device Configuration
 
 ```eos
+!
+ip prefix-list PFX-PALO-PFX
+   seq 10 permit 10.1.1.0/24 eq 32
 !
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
    seq 10 permit 10.255.0.0/27 eq 32
@@ -2732,6 +2776,12 @@ ip prefix-list PL-MLAG-PEER-VRFS
 | -------- | ---- | ----- | --- | ------------- | -------- |
 | 10 | permit | - | origin incomplete | - | - |
 
+##### RM_to_PALO_OUT
+
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix-list blah | - | - | - |
+
 #### Route-maps Device Configuration
 
 ```eos
@@ -2747,6 +2797,9 @@ route-map RM-CONN-2-BGP-VRFS permit 20
 route-map RM-MLAG-PEER-IN permit 10
    description Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
    set origin incomplete
+!
+route-map RM_to_PALO_OUT permit 10
+   match ip address prefix-list blah
 ```
 
 ## ACL

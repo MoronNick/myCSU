@@ -58,6 +58,17 @@ tenants:
 ################################################
         svis:
           # SVI definitions.
+          - id: 2
+            name: BGP_to_Palo
+            enabled: true
+            trunk_groups:
+              - Palo
+            nodes:
+              - node: borderleaf1
+                ip_address: 1.1.1.1/29
+              - node: borderleaf2
+                ip_address: 1.1.1.2/29
+
           - id: 8
             # SVI Description
             name: West_Campus_Remote_Public
