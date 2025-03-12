@@ -1,0 +1,61 @@
+wifi:
+  - name: wifi
+    # Number used to generate the VNI of each VLAN by adding the VLAN number in this tenant.
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: wifi
+        # VRF VNI definition.
+        vrf_vni: 20
+        # Enable VTEP Network diagnostics
+        # This will create a loopback with virtual source-nat enable to perform diagnostics from the switch.
+        vtep_diagnostic:
+          # Loopback interface number
+          loopback: 11
+          # Loopback ip range, a unique ip is derived from this ranged and assigned- *Need to carve out IP space for each VRF*
+          # to each l3 leaf based on it's unique id.
+          loopback_ip_range: 10.255.11.0/27
+        bgp_peers:
+          - ip_address: 3.3.3.3
+            remote_as: 64512
+            description: Palo1
+            route_map_in: test_in
+            route_map_out: test_out        
+            nodes: [ borderleaf1, borderleaf2 ]
+          - ip_address: 4.4.4.3
+            remote_as: 64512
+            description: Palo2
+            route_map_in: test_in
+            route_map_out: test_out           
+            nodes: [ borderleaf1, borderleaf2 ]
+        svis:
+         # TRANSIT TO FW
+          - id: 1236
+            name: Palo1-test
+            enabled: true
+            vxlan: false
+            tags: [ palo ]
+            nodes:
+              - node: borderleaf1
+                ip_address: 3.3.3.1/29
+              - node: borderleaf2
+                ip_address: 3.3.3.2/29  
+                  
+          - id: 1237
+            name: Palo2
+            enabled: true
+            vxlan: false
+            tags: [ palo ]
+            nodes:
+              - node: borderleaf1
+                ip_address: 4.4.4.1/29
+              - node: borderleaf2
+                ip_address: 4.4.4.2/29  
+
+          # SVI definitions.
+          - id: 99
+            # SVI Description
+            name: Wifi
+            tags: [ wifi ]
+            enabled: true
+            # IP anycast gateway to be used in the SVI in every leaf.
+            ip_address_virtual: 129.82.99.1/24

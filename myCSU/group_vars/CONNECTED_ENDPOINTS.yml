@@ -5,19 +5,6 @@
 servers:
 
   # Name of the defined server.
-  - name: Palo-A-Side
-    adapters:
-      - endpoint_ports: [Etherent1, Ethernet2]
-        switch_ports: [Ethernet14, Ethernet14]
-        switches: [borderleaf1, borderleaf2]
-        description: Trunk_to_Palos_A
-        vlans: 2,3
-        mode: trunk
-        port_channel:
-          description: Po_to_Palo_A
-          channel_id: 100
-          mode: active
-
   - name: Atmospheric Science
     # Definition of adapters on the server.
     adapters:
@@ -27,17 +14,17 @@ servers:
         switch_ports: [ Ethernet5, Ethernet5 ]
         # Device names where the server ports are connected.
         switches: [ WCC1, WCC2 ]
-# --> This needs to be descriptions, not description, when configuring multiple ports 
         descriptions: [ 'level1_atmospheric-science(1120)_ats1_114b_048002_A22', 'level1_atmospheric-science(1120)_ats1_114b_048002_B22' ]
         # VLANs that will be configured on these ports.
-        vlans: 17,48,50,401,428,472,512,513,525,804,814,2020,2716-2720,3300,3307,3349
+        vlans: 17,48,50,401,428,472,512,513,525,804,814,2020,2716-2720,3300,3307,3349,168
         # L2 mode of the port.
         mode: trunk
         # Spanning tree portfast configuration on this port.
         spanning_tree_portfast: edge
         port_channel:
           description: level1_atmospheric-science(1120)_ats1_114b_048002_Trk1
-# -- > channel_id: sets both the port-channel # and the MLAG # simultaneously, without this field, both are set to match the physical interface # 
           channel_id: 48
           # Port channel mode for LACP.
           mode: active
+
+

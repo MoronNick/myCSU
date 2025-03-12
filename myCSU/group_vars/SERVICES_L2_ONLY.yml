@@ -1,0 +1,51 @@
+---
+l2only:
+  # Definition of tenants. Additional level of abstraction to VRFs
+  - name: l2only
+    # Number used to generate the VNI of each VLAN by adding the VLAN number in this tenant.
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: default
+
+    l2vlans:
+      # These are pure L2 vlans. They do not have a SVI defined in the l3leafs and they will be bridged inside the VXLAN fabric
+      - id: 168
+        name: Aruba_ctrlr_public
+        tags: [csu]        
+      - id: 313
+        name: csu-visitor
+      - id: 314
+        name: IoT_Wireless
+      - id: 315
+        name: NOC_Systems 
+      - id: 620
+        name: Heating_2_Chill
+      - id: 634
+        name: Engr_Wifi                                            
+      - id: 804
+        name: Cardkey
+      - id: 814
+        name: EMS
+      - id: 815
+        name: IDRC_EMS        
+      - id: 817
+        name: GMP_EMS  
+      - id: 1068
+        name: Aruba_ctrlr_private
+      - id: 2020
+        name: ARUBA_000
+      - id: 2023
+        name: ARUBA_192   
+      - id: 3500
+        name: csu-net     
+      - id: 3714
+        name: .1x_foothills 
+      - id: 3785
+        name: aruba_guest 
+      - id: 3900
+        name: Wireless-1083_0 
+      - id: 3903
+        name: Wireless-1083_64   
+
+
+                                                          

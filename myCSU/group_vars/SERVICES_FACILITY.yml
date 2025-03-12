@@ -1,0 +1,24 @@
+facilities:
+  - name: facilities
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: facilities
+        # VRF VNI definition.
+        vrf_vni: 30
+        # Enable VTEP Network diagnostics
+        # This will create a loopback with virtual source-nat enable to perform diagnostics from the switch.
+        vtep_diagnostic:
+          # Loopback interface number
+          loopback: 12
+          # Loopback ip range, a unique ip is derived from this ranged and assigned- *Need to carve out IP space for each VRF*
+          # to each l3 leaf based on it's unique id.
+          loopback_ip_range: 10.255.11.0/27
+        # nodes:
+        #   - borderleaf1
+        svis: 
+          - id: 456
+            name: facilities
+            tags: [facil]
+            enabled: true
+            # IP anycast gateway to be used in the SVI in every leaf.
+            ip_address_virtual: 129.82.254.1/23

@@ -25,22 +25,24 @@ all:
                       ansible_host: 192.168.100.200
                     Spine2:
                       ansible_host: 192.168.100.201
-                DC1_L3_LEAVES:
-                  hosts:
-                    WCC1:
-                      ansible_host: 192.168.100.202
-                    WCC2:
-                      ansible_host: 192.168.100.203
-                    SCC1:
-                      ansible_host: 192.168.100.204
-                    SCC2:
-                      ansible_host: 192.168.100.205
-                DC1_borderleaf:
-                  hosts:
-                    borderleaf1:
-                      ansible_host: 192.168.100.208
-                    borderleaf2:
-                      ansible_host: 192.168.100.209
+                Routers:
+                  children:
+                    DC1_L3_LEAVES:
+                      hosts:
+                        WCC1:
+                          ansible_host: 192.168.100.202
+                        WCC2:
+                          ansible_host: 192.168.100.203
+                        SCC1:
+                          ansible_host: 192.168.100.204
+                        SCC2:
+                          ansible_host: 192.168.100.205
+                    DC1_borderleaf:
+                      hosts:
+                        borderleaf1:
+                          ansible_host: 192.168.100.208
+                        borderleaf2:
+                          ansible_host: 192.168.100.209
         Standalone: 
           children:
             L2_LEAVES:
@@ -51,21 +53,51 @@ all:
                       ansible_host: 192.168.100.206
                     e7_0r05c05052052:
                       ansible_host: 192.168.100.207
-    NETWORK_SERVICES:
+
+#SVIs per vrf
+    SERVICES_CAMPUS:
       children:
         DC1_L3_LEAVES:
         DC1_L2_LEAVES:
         DC1_borderleaf:
-    L3_INTERFACES:
+    SERVICES_WIFI:
       children:
-        DC1_borderleaf:        
+        DC1_L3_LEAVES:
+        DC1_L2_LEAVES:
+        DC1_borderleaf:
+    SERVICES_FACILITY:
+      children:
+        DC1_L3_LEAVES:
+        DC1_L2_LEAVES:
+        DC1_borderleaf:
+#L2 Only VLANs in the fabric
+    SERVICES_L2_ONLY:
+      children:
+        DC1_L3_LEAVES:
+        DC1_L2_LEAVES:
+        DC1_borderleaf:
+#Interface Configuration
     CONNECTED_ENDPOINTS:
       children:
         DC1_L3_LEAVES:
         DC1_L2_LEAVES:
-    FW_ENDPOINTS:
+#BORDERLEAFS   
+    BORDERLEAF_ENDPOINTS:
       children:
         DC1_borderleaf:
+
     Standalone_Endpoints: 
       children: 
         Cameras: 
+
+
+#OLD STUFF
+    # NETWORK_SERVICES:
+    #   children:
+    #     DC1_L3_LEAVES:
+    #     DC1_L2_LEAVES:
+    #     DC1_borderleaf:
+    # L3_INTERFACES:
+    #   children:
+    #     DC1_borderleaf:  
+

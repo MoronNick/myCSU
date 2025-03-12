@@ -1,18 +1,19 @@
 ---
+#Network Services Keys - Used to seperate VLAN configuration per VRF
+network_services_keys: 
+  - name: tenants
+  - name: campus
+  - name: wifi
+  - name: facilities
+  - name: l2only
+
 # Define underlay and overlay routing protocol to be used
 underlay_routing_protocol: ebgp
 overlay_routing_protocol: ebgp
+#Add for Mulicast support
+underlay_multicast: true
+evpn_multicast: true
 
-# custom_structured_configuration_local_users:
-#   # Define a new user, which is called "ansible"
-#   - name: nmoore
-#     privilege: 15
-#     role: network-admin
-#     # Password set to "ansible". Same string as the device generates when configuring a username.
-#     sha512_password: $6$efhlpbsLckairgf9$LEm8jDPNicbyg0rY.Iy7x7gi1/8cdvIWoo416ssez3.q1IFm8gNfLwme.326zSa5E/nXKeeknOhk/Jjxo/Xe4/ 
-
-# enable_trunk_groups: true
-only_local_vlan_trunk_groups: true 
 # BGP peer groups passwords
 bgp_peer_groups:
   # all passwords set to "arista"
@@ -25,8 +26,8 @@ bgp_peer_groups:
 
 
 # p2p_uplinks_mtu: 9214
-p2p_uplinks_mtu: 1500
-
+p2p_uplinks_mtu: 9214
+default_interface_mtu: 9100
 # Set default uplink, downlink, and MLAG interfaces based on node type
 default_interfaces:
   - types: [ spine ]

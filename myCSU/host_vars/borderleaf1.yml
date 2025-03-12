@@ -1,0 +1,21 @@
+servers:
+
+  # Name of the defined server.
+  - name: Test_host1
+    adapters:
+      - endpoint_ports: [Etherent1]
+        switch_ports: [Ethernet25]
+        switches: [borderleaf1]
+        description: Test_host1_bl1
+        vlans: 513,525,540
+        mode: trunk
+
+
+  - name: Test_host2
+    adapters:
+      - endpoint_ports: [Etherent1]
+        switch_ports: [Ethernet26]
+        switches: [borderleaf1]
+        description: Test_host2_bl1
+        vlans: 653
+        mode: access

@@ -24,6 +24,7 @@
   - [Internal VLAN Allocation Policy Summary](#internal-vlan-allocation-policy-summary)
   - [Internal VLAN Allocation Policy Device Configuration](#internal-vlan-allocation-policy-device-configuration)
 - [Interfaces](#interfaces)
+  - [Interface Defaults](#interface-defaults)
   - [Ethernet Interfaces](#ethernet-interfaces)
   - [Loopback Interfaces](#loopback-interfaces)
 - [Routing](#routing)
@@ -34,6 +35,9 @@
   - [Router BGP](#router-bgp)
 - [BFD](#bfd)
   - [Router BFD](#router-bfd)
+- [Multicast](#multicast)
+  - [Router Multicast](#router-multicast)
+  - [PIM Sparse Mode](#pim-sparse-mode)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
   - [Route-maps](#route-maps)
@@ -330,6 +334,20 @@ vlan internal order ascending range 1006 1199
 
 ## Interfaces
 
+### Interface Defaults
+
+#### Interface Defaults Summary
+
+- Default Routed Interface MTU: 9100
+
+#### Interface Defaults Device Configuration
+
+```eos
+!
+interface defaults
+   mtu 9100
+```
+
 ### Ethernet Interfaces
 
 #### Ethernet Interfaces Summary
@@ -345,12 +363,12 @@ vlan internal order ascending range 1006 1199
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_WCC1_Ethernet7 | - | 10.255.255.0/31 | default | 1500 | False | - | - |
-| Ethernet2 | P2P_WCC2_Ethernet7 | - | 10.255.255.4/31 | default | 1500 | False | - | - |
-| Ethernet3 | P2P_SCC1_Ethernet7 | - | 10.255.255.8/31 | default | 1500 | False | - | - |
-| Ethernet4 | P2P_SCC2_Ethernet7 | - | 10.255.255.12/31 | default | 1500 | False | - | - |
-| Ethernet5 | P2P_borderleaf1_Ethernet11 | - | 10.255.255.36/31 | default | 1500 | False | - | - |
-| Ethernet6 | P2P_borderleaf2_Ethernet11 | - | 10.255.255.40/31 | default | 1500 | False | - | - |
+| Ethernet1 | P2P_WCC1_Ethernet7 | - | 10.255.255.0/31 | default | 9214 | False | - | - |
+| Ethernet2 | P2P_WCC2_Ethernet7 | - | 10.255.255.4/31 | default | 9214 | False | - | - |
+| Ethernet3 | P2P_SCC1_Ethernet7 | - | 10.255.255.8/31 | default | 9214 | False | - | - |
+| Ethernet4 | P2P_SCC2_Ethernet7 | - | 10.255.255.12/31 | default | 9214 | False | - | - |
+| Ethernet5 | P2P_borderleaf1_Ethernet11 | - | 10.255.255.36/31 | default | 9214 | False | - | - |
+| Ethernet6 | P2P_borderleaf2_Ethernet11 | - | 10.255.255.40/31 | default | 9214 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -359,44 +377,50 @@ vlan internal order ascending range 1006 1199
 interface Ethernet1
    description P2P_WCC1_Ethernet7
    no shutdown
-   mtu 1500
+   mtu 9214
    no switchport
    ip address 10.255.255.0/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet2
    description P2P_WCC2_Ethernet7
    no shutdown
-   mtu 1500
+   mtu 9214
    no switchport
    ip address 10.255.255.4/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet3
    description P2P_SCC1_Ethernet7
    no shutdown
-   mtu 1500
+   mtu 9214
    no switchport
    ip address 10.255.255.8/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet4
    description P2P_SCC2_Ethernet7
    no shutdown
-   mtu 1500
+   mtu 9214
    no switchport
    ip address 10.255.255.12/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet5
    description P2P_borderleaf1_Ethernet11
    no shutdown
-   mtu 1500
+   mtu 9214
    no switchport
    ip address 10.255.255.36/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet6
    description P2P_borderleaf2_Ethernet11
    no shutdown
-   mtu 1500
+   mtu 9214
    no switchport
    ip address 10.255.255.40/31
+   pim ipv4 sparse-mode
 ```
 
 ### Loopback Interfaces
@@ -624,6 +648,36 @@ router bgp 65100
 router bfd
    multihop interval 300 min-rx 300 multiplier 3
 ```
+
+## Multicast
+
+### Router Multicast
+
+#### IP Router Multicast Summary
+
+- Routing for IPv4 multicast is enabled.
+
+#### Router Multicast Device Configuration
+
+```eos
+!
+router multicast
+   ipv4
+      routing
+```
+
+### PIM Sparse Mode
+
+#### PIM Sparse Mode Enabled Interfaces
+
+| Interface Name | VRF Name | IP Version | Border Router | DR Priority | Local Interface |
+| -------------- | -------- | ---------- | ------------- | ----------- | --------------- |
+| Ethernet1 | - | IPv4 | - | - | - |
+| Ethernet2 | - | IPv4 | - | - | - |
+| Ethernet3 | - | IPv4 | - | - | - |
+| Ethernet4 | - | IPv4 | - | - | - |
+| Ethernet5 | - | IPv4 | - | - | - |
+| Ethernet6 | - | IPv4 | - | - | - |
 
 ## Filters
 

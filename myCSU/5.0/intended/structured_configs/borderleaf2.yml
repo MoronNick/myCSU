@@ -54,6 +54,11 @@ router_bgp:
     remote_as: '65100'
     peer: Spine1
     description: Spine1_Ethernet6
+  - ip_address: 10.255.255.42
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65100'
+    peer: Spine2
+    description: Spine2_Ethernet6
   - ip_address: 10.255.0.1
     peer_group: EVPN-OVERLAY-PEERS
     peer: Spine1
@@ -80,6 +85,7 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - '10:10'
+    evpn_multicast: true
     router_id: 10.255.0.13
     redistribute:
       connected:
@@ -89,15 +95,42 @@ router_bgp:
     - ip_address: 10.255.1.114
       peer_group: MLAG-IPv4-UNDERLAY-PEER
       description: borderleaf1_Vlan3009
-    - ip_address: 172.16.20.1
+    - ip_address: 1.1.1.3
       remote_as: '64512'
-      description: BGP_To_Palo
+      description: Palo1
+      route_map_in: test_in
+      route_map_out: test_out
+    - ip_address: 2.2.2.3
+      remote_as: '64512'
+      description: Palo2
       route_map_in: test_in
       route_map_out: test_out
     address_family_ipv4:
       neighbors:
-      - ip_address: 172.16.20.1
+      - ip_address: 1.1.1.3
         activate: true
+      - ip_address: 2.2.2.3
+        activate: true
+  - name: facilities
+    rd: 10.255.0.13:30
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - '30:30'
+      export:
+      - address_family: evpn
+        route_targets:
+        - '30:30'
+    router_id: 10.255.0.13
+    redistribute:
+      connected:
+        enabled: true
+        route_map: RM-CONN-2-BGP-VRFS
+    neighbors:
+    - ip_address: 10.255.1.114
+      peer_group: MLAG-IPv4-UNDERLAY-PEER
+      description: borderleaf1_Vlan3029
   - name: wifi
     rd: 10.255.0.13:20
     route_targets:
@@ -118,17 +151,25 @@ router_bgp:
     - ip_address: 10.255.1.114
       peer_group: MLAG-IPv4-UNDERLAY-PEER
       description: borderleaf1_Vlan3019
+    - ip_address: 3.3.3.3
+      remote_as: '64512'
+      description: Palo1
+      route_map_in: test_in
+      route_map_out: test_out
+    - ip_address: 4.4.4.3
+      remote_as: '64512'
+      description: Palo2
+      route_map_in: test_in
+      route_map_out: test_out
+    address_family_ipv4:
+      neighbors:
+      - ip_address: 3.3.3.3
+        activate: true
+      - ip_address: 4.4.4.3
+        activate: true
   vlans:
-  - id: 2
-    tenant: TENANT1
-    rd: 10.255.0.13:10002
-    route_targets:
-      both:
-      - 10002:10002
-    redistribute_routes:
-    - learned
   - id: 8
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10008
     route_targets:
       both:
@@ -136,7 +177,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 26
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10026
     route_targets:
       both:
@@ -144,23 +185,15 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 48
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10048
     route_targets:
       both:
       - 10048:10048
     redistribute_routes:
     - learned
-  - id: 50
-    tenant: TENANT1
-    rd: 10.255.0.13:10050
-    route_targets:
-      both:
-      - 10050:10050
-    redistribute_routes:
-    - learned
   - id: 84
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10084
     route_targets:
       both:
@@ -168,7 +201,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 108
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10108
     route_targets:
       both:
@@ -176,7 +209,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 214
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10214
     route_targets:
       both:
@@ -184,7 +217,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 232
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10232
     route_targets:
       both:
@@ -192,7 +225,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 233
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10233
     route_targets:
       both:
@@ -200,7 +233,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 248
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10248
     route_targets:
       both:
@@ -208,7 +241,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 320
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10320
     route_targets:
       both:
@@ -216,7 +249,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 322
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10322
     route_targets:
       both:
@@ -224,7 +257,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 323
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10323
     route_targets:
       both:
@@ -232,7 +265,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 331
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10331
     route_targets:
       both:
@@ -240,7 +273,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 332
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10332
     route_targets:
       both:
@@ -248,7 +281,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 351
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10351
     route_targets:
       both:
@@ -256,7 +289,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 352
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10352
     route_targets:
       both:
@@ -264,7 +297,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 375
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10375
     route_targets:
       both:
@@ -272,7 +305,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 376
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10376
     route_targets:
       both:
@@ -280,7 +313,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 384
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10384
     route_targets:
       both:
@@ -288,7 +321,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 386
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10386
     route_targets:
       both:
@@ -296,7 +329,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 387
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10387
     route_targets:
       both:
@@ -304,7 +337,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 388
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10388
     route_targets:
       both:
@@ -312,7 +345,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 395
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10395
     route_targets:
       both:
@@ -320,7 +353,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 397
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10397
     route_targets:
       both:
@@ -328,7 +361,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 401
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10401
     route_targets:
       both:
@@ -336,7 +369,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 409
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10409
     route_targets:
       both:
@@ -344,7 +377,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 421
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10421
     route_targets:
       both:
@@ -352,7 +385,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 422
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10422
     route_targets:
       both:
@@ -360,7 +393,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 426
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10426
     route_targets:
       both:
@@ -368,7 +401,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 428
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10428
     route_targets:
       both:
@@ -376,7 +409,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 472
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10472
     route_targets:
       both:
@@ -384,7 +417,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 512
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10512
     route_targets:
       both:
@@ -392,7 +425,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 513
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10513
     route_targets:
       both:
@@ -400,7 +433,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 525
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10525
     route_targets:
       both:
@@ -408,7 +441,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 540
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10540
     route_targets:
       both:
@@ -416,7 +449,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 584
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10584
     route_targets:
       both:
@@ -424,7 +457,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 600
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10600
     route_targets:
       both:
@@ -432,7 +465,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 653
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:10653
     route_targets:
       both:
@@ -440,7 +473,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 1107
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:11107
     route_targets:
       both:
@@ -448,7 +481,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 1108
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:11108
     route_targets:
       both:
@@ -456,7 +489,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 1112
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:11112
     route_targets:
       both:
@@ -464,7 +497,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 1208
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:11208
     route_targets:
       both:
@@ -472,7 +505,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 1226
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:11226
     route_targets:
       both:
@@ -480,7 +513,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 1300
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:11300
     route_targets:
       both:
@@ -488,7 +521,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2326
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12326
     route_targets:
       both:
@@ -496,7 +529,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2670
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12670
     route_targets:
       both:
@@ -504,7 +537,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2672
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12672
     route_targets:
       both:
@@ -512,7 +545,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2676
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12676
     route_targets:
       both:
@@ -520,7 +553,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2677
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12677
     route_targets:
       both:
@@ -528,7 +561,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2680
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12680
     route_targets:
       both:
@@ -536,7 +569,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2684
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12684
     route_targets:
       both:
@@ -544,7 +577,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2689
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12689
     route_targets:
       both:
@@ -552,7 +585,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2691
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12691
     route_targets:
       both:
@@ -560,7 +593,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2694
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12694
     route_targets:
       both:
@@ -568,7 +601,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2698
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12698
     route_targets:
       both:
@@ -576,7 +609,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2699
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12699
     route_targets:
       both:
@@ -584,7 +617,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2712
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12712
     route_targets:
       both:
@@ -592,7 +625,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2716
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12716
     route_targets:
       both:
@@ -600,7 +633,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2717
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12717
     route_targets:
       both:
@@ -608,7 +641,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2718
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12718
     route_targets:
       both:
@@ -616,7 +649,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2719
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12719
     route_targets:
       both:
@@ -624,7 +657,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 2720
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:12720
     route_targets:
       both:
@@ -632,7 +665,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3300
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13300
     route_targets:
       both:
@@ -640,7 +673,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3301
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13301
     route_targets:
       both:
@@ -648,7 +681,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3302
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13302
     route_targets:
       both:
@@ -656,7 +689,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3303
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13303
     route_targets:
       both:
@@ -664,7 +697,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3304
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13304
     route_targets:
       both:
@@ -672,7 +705,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3305
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13305
     route_targets:
       both:
@@ -680,7 +713,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3306
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13306
     route_targets:
       both:
@@ -688,7 +721,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3307
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13307
     route_targets:
       both:
@@ -696,7 +729,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3308
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13308
     route_targets:
       both:
@@ -704,7 +737,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3309
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13309
     route_targets:
       both:
@@ -712,7 +745,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3310
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13310
     route_targets:
       both:
@@ -720,7 +753,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3311
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13311
     route_targets:
       both:
@@ -728,7 +761,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3312
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13312
     route_targets:
       both:
@@ -736,7 +769,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3313
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13313
     route_targets:
       both:
@@ -744,163 +777,35 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 3349
-    tenant: TENANT1
+    tenant: campus
     rd: 10.255.0.13:13349
     route_targets:
       both:
       - 13349:13349
     redistribute_routes:
     - learned
-  - id: 99
-    tenant: TENANT1
-    rd: 10.255.0.13:10099
+  - id: 456
+    tenant: facilities
+    rd: 10.255.0.13:10456
     route_targets:
       both:
-      - 10099:10099
-    redistribute_routes:
-    - learned
-  - id: 3714
-    tenant: TENANT1
-    rd: 10.255.0.13:13714
-    route_targets:
-      both:
-      - 13714:13714
-    redistribute_routes:
-    - learned
-  - id: 2020
-    tenant: TENANT1
-    rd: 10.255.0.13:12020
-    route_targets:
-      both:
-      - 12020:12020
-    redistribute_routes:
-    - learned
-  - id: 2023
-    tenant: TENANT1
-    rd: 10.255.0.13:12023
-    route_targets:
-      both:
-      - 12023:12023
-    redistribute_routes:
-    - learned
-  - id: 1068
-    tenant: TENANT1
-    rd: 10.255.0.13:11068
-    route_targets:
-      both:
-      - 11068:11068
+      - 10456:10456
     redistribute_routes:
     - learned
   - id: 168
-    tenant: TENANT1
+    tenant: l2only
     rd: 10.255.0.13:10168
     route_targets:
       both:
       - 10168:10168
     redistribute_routes:
     - learned
-  - id: 804
-    tenant: TENANT1
-    rd: 10.255.0.13:10804
+  - id: 99
+    tenant: wifi
+    rd: 10.255.0.13:10099
     route_targets:
       both:
-      - 10804:10804
-    redistribute_routes:
-    - learned
-  - id: 814
-    tenant: TENANT1
-    rd: 10.255.0.13:10814
-    route_targets:
-      both:
-      - 10814:10814
-    redistribute_routes:
-    - learned
-  - id: 634
-    tenant: TENANT1
-    rd: 10.255.0.13:10634
-    route_targets:
-      both:
-      - 10634:10634
-    redistribute_routes:
-    - learned
-  - id: 817
-    tenant: TENANT1
-    rd: 10.255.0.13:10817
-    route_targets:
-      both:
-      - 10817:10817
-    redistribute_routes:
-    - learned
-  - id: 620
-    tenant: TENANT1
-    rd: 10.255.0.13:10620
-    route_targets:
-      both:
-      - 10620:10620
-    redistribute_routes:
-    - learned
-  - id: 815
-    tenant: TENANT1
-    rd: 10.255.0.13:10815
-    route_targets:
-      both:
-      - 10815:10815
-    redistribute_routes:
-    - learned
-  - id: 314
-    tenant: TENANT1
-    rd: 10.255.0.13:10314
-    route_targets:
-      both:
-      - 10314:10314
-    redistribute_routes:
-    - learned
-  - id: 315
-    tenant: TENANT1
-    rd: 10.255.0.13:10315
-    route_targets:
-      both:
-      - 10315:10315
-    redistribute_routes:
-    - learned
-  - id: 3900
-    tenant: TENANT1
-    rd: 10.255.0.13:13900
-    route_targets:
-      both:
-      - 13900:13900
-    redistribute_routes:
-    - learned
-  - id: 3903
-    tenant: TENANT1
-    rd: 10.255.0.13:13903
-    route_targets:
-      both:
-      - 13903:13903
-    redistribute_routes:
-    - learned
-  - id: 3785
-    tenant: TENANT1
-    rd: 10.255.0.13:13785
-    route_targets:
-      both:
-      - 13785:13785
-    redistribute_routes:
-    - learned
-  - id: 3500
-    tenant: TENANT1
-    rd: 10.255.0.13:13500
-    route_targets:
-      both:
-      - 13500:13500
-    redistribute_routes:
-    - learned
-  - id: 313
-    tenant: TENANT1
-    rd: 10.255.0.13:10313
-    route_targets:
-      both:
-      - 10313:10313
+      - 10099:10099
     redistribute_routes:
     - learned
 static_routes:
@@ -909,6 +814,14 @@ static_routes:
   gateway: 192.168.100.1
 service_routing_protocols_model: multi-agent
 ip_routing: true
+router_multicast:
+  ipv4:
+    routing: true
+    software_forwarding: sfe
+  vrfs:
+  - name: campus
+    ipv4:
+      routing: true
 daemon_terminattr:
   cvaddrs:
   - apiserver.cv-staging.corp.arista.io:443
@@ -922,8 +835,8 @@ daemon_terminattr:
 vlan_internal_order:
   allocation: ascending
   range:
-    beginning: 1006
-    ending: 1199
+    beginning: 3200
+    ending: 3299
 aaa_root:
   disabled: true
 config_end: true
@@ -939,6 +852,8 @@ event_handlers:
 ip_name_servers:
 - ip_address: 8.8.8.8
   vrf: mgmt
+interface_defaults:
+  mtu: 9100
 spanning_tree:
   mode: mstp
   mst_instances:
@@ -958,11 +873,14 @@ vrfs:
 - name: mgmt
   ip_routing: true
 - name: campus
-  tenant: TENANT1
+  tenant: campus
   ip_routing: true
   ipv6_routing: true
+- name: facilities
+  tenant: facilities
+  ip_routing: true
 - name: wifi
-  tenant: TENANT1
+  tenant: wifi
   ip_routing: true
 management_interfaces:
 - name: Management0
@@ -987,824 +905,1298 @@ vlans:
   name: MLAG
   trunk_groups:
   - MLAG
-- id: 2
-  name: BGP_to_Palo
-  tenant: TENANT1
 - id: 8
   name: West_Campus_Remote_Public
-  tenant: TENANT1
+  tenant: campus
 - id: 26
   name: CVMBS_RBL_Public
-  tenant: TENANT1
+  tenant: campus
 - id: 48
   name: COE_ATS_Public
-  tenant: TENANT1
-- id: 50
-  name: Drone_Pub
-  tenant: TENANT1
+  tenant: campus
 - id: 84
   name: vendor_foothills
-  tenant: TENANT1
+  tenant: campus
 - id: 108
   name: ACRC-CIRA_Public
-  tenant: TENANT1
+  tenant: campus
 - id: 214
   name: CVMBS_ARBL_Public
-  tenant: TENANT1
+  tenant: campus
 - id: 232
   name: ERC_Public
-  tenant: TENANT1
+  tenant: campus
 - id: 233
   name: ERC_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 248
   name: CSFS_Public
-  tenant: TENANT1
+  tenant: campus
 - id: 320
   name: WCC_PA_PtP
-  tenant: TENANT1
+  tenant: campus
 - id: 322
   name: West_Campus_Remote_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 323
   name: West_Campus_Remote_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 331
   name: CSFS_Public
-  tenant: TENANT1
+  tenant: campus
 - id: 332
   name: ARBL_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 351
   name: AIDL_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 352
   name: AIDL_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 375
   name: IDA_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 376
   name: IDA_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 384
   name: HHS_Aggie_Labs_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 386
   name: ERL_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 387
   name: CVMBS_Equine_Center_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 388
   name: Equine_Center_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 395
   name: ACRC-CIRA_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 397
   name: ERC_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 401
   name: Atmos_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 409
   name: ABL_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 421
   name: Aggie_Labs_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 422
   name: Aggie_Labs_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 426
   name: RBL_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 428
   name: ATS_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 472
   name: SimLab_Public
-  tenant: TENANT1
+  tenant: campus
 - id: 512
   name: SimLab_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 513
   name: SimLab_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 525
   name: ATS_Chem_Utility
-  tenant: TENANT1
+  tenant: campus
 - id: 540
   name: Beam_Lab_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 584
   name: WCC_Public_Non_CSU
-  tenant: TENANT1
+  tenant: campus
 - id: 600
   name: WCC_ENDR_DREN_L2_link
-  tenant: TENANT1
+  tenant: campus
 - id: 653
   name: AECOM_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 1107
   name: Temple_Grandin_Util
-  tenant: TENANT1
+  tenant: campus
 - id: 1108
   name: WCC_Public_Non_CSU
-  tenant: TENANT1
+  tenant: campus
 - id: 1112
   name: Engines_Lab_Priv2
-  tenant: TENANT1
+  tenant: campus
 - id: 1208
   name: ACRC-CIRA_Static_Private
-  tenant: TENANT1
+  tenant: campus
 - id: 1226
   name: CVMBS_RBL_Private
-  tenant: TENANT1
+  tenant: campus
+- id: 1234
+  name: Palo1-test
+  tenant: campus
+- id: 1235
+  name: Palo2
+  tenant: campus
 - id: 1300
   name: Temple_Grandin_Priv
-  tenant: TENANT1
+  tenant: campus
 - id: 2326
   name: VOIP_RIC
-  tenant: TENANT1
+  tenant: campus
 - id: 2670
   name: VOIP_ARBL
-  tenant: TENANT1
+  tenant: campus
 - id: 2672
   name: VOIP_RBL
-  tenant: TENANT1
+  tenant: campus
 - id: 2676
   name: VOIP_ERL
-  tenant: TENANT1
+  tenant: campus
 - id: 2677
   name: VOIP_Aggie_Labs
-  tenant: TENANT1
+  tenant: campus
 - id: 2680
   name: VOIP_BEAMLAB
-  tenant: TENANT1
+  tenant: campus
 - id: 2684
   name: VOIP_IDA
-  tenant: TENANT1
+  tenant: campus
 - id: 2689
   name: VOIP_CSFS
-  tenant: TENANT1
+  tenant: campus
 - id: 2691
   name: VOIP_AIDL
-  tenant: TENANT1
+  tenant: campus
 - id: 2694
   name: VOIP_AECOM
-  tenant: TENANT1
+  tenant: campus
 - id: 2698
   name: VOIP_ACRC-CIRA
-  tenant: TENANT1
+  tenant: campus
 - id: 2699
   name: VOIP_ERC
-  tenant: TENANT1
+  tenant: campus
 - id: 2712
   name: VOIP_FOOTHILLS_CATCHALL
-  tenant: TENANT1
+  tenant: campus
 - id: 2716
   name: VOIP_ATS_Main
-  tenant: TENANT1
+  tenant: campus
 - id: 2717
   name: VOIP_ATS_CMMAP
-  tenant: TENANT1
+  tenant: campus
 - id: 2718
   name: VOIP_ATS_Chem
-  tenant: TENANT1
+  tenant: campus
 - id: 2719
   name: VOIP_ATS_Annex
-  tenant: TENANT1
+  tenant: campus
 - id: 2720
   name: VOIP_SimLab
-  tenant: TENANT1
+  tenant: campus
 - id: 3300
   name: ACNS_SW-MGMT_WC
-  tenant: TENANT1
+  tenant: campus
 - id: 3301
   name: Wireless_ACRC
-  tenant: TENANT1
+  tenant: campus
 - id: 3302
   name: Wireless_ABL
-  tenant: TENANT1
+  tenant: campus
 - id: 3303
   name: Wireless_AECOM
-  tenant: TENANT1
+  tenant: campus
 - id: 3304
   name: Wireless_Aggie_Labs
-  tenant: TENANT1
+  tenant: campus
 - id: 3305
   name: Wireless_AIDL
-  tenant: TENANT1
+  tenant: campus
 - id: 3306
   name: Wireless_ARBL
-  tenant: TENANT1
+  tenant: campus
 - id: 3307
   name: Wireless_Atmospheric_Science
-  tenant: TENANT1
+  tenant: campus
 - id: 3308
   name: Wireless_CSFS
-  tenant: TENANT1
+  tenant: campus
 - id: 3309
   name: Wireless_ERC
-  tenant: TENANT1
+  tenant: campus
 - id: 3310
   name: Wireless_ERL
-  tenant: TENANT1
+  tenant: campus
 - id: 3311
   name: Wireless_IDA
-  tenant: TENANT1
+  tenant: campus
 - id: 3312
   name: Wireless_RBL
-  tenant: TENANT1
+  tenant: campus
 - id: 3313
   name: Wireless_Temple_Grandin
-  tenant: TENANT1
+  tenant: campus
 - id: 3349
   name: ACNS_UPS-MGMT_WC
-  tenant: TENANT1
+  tenant: campus
 - id: 3009
   name: MLAG_L3_VRF_campus
   trunk_groups:
   - MLAG
-  tenant: TENANT1
+  tenant: campus
+- id: 456
+  name: facilities
+  tenant: facilities
+- id: 3029
+  name: MLAG_L3_VRF_facilities
+  trunk_groups:
+  - MLAG
+  tenant: facilities
+- id: 168
+  name: Aruba_ctrlr_public
+  tenant: l2only
 - id: 99
   name: Wifi
-  tenant: TENANT1
+  tenant: wifi
+- id: 1236
+  name: Palo1-test
+  tenant: wifi
+- id: 1237
+  name: Palo2
+  tenant: wifi
 - id: 3019
   name: MLAG_L3_VRF_wifi
   trunk_groups:
   - MLAG
-  tenant: TENANT1
-- id: 168
-  name: Aruba_ctrlr_public
-  tenant: TENANT1
-- id: 313
-  name: csu-visitor
-  tenant: TENANT1
-- id: 314
-  name: IoT_Wireless
-  tenant: TENANT1
-- id: 315
-  name: NOC_Systems
-  tenant: TENANT1
-- id: 620
-  name: Heating_2_Chill
-  tenant: TENANT1
-- id: 634
-  name: Engr_Wifi
-  tenant: TENANT1
-- id: 804
-  name: Cardkey
-  tenant: TENANT1
-- id: 814
-  name: EMS
-  tenant: TENANT1
-- id: 815
-  name: IDRC_EMS
-  tenant: TENANT1
-- id: 817
-  name: GMP_EMS
-  tenant: TENANT1
-- id: 1068
-  name: Aruba_ctrlr_private
-  tenant: TENANT1
-- id: 2020
-  name: ARUBA_000
-  tenant: TENANT1
-- id: 2023
-  name: ARUBA_192
-  tenant: TENANT1
-- id: 3500
-  name: csu-net
-  tenant: TENANT1
-- id: 3714
-  name: .1x_foothills
-  tenant: TENANT1
-- id: 3785
-  name: aruba_guest
-  tenant: TENANT1
-- id: 3900
-  name: Wireless-1083_0
-  tenant: TENANT1
-- id: 3903
-  name: Wireless-1083_64
-  tenant: TENANT1
+  tenant: wifi
 vlan_interfaces:
 - name: Vlan4093
   description: MLAG_L3
   shutdown: false
-  mtu: 1500
+  mtu: 9214
   ip_address: 10.255.1.115/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Vlan4094
   description: MLAG
   shutdown: false
   no_autostate: true
-  mtu: 1500
+  mtu: 9214
   ip_address: 10.255.1.83/31
-- name: Vlan2
-  tenant: TENANT1
-  description: BGP_to_Palo
-  shutdown: false
-  ip_address: 1.1.1.2/29
-  vrf: campus
 - name: Vlan8
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: West_Campus_Remote_Public
   shutdown: false
   ipv6_enable: true
   ip_address_virtual: 129.82.8.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   ipv6_address_virtuals:
   - fec0:0:8::1/96
   vrf: campus
 - name: Vlan26
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: CVMBS_RBL_Public
   shutdown: false
   ip_address_virtual: 129.82.26.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan48
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: COE_ATS_Public
   shutdown: false
   ip_address_virtual: 129.82.48.1/24
-  vrf: campus
-- name: Vlan50
-  tenant: TENANT1
-  description: Drone_Pub
-  shutdown: false
-  ip_address_virtual: 129.82.5.193/26
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan84
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: vendor_foothills
   shutdown: false
   ip_address_virtual: 129.82.84.129/26
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan108
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ACRC-CIRA_Public
   shutdown: false
   ip_address_virtual: 129.82.108.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan214
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: CVMBS_ARBL_Public
   shutdown: false
   ip_address_virtual: 129.82.214.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan232
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ERC_Public
   shutdown: false
   ip_address_virtual: 129.82.232.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan233
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ERC_Private
   shutdown: false
   ip_address_virtual: 10.1.232.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan248
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: CSFS_Public
   shutdown: false
   ip_address_virtual: 129.82.248.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan320
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: WCC_PA_PtP
   shutdown: false
   ip_address_virtual: 129.82.1.138/29
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan322
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: West_Campus_Remote_Private
   shutdown: false
   ip_address_virtual: 10.1.8.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan323
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: West_Campus_Remote_Utility
   shutdown: false
   ip_address_virtual: 10.11.8.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan331
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: CSFS_Public
   shutdown: false
   ip_address_virtual: 10.1.214.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan332
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ARBL_Utility
   shutdown: false
   ip_address_virtual: 10.11.214.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan351
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: AIDL_Private
   shutdown: false
   ip_address_virtual: 10.1.178.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan352
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: AIDL_Utility
   shutdown: false
   ip_address_virtual: 10.11.178.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan375
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: IDA_Private
   shutdown: false
   ip_address_virtual: 10.1.179.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan376
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: IDA_Utility
   shutdown: false
   ip_address_virtual: 10.11.179.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan384
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: HHS_Aggie_Labs_Private
   shutdown: false
   ip_address_virtual: 10.3.152.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan386
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ERL_Private
   shutdown: false
   ip_address_virtual: 10.2.216.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan387
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: CVMBS_Equine_Center_Private
   shutdown: false
   ip_address_virtual: 10.2.218.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan388
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Equine_Center_Utility
   shutdown: false
   ip_address_virtual: 10.11.218.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan395
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ACRC-CIRA_Utility
   shutdown: false
   ip_address_virtual: 10.11.108.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan397
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ERC_Utility
   shutdown: false
   ip_address_virtual: 10.11.232.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan401
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Atmos_Private
   shutdown: false
   ip_address_virtual: 10.1.48.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan409
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ABL_Utility
   shutdown: false
   ip_address_virtual: 10.11.228.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan421
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Aggie_Labs_Private
   shutdown: false
   ip_address_virtual: 10.2.255.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan422
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Aggie_Labs_Utility
   shutdown: false
   ip_address_virtual: 10.12.255.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan426
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: RBL_Utility
   shutdown: false
   ip_address_virtual: 10.11.26.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan428
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ATS_Utility
   shutdown: false
   ip_address_virtual: 10.11.48.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan472
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: SimLab_Public
   shutdown: false
   ip_address_virtual: 129.82.4.129/25
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan512
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: SimLab_Private
   shutdown: false
   ip_address_virtual: 10.1.4.129/25
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan513
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: SimLab_Utility
   shutdown: false
   ip_address_virtual: 10.11.4.129/25
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan525
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ATS_Chem_Utility
   shutdown: false
   ip_address_virtual: 10.11.49.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan540
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Beam_Lab_Private
   shutdown: false
   ip_address_virtual: 10.1.228.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan584
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: WCC_Public_Non_CSU
   shutdown: false
   ip_address_virtual: 129.82.18.129/25
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan600
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: WCC_ENDR_DREN_L2_link
   shutdown: false
   ip_address_virtual: 129.82.1.72/28
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan653
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: AECOM_Private
   shutdown: false
   ip_address_virtual: 10.2.228.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1107
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Temple_Grandin_Util
   shutdown: false
   ip_address_virtual: 10.11.107.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1108
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: WCC_Public_Non_CSU
   shutdown: false
   ip_address_virtual: 10.1.108.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1112
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Engines_Lab_Priv2
   shutdown: false
   ip_address_virtual: 10.3.106.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1208
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ACRC-CIRA_Static_Private
   shutdown: false
   ip_address_virtual: 10.2.108.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1226
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: CVMBS_RBL_Private
   shutdown: false
   ip_address_virtual: 10.1.26.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
+  vrf: campus
+- name: Vlan1234
+  tenant: campus
+  tags:
+  - palo
+  description: Palo1-test
+  shutdown: false
+  ip_address: 1.1.1.2/29
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
+  vrf: campus
+- name: Vlan1235
+  tenant: campus
+  tags:
+  - palo
+  description: Palo2
+  shutdown: false
+  ip_address: 2.2.2.2/29
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan1300
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Temple_Grandin_Priv
   shutdown: false
   ip_address_virtual: 10.1.15.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2326
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_RIC
   shutdown: false
   ip_address_virtual: 10.174.26.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2670
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_ARBL
   shutdown: false
   ip_address_virtual: 10.20.138.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2672
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_RBL
   shutdown: false
   ip_address_virtual: 10.20.142.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2676
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_ERL
   shutdown: false
   ip_address_virtual: 10.20.150.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2677
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_Aggie_Labs
   shutdown: false
   ip_address_virtual: 10.20.152.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2680
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_BEAMLAB
   shutdown: false
   ip_address_virtual: 10.20.158.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2684
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_IDA
   shutdown: false
   ip_address_virtual: 10.20.166.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2689
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_CSFS
   shutdown: false
   ip_address_virtual: 10.20.176.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2691
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_AIDL
   shutdown: false
   ip_address_virtual: 10.20.180.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2694
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_AECOM
   shutdown: false
   ip_address_virtual: 10.20.186.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2698
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_ACRC-CIRA
   shutdown: false
   ip_address_virtual: 10.20.194.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2699
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_ERC
   shutdown: false
   ip_address_virtual: 10.20.196.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2712
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_FOOTHILLS_CATCHALL
   shutdown: false
   ip_address_virtual: 10.20.222.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2716
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_ATS_Main
   shutdown: false
   ip_address_virtual: 10.20.230.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2717
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_ATS_CMMAP
   shutdown: false
   ip_address_virtual: 10.20.232.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2718
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_ATS_Chem
   shutdown: false
   ip_address_virtual: 10.20.234.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2719
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_ATS_Annex
   shutdown: false
   ip_address_virtual: 10.20.236.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan2720
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: VOIP_SimLab
   shutdown: false
   ip_address_virtual: 10.20.238.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3300
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ACNS_SW-MGMT_WC
   shutdown: false
   ip_address_virtual: 10.111.0.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3301
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_ACRC
   shutdown: false
   ip_address_virtual: 10.111.108.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3302
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_ABL
   shutdown: false
   ip_address_virtual: 10.111.228.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3303
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_AECOM
   shutdown: false
   ip_address_virtual: 10.111.226.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3304
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_Aggie_Labs
   shutdown: false
   ip_address_virtual: 10.111.255.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3305
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_AIDL
   shutdown: false
   ip_address_virtual: 10.111.178.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3306
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_ARBL
   shutdown: false
   ip_address_virtual: 10.111.214.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3307
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_Atmospheric_Science
   shutdown: false
   ip_address_virtual: 10.111.48.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3308
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_CSFS
   shutdown: false
   ip_address_virtual: 10.111.248.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3309
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_ERC
   shutdown: false
   ip_address_virtual: 10.111.232.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3310
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_ERL
   shutdown: false
   ip_address_virtual: 10.111.216.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3311
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_IDA
   shutdown: false
   ip_address_virtual: 10.111.179.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3312
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_RBL
   shutdown: false
   ip_address_virtual: 10.111.26.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3313
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: Wireless_Temple_Grandin
   shutdown: false
   ip_address_virtual: 10.111.227.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3349
-  tenant: TENANT1
+  tenant: campus
+  tags:
+  - csu
   description: ACNS_UPS-MGMT_WC
   shutdown: false
   ip_address_virtual: 10.111.2.1/23
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback10
   vrf: campus
 - name: Vlan3009
-  tenant: TENANT1
+  tenant: campus
   type: underlay_peering
   shutdown: false
   description: MLAG_L3_VRF_campus
   vrf: campus
-  mtu: 1500
+  mtu: 9214
+  ip_address: 10.255.1.115/31
+- name: Vlan456
+  tenant: facilities
+  tags:
+  - facil
+  description: facilities
+  shutdown: false
+  ip_address_virtual: 129.82.254.1/23
+  vrf: facilities
+- name: Vlan3029
+  tenant: facilities
+  type: underlay_peering
+  shutdown: false
+  description: MLAG_L3_VRF_facilities
+  vrf: facilities
+  mtu: 9214
   ip_address: 10.255.1.115/31
 - name: Vlan99
-  tenant: TENANT1
+  tenant: wifi
+  tags:
+  - wifi
   description: Wifi
   shutdown: false
   ip_address_virtual: 129.82.99.1/24
   vrf: wifi
+- name: Vlan1236
+  tenant: wifi
+  tags:
+  - palo
+  description: Palo1-test
+  shutdown: false
+  ip_address: 3.3.3.2/29
+  vrf: wifi
+- name: Vlan1237
+  tenant: wifi
+  tags:
+  - palo
+  description: Palo2
+  shutdown: false
+  ip_address: 4.4.4.2/29
+  vrf: wifi
 - name: Vlan3019
-  tenant: TENANT1
+  tenant: wifi
   type: underlay_peering
   shutdown: false
   description: MLAG_L3_VRF_wifi
   vrf: wifi
-  mtu: 1500
+  mtu: 9214
   ip_address: 10.255.1.115/31
 port_channel_interfaces:
-- name: Port-Channel1
-  description: MLAG_borderleaf1_Port-Channel1
+- name: Port-Channel20
+  description: MLAG_borderleaf1_Port-Channel20
   switchport:
     enabled: true
     mode: trunk
@@ -1812,33 +2204,33 @@ port_channel_interfaces:
       groups:
       - MLAG
   shutdown: false
-- name: Port-Channel100
-  description: Po_to_Palo_A
+- name: Port-Channel1234
+  description: Po_to_Palo
   shutdown: false
   switchport:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 2,3
-  mlag: 100
+      allowed_vlan: 1234,1235,1236,1237
+  mlag: 1234
 ethernet_interfaces:
-- name: Ethernet1
+- name: Ethernet20
   peer: borderleaf1
-  peer_interface: Ethernet1
+  peer_interface: Ethernet20
   peer_type: mlag_peer
-  description: MLAG_borderleaf1_Ethernet1
+  description: MLAG_borderleaf1_Ethernet20
   shutdown: false
   channel_group:
-    id: 1
+    id: 20
     mode: active
-- name: Ethernet2
+- name: Ethernet21
   peer: borderleaf1
-  peer_interface: Ethernet2
+  peer_interface: Ethernet21
   peer_type: mlag_peer
-  description: MLAG_borderleaf1_Ethernet2
+  description: MLAG_borderleaf1_Ethernet21
   shutdown: false
   channel_group:
-    id: 1
+    id: 20
     mode: active
 - name: Ethernet11
   peer: Spine1
@@ -1846,31 +2238,40 @@ ethernet_interfaces:
   peer_type: spine
   description: P2P_Spine1_Ethernet6
   shutdown: false
-  mtu: 1500
+  mtu: 9214
   switchport:
     enabled: false
   ip_address: 10.255.255.41/31
-- name: Ethernet3
-  peer_type: l3_interface
-  ip_address: 172.16.20.2/30
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet12
+  peer: Spine2
+  peer_interface: Ethernet6
+  peer_type: spine
+  description: P2P_Spine2_Ethernet6
   shutdown: false
+  mtu: 9214
   switchport:
     enabled: false
-  vrf: campus
+  ip_address: 10.255.255.43/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Ethernet14
-  peer: Palo-A-Side
+  peer: Palo
   peer_interface: Ethernet2
   peer_type: server
-  description: Trunk_to_Palos_A
+  description: Trunk_to_Palos_1
   shutdown: false
   channel_group:
-    id: 100
+    id: 1234
     mode: active
 mlag_configuration:
   domain_id: DC1_Borderleaf
   local_interface: Vlan4094
   peer_address: 10.255.1.82
-  peer_link: Port-Channel1
+  peer_link: Port-Channel20
   reload_delay_mlag: '300'
   reload_delay_non_mlag: '330'
 route_maps:
@@ -1915,6 +2316,11 @@ loopback_interfaces:
   shutdown: false
   vrf: campus
   ip_address: 10.255.10.13/32
+- name: Loopback12
+  description: DIAG_VRF_facilities
+  shutdown: false
+  vrf: facilities
+  ip_address: 10.255.11.13/32
 - name: Loopback11
   description: DIAG_VRF_wifi
   shutdown: false
@@ -1948,19 +2354,16 @@ vxlan_interface:
     description: borderleaf2_VTEP
     vxlan:
       udp_port: 4789
-      source_interface: Loopback1
+      source_interface: Loopback0
+      mlag_source_interface: Loopback1
       virtual_router_encapsulation_mac_address: mlag-system-id
       vlans:
-      - id: 2
-        vni: 10002
       - id: 8
         vni: 10008
       - id: 26
         vni: 10026
       - id: 48
         vni: 10048
-      - id: 50
-        vni: 10050
       - id: 84
         vni: 10084
       - id: 108
@@ -2109,52 +2512,25 @@ vxlan_interface:
         vni: 13313
       - id: 3349
         vni: 13349
-      - id: 99
-        vni: 10099
+      - id: 456
+        vni: 10456
       - id: 168
         vni: 10168
-      - id: 313
-        vni: 10313
-      - id: 314
-        vni: 10314
-      - id: 315
-        vni: 10315
-      - id: 620
-        vni: 10620
-      - id: 634
-        vni: 10634
-      - id: 804
-        vni: 10804
-      - id: 814
-        vni: 10814
-      - id: 815
-        vni: 10815
-      - id: 817
-        vni: 10817
-      - id: 1068
-        vni: 11068
-      - id: 2020
-        vni: 12020
-      - id: 2023
-        vni: 12023
-      - id: 3500
-        vni: 13500
-      - id: 3714
-        vni: 13714
-      - id: 3785
-        vni: 13785
-      - id: 3900
-        vni: 13900
-      - id: 3903
-        vni: 13903
+      - id: 99
+        vni: 10099
       vrfs:
       - name: campus
         vni: 10
+        multicast_group: 232.0.0.10
+      - name: facilities
+        vni: 30
       - name: wifi
         vni: 20
 virtual_source_nat_vrfs:
 - name: campus
   ip_address: 10.255.10.13
+- name: facilities
+  ip_address: 10.255.11.13
 - name: wifi
   ip_address: 10.255.11.13
 metadata:

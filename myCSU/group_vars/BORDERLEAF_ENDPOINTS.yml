@@ -1,0 +1,28 @@
+---
+# Definition of connected endpoints in the fabric.
+
+      
+servers:
+
+  # Name of the defined server.
+  - name: Palo
+    adapters:
+      - endpoint_ports: [Etherent1, Ethernet2]
+        switch_ports: [Ethernet14, Ethernet14]
+        switches: [borderleaf1, borderleaf2]
+        description: Trunk_to_Palos_1
+        vlans: 1234,1235,1236,1237
+        mode: trunk
+        port_channel:
+          description: Po_to_Palo
+          channel_id: 1234
+          mode: active
+      
+  - name: vlan50-test
+    adapters:
+      - endpoint_ports: [Etherent1]
+        switch_ports: [Ethernet18]
+        switches: [borderleaf1]
+        description: test-vlan50
+        vlans: 50
+        mode: trunk

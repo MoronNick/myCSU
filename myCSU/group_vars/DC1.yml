@@ -32,6 +32,7 @@ spine:
       id: 2
       mgmt_ip: 192.168.100.201/24
 
+
 # L3 Leaf switch group
 l3leaf:
   defaults:
@@ -57,7 +58,8 @@ l3leaf:
     virtual_router_mac_address: 00:1c:73:00:00:99
     spanning_tree_priority: 4096
     spanning_tree_mode: mstp
-
+    filter:
+      only_vlans_in_use: false
   # If two nodes (and only two) are in the same node_group, they will automatically form an MLAG pair
   node_groups:
     # Definition of a node group that will include two devices in MLAG.
@@ -65,6 +67,8 @@ l3leaf:
     - group: DC1_L3_LEAF1
       # ASN to be used by BGP for the group. Both devices in the MLAG pair will use the same BGP ASN
       bgp_as: 65101
+      filter:
+        tags: [csu, wifi, facil]     
       nodes:
         # Definition of hostnames under the node_group
         - name: WCC1
@@ -72,53 +76,42 @@ l3leaf:
           mgmt_ip: 192.168.100.202/24
           # Definition of the port to be used in the uplink device facing this device.
           # Note that the number of elements in this list must match the length of 'uplink_switches' as well as 'uplink_interfaces'
-          uplink_switch_interfaces:
-            - Ethernet1
-            - Ethernet1
+          uplink_switch_interfaces: [Ethernet1, Ethernet1]
         - name: WCC2
           id: 2
           mgmt_ip: 192.168.100.203/24
-          uplink_switch_interfaces:
-            - Ethernet2
-            - Ethernet2
+          uplink_switch_interfaces: [Ethernet2, Ethernet2]
+
 
     - group: DC1_L3_LEAF2
       bgp_as: 65102
+      filter:
+        tags: [csu, wifi, facil]   
       nodes:
         - name: SCC1
           id: 3
           mgmt_ip: 192.168.100.204/24
-          uplink_switch_interfaces:
-            - Ethernet3
-            - Ethernet3
+          uplink_switch_interfaces: [Ethernet3, Ethernet3]
         - name: SCC2
           id: 4
           mgmt_ip: 192.168.100.205/24
-          uplink_switch_interfaces:
-            - Ethernet4
-            - Ethernet4
+          uplink_switch_interfaces: [Ethernet4, Ethernet4]
+
     - group: DC1_Borderleaf
       bgp_as: 65103
+      filter:
+        tags: [csu, facil, palo, wifi]  
       nodes:
         - name: borderleaf1
           id: 10
           mgmt_ip: 192.168.100.208/24
-          uplink_switch_interfaces:
-            - Ethernet5
-          uplink_interfaces:
-            - Ethernet11
-            - Ethernet12
-          mlag_interfaces: 
-            - Ethernet1
-            - Ethernet2
+          uplink_switch_interfaces:  [Ethernet5, Ethernet5]
+          uplink_interfaces:  [Ethernet11, Ethernet12]
+          mlag_interfaces:  [Ethernet20, Ethernet21]
         - name: borderleaf2
           id: 11
           mgmt_ip: 192.168.100.209/24
-          uplink_switch_interfaces:
-            - Ethernet6
-          uplink_interfaces:
-            - Ethernet11
-            - Ethernet12
-          mlag_interfaces: 
-            - Ethernet1
-            - Ethernet2
+          uplink_switch_interfaces: [Ethernet6, Ethernet6]
+          uplink_interfaces: [Ethernet11, Ethernet12]
+          mlag_interfaces: [Ethernet20, Ethernet21]
+

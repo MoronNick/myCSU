@@ -1,4 +1,3 @@
-type: l3leaf
 custom_structured_configuration_route_maps:
   - name: RM_to_PALO_OUT
     sequence_numbers:
@@ -13,7 +12,3 @@ custom_structured_configuration_prefix_lists:
       - sequence: 10
         # Action as string.
         action: "permit 10.1.1.0/24 eq 32"
-
-  # custom_structured_configurations_trunk_groups_enabled: true
-
-only_local_vlan_trunk_groups: true 

@@ -107,6 +107,9 @@ static_routes:
   gateway: 192.168.100.1
 service_routing_protocols_model: multi-agent
 ip_routing: true
+router_multicast:
+  ipv4:
+    routing: true
 daemon_terminattr:
   cvaddrs:
   - apiserver.cv-staging.corp.arista.io:443
@@ -137,6 +140,8 @@ event_handlers:
 ip_name_servers:
 - ip_address: 8.8.8.8
   vrf: mgmt
+interface_defaults:
+  mtu: 9100
 spanning_tree:
   mode: none
 local_users:
@@ -170,60 +175,78 @@ ethernet_interfaces:
   peer_type: l3leaf
   description: P2P_WCC1_Ethernet7
   shutdown: false
-  mtu: 1500
+  mtu: 9214
   switchport:
     enabled: false
   ip_address: 10.255.255.0/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Ethernet2
   peer: WCC2
   peer_interface: Ethernet7
   peer_type: l3leaf
   description: P2P_WCC2_Ethernet7
   shutdown: false
-  mtu: 1500
+  mtu: 9214
   switchport:
     enabled: false
   ip_address: 10.255.255.4/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Ethernet3
   peer: SCC1
   peer_interface: Ethernet7
   peer_type: l3leaf
   description: P2P_SCC1_Ethernet7
   shutdown: false
-  mtu: 1500
+  mtu: 9214
   switchport:
     enabled: false
   ip_address: 10.255.255.8/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Ethernet4
   peer: SCC2
   peer_interface: Ethernet7
   peer_type: l3leaf
   description: P2P_SCC2_Ethernet7
   shutdown: false
-  mtu: 1500
+  mtu: 9214
   switchport:
     enabled: false
   ip_address: 10.255.255.12/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Ethernet5
   peer: borderleaf1
   peer_interface: Ethernet11
   peer_type: l3leaf
   description: P2P_borderleaf1_Ethernet11
   shutdown: false
-  mtu: 1500
+  mtu: 9214
   switchport:
     enabled: false
   ip_address: 10.255.255.36/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Ethernet6
   peer: borderleaf2
   peer_interface: Ethernet11
   peer_type: l3leaf
   description: P2P_borderleaf2_Ethernet11
   shutdown: false
-  mtu: 1500
+  mtu: 9214
   switchport:
     enabled: false
   ip_address: 10.255.255.40/31
+  pim:
+    ipv4:
+      sparse_mode: true
 loopback_interfaces:
 - name: Loopback0
   description: ROUTER_ID
